@@ -1,8 +1,8 @@
 
 
-    XMLRequest = function(path, message, callback){
-
-      var xhr = new XMLHttpRequest();
+    XMLRequest = function(path, message, callback){ /*   ofc this function          */
+                                                    /*    JUST                      */
+      var xhr = new XMLHttpRequest();               /*     setnd XMLHttpRequest     */
 
       xhr.open('POST', path );
 
