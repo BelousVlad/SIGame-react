@@ -33,7 +33,7 @@
     //window.onload = function(){alert('loaded')};
 //    window.location.replace('records/')
 
+   window.addEventListener('popstate', function (event) {
+    alert("url are changed")
+    });
 
-window.onhashchange = function() {
-alert(123)
-}

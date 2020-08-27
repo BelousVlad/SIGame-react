@@ -13,7 +13,7 @@
       <input type="button" name="but1" value="but1" onclick = "">
 
 
-    <input type="button" name="but2" value="but2">
+    <input type="button" name="but2" value="but2" onclick="ChangePage('records/')">
     <input type="button" name="but3" value="but3">
 
 
