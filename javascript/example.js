@@ -2,12 +2,14 @@
 
     XMLRequest = function(path, message, callback){ /*   ofc this function          */
                                                     /*    JUST                      */
-      var xhr = new XMLHttpRequest();               /*     setnd XMLHttpRequest     */
-
+      var xhr = new XMLHttpRequest();               /*     send XMLHttpRequest      */
+                                                    /*  and get response            */
       xhr.open('POST', path );
 
-      xhr.onload = function(){callback(xhr.response);};
-
+      if (typeof( callback ) !== 'undefined')
+      {
+        xhr.onload = function(){callback(xhr.response);};
+      }
 
       xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
       xhr.send( message );
