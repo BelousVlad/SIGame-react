@@ -37,3 +37,25 @@
     alert("url are changed")
     });
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /*
+    window.onhashchange = function() {
+    alert(123)
+    }
+    =======   */
+      //ChangePage('records/');
