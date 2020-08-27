@@ -30,6 +30,10 @@
 
 
     };
+    //window.onload = function(){alert('loaded')};
+//    window.location.replace('records/')
 
 
-    ChangePage('records/');
+window.onhashchange = function() {
+alert(123)
+}
