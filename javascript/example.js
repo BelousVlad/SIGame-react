@@ -31,5 +31,8 @@
 
     };
 
+   window.addEventListener('popstate', function (event) {
+    alert("url are changed")
+    });
 
-    ChangePage('records/');
+  //ChangePage('records/');
