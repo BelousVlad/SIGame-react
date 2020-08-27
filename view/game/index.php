@@ -6,13 +6,13 @@ print_r($_POST)
 
 
  ?>
-<h1> RECORDS PAGE</h1>
+<h1> GAME PAGE </h1>
 
 
 <script>
 
 <?php
-include "../javascript/example.js";
+include "../../javascript/example.js";
 ?>
 
 </script>
