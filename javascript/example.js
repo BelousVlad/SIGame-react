@@ -17,3 +17,16 @@
     };
 
     //XMLRequest('records/', "fname=Henry&lname=Ford", function(e){alert(e)});
+
+    ChangePage = function(page_path){   //    page changer function
+
+      Change = function(page){
+        document.body.innerHTML = page
+      };
+
+      XMLRequest(page_path, null, Change);
+
+    };
+
+
+    ChangePage('records/');
