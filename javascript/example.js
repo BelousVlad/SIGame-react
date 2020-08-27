@@ -6,7 +6,7 @@
                                                     /*  and get response            */
       xhr.open('POST', path );
 
-      if (typeof( callback ) !== 'undefined')
+      if (typeof( callback ) === typeof (function(){} ) )
       {
         xhr.onload = function(){callback(xhr.response);};
       }
@@ -22,9 +22,12 @@
 
       Change = function(page){
         document.body.innerHTML = page
+
+        history.pushState(null,null, page_path)
       };
 
       XMLRequest(page_path, null, Change);
+
 
     };
 
