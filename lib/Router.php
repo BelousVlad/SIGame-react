@@ -30,10 +30,11 @@ class Router{
 
           if (preg_match("~$pattern~i", $uri) == 1 ){
 
-              $internal_route = preg_replace("~$pattern~i", $route, $uri);
+              //$internal_route = preg_replace("~$pattern~i", $route, $uri);
               //echo $internal_route;
               //return $internal_route;
-              header('Location: /lib/'.$internal_route.'/');
+              (new Controller)->ToPage($route);
+
 
           }
 
@@ -46,7 +47,13 @@ class Router{
 
 }
 
+class Controller{
 
+  function ToPage($route){
+      header('Location: /lib/'.$route.'/');
+  }
+
+}
 
 
 
