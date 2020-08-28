@@ -34,7 +34,7 @@
 //    window.location.replace('records/')
 
    window.addEventListener('popstate', function (event) {
-    alert("url are changed")
+    alert("current url = " + window.location.href)
     });
 
 

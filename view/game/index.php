@@ -12,7 +12,8 @@ print_r($_POST)
 <script>
 
 <?php
-include "../../javascript/example.js";
+include "javascript/example.js";
 ?>
 
 </script>
+<input/>
