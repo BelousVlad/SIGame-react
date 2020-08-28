@@ -1,6 +1,8 @@
 
+
+
 <? include 'view/main.php' ?> 
-=======
+
 <?php
 
 define('ROOT', dirname(__FILE__) );
@@ -11,9 +13,6 @@ require_once(ROOT.'/lib/Router.php');
 $rot = new Router(ROOT.'/lib/routes.php');
 
 $rot->run();
-
-
-
 
 
 ?>
