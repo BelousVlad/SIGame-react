@@ -26,11 +26,12 @@ class Router{
       function run(){
         $uri = $this->getURI();
 
-  //      print_r($this->routes);
+
+
 
         foreach($this->routes as $pattern => $route){
 
-//echo "$pattern => $route ||| ";
+
 
           if (preg_match("~$pattern~i", $uri) == 1 ){
 
@@ -60,6 +61,16 @@ class Router{
 class Controller{
 
   function ToPage($route){
+
+
+        if ($route == ""){
+          (new Controller)->ToPage("../view");
+          return;
+        }
+
+
+
+
       require_once ROOT.'/view/'.$route.'/index.php';
   }
 
