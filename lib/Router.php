@@ -21,23 +21,9 @@ class Router{
           if(!empty($_SERVER['QUERY_STRING'])) {
               return trim($_SERVER['QUERY_STRING'], '/');
           }
-      }
-
-      function run(){
-        $uri = $this->getURI();
-
-        if ( $uri == ""){
-
-        (new Controller)->ToPage("../view");
-
-            return;
-            }
-
-        foreach($this->routes as $pattern => $route){
 
 
-
-          if (preg_match("~$pattern~i", $uri) == 1 ){
+      if (preg_match("~$pattern~i", $uri) == 1 ){
 
             if ( count( explode('/', $route) ) == 1 ){
 
@@ -52,24 +38,12 @@ class Router{
                         // if ($uri == ""){
                         //     (new Controller)->ToPage("../view");
                         //     return;
-                        // }
-
-              //$internal_route = preg_replace("~$pattern~i", $route, $uri);
-              //echo $internal_route;
-              //return $internal_route;
-
-
-            }
 
           }
         (new Controller)->Failure();
         return;
 
-        }
-
-
-
-
+    }
 
 
 
@@ -88,6 +62,7 @@ class Controller{
 
 
       require_once ROOT.'/view/'.$route.'/index.php';
+
   }
 
   function Failure(){
