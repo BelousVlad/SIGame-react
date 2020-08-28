@@ -1,12 +1,9 @@
-<IfModule dir_module>
-    DirectoryIndex index.php index.html
-</IfModule>
-AddDefaultCharset UTF-8
-AddCharset UTF-8 .html
-<FilesMatch "\.(html)$">
-   Header set Cache-Control: "no-cache, no-store"
-   Header unset ETag
-</FilesMatch>
-Header set X-Content-Type-Options nosniff
+AddDefaultCharset utf-8
+
 RewriteEngine on
-RewriteRule . index.php
+RewriteBase /
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+RewriteRule ^(.*)$ index.php

@@ -21,13 +21,11 @@ class Router{
           if(!empty($_SERVER['QUERY_STRING'])) {
               return trim($_SERVER['QUERY_STRING'], '/');
           }
-      }
+      } 
 
       function run(){
         $uri = $this->getURI();
-
-  //      print_r($this->routes);
-
+        
         foreach($this->routes as $pattern => $route){
 
 //echo "$pattern => $route ||| ";

@@ -1,19 +1,9 @@
-<?php
-
-print_r($_POST)
-
-
-
-
- ?>
-<h1> GAME PAGE </h1>
-
-
-<script>
-
-<?php
-include "javascript/example.js";
+<?
+include ROOT.'\view\header.php';
 ?>
 
-</script>
-<input/>
+<h1>game page</h1>
+
+<?
+include ROOT.'\view\footer.php';
+?>	
