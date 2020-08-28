@@ -16,11 +16,12 @@ class Eventer{
 	{
 		for(let item of this.events)
 		{
-
 			if($(htmlObj).is(item.selector))
 			{
 
-				if (!item.event(args))
+				let flag = item.event(args); 
+
+				if (!flag || flag === undefined || flag === null)
 				{
 					return false;
 				}
@@ -28,7 +29,4 @@ class Eventer{
 		}
 		
 	}
-
-
-
 }
