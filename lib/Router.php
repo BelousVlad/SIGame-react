@@ -36,12 +36,15 @@ class Router{
 
           if (preg_match("~$pattern~i", $uri) == 1 ){
 
-
+                        if ($uri == ""){
+                            (new Controller)->ToPage("../view");
+                            return;
+                        }
 
               //$internal_route = preg_replace("~$pattern~i", $route, $uri);
               //echo $internal_route;
               //return $internal_route;
-              (new Controller)->ToPage($route);
+              (new Controller)->Switch($route);
               return;
 
 
@@ -61,14 +64,25 @@ class Router{
 
 class Controller{
 
+  function Switch($route){
+
+    if ( $route == ""){
+
+      $this->ToPage("../view");
+
+    } else if ( count( explode('/', $route) ) == 1 ){
+
+      $this->ToPage($route);
+
+    } else{
+
+      return;
+    }
+
+
+  }
+
   function ToPage($route){
-
-
-        if ($route == ""){
-          (new Controller)->ToPage("../view");
-          return;
-        }
-
 
 
 
