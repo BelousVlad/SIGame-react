@@ -65,5 +65,3 @@ clickEventer.addEvent("a",(event) =>{
 $(document).bind("click",(event) => {
 	return clickEventer.checkAndRun(event.target,event);
 })
-
-console.log($("div"));

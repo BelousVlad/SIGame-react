@@ -3,8 +3,13 @@ include 'header.php';
 ?>
 
 <div class="container">
-	<h1 class="lol">Hi</h1>
-	<a href="http://SIgame/">test</a>
+	<div class="main-menu-container">
+		<a href="game" class="main-menu-btn main-menu-play-btn">
+			<div>
+				Play
+			</div>
+		</a>
+	</div>
 </div>
 
 <?
