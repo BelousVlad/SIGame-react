@@ -2,7 +2,7 @@
 include ROOT.'\view\header.php';
 ?>
 
-<h1>game page</h1>
+<a href = "<?php echo ROOT.'\view\records\index.php'?>">game page</a>
 
 <?
 include ROOT.'\view\footer.php';

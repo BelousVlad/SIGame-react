@@ -21,6 +21,15 @@ class Router{
           if(!empty($_SERVER['QUERY_STRING'])) {
               return trim($_SERVER['QUERY_STRING'], '/');
           }
+        }
+
+        function run(){
+
+          $uri = $this->getURI();
+
+          if ($uri == ""){
+            (new Controller)->ToPage("");
+                        }
 
 
       if (preg_match("~$pattern~i", $uri) == 1 ){
@@ -29,8 +38,8 @@ class Router{
 
             (new Controller)->ToPage($route);
             return;
-
-            } else{
+}
+    else{
 
             return;
             }
@@ -51,11 +60,11 @@ class Router{
 
 class Controller{
 
-  function Switch($route){
+  // function Switch($route){
 
 
 
-  }
+  // }
 
   function ToPage($route){
 
