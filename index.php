@@ -1,3 +1,6 @@
+
+<? include 'view/main.php' ?> 
+=======
 <?php
 
 define('ROOT', dirname(__FILE__) );
@@ -14,3 +17,4 @@ $rot->run();
 
 
 ?>
+
