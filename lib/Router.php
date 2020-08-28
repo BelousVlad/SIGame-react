@@ -26,20 +26,30 @@ class Router{
       function run(){
         $uri = $this->getURI();
 
+  //      print_r($this->routes);
+
         foreach($this->routes as $pattern => $route){
 
+//echo "$pattern => $route ||| ";
+
           if (preg_match("~$pattern~i", $uri) == 1 ){
+
+
 
               //$internal_route = preg_replace("~$pattern~i", $route, $uri);
               //echo $internal_route;
               //return $internal_route;
               (new Controller)->ToPage($route);
+              return;
 
 
           }
 
+
         }
 
+        (new Controller)->Failure();
+        return;
 
       }
 
@@ -50,7 +60,11 @@ class Router{
 class Controller{
 
   function ToPage($route){
-      header('Location: /lib/'.$route.'/');
+      require_once ROOT.'/view/'.$route.'/index.php';
+  }
+
+  function Failure(){
+      require_once ROOT.'/lib/FailurePage.php';
   }
 
 }
