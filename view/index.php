@@ -9,7 +9,7 @@
     <div id="123">
 
     </div>
-
+      <h1>Index (main page)</h1>
       <input type="button" name="but1" value="but1" onclick = "">
 
 

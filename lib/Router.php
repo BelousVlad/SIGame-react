@@ -26,9 +26,12 @@ class Router{
       function run(){
         $uri = $this->getURI();
 
+        if ( $uri == ""){
 
+        (new Controller)->ToPage("../view");
 
-
+            return;
+            }
 
         foreach($this->routes as $pattern => $route){
 
@@ -36,27 +39,37 @@ class Router{
 
           if (preg_match("~$pattern~i", $uri) == 1 ){
 
-                        if ($uri == ""){
-                            (new Controller)->ToPage("../view");
-                            return;
-                        }
+            if ( count( explode('/', $route) ) == 1 ){
+
+            (new Controller)->ToPage($route);
+            return;
+
+            } else{
+
+            return;
+            }
+
+                        // if ($uri == ""){
+                        //     (new Controller)->ToPage("../view");
+                        //     return;
+                        // }
 
               //$internal_route = preg_replace("~$pattern~i", $route, $uri);
               //echo $internal_route;
               //return $internal_route;
-              (new Controller)->Switch($route);
-              return;
 
+
+            }
 
           }
-
-
-        }
-
         (new Controller)->Failure();
         return;
 
-      }
+        }
+
+
+
+
 
 
 
@@ -66,18 +79,6 @@ class Controller{
 
   function Switch($route){
 
-    if ( $route == ""){
-
-      $this->ToPage("../view");
-
-    } else if ( count( explode('/', $route) ) == 1 ){
-
-      $this->ToPage($route);
-
-    } else{
-
-      return;
-    }
 
 
   }

@@ -6,4 +6,4 @@ include ROOT.'\view\header.php';
 
 <?
 include ROOT.'\view\footer.php';
-?>	
+?>
