@@ -25,27 +25,32 @@ class Router{
 
         function run(){
 
+          // echo 12312312321321;
+
           $uri = $this->getURI();
 
           if ($uri == ""){
             (new Controller)->ToPage("");
+            return;
                         }
 
-
+                        foreach ( $this->routes as $pattern=>$route){
+// echo "misssssssssssssssssssssssssstake";
       if (preg_match("~$pattern~i", $uri) == 1 ){
 
             if ( count( explode('/', $route) ) == 1 ){
-
+// (new Controller)->Failure();
             (new Controller)->ToPage($route);
             return;
-}
-    else{
+            }
+            else{
 
-            return;
+            // return;
             }
 
+
                         // if ($uri == ""){
-                        //     (new Controller)->ToPage("../view");
+            }            //     (new Controller)->ToPage("../view");
                         //     return;
 
           }
@@ -75,6 +80,7 @@ class Controller{
   }
 
   function Failure(){
+    // echo "WARNING WARNING!!!";
       require_once ROOT.'/lib/FailurePage.php';
   }
 

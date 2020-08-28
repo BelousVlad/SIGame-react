@@ -1,8 +1,8 @@
 <?
 include ROOT.'\view\header.php';
 ?>
-
-<a href = "<?php echo ROOT.'\view\records\index.php'?>">game page</a>
+<h1>GAME PAGE</h1>
+<a href = "../records">go to records page</a>
 
 <?
 include ROOT.'\view\footer.php';
