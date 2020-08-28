@@ -21,35 +21,33 @@ class Router{
           if(!empty($_SERVER['QUERY_STRING'])) {
               return trim($_SERVER['QUERY_STRING'], '/');
           }
-      } 
+  } 
 
-      function run(){
-        $uri = $this->getURI();
-        
-        foreach($this->routes as $pattern => $route){
+  function run(){
+    $uri = $this->getURI();
 
-//echo "$pattern => $route ||| ";
+    foreach($this->routes as $pattern => $route){
 
-          if (preg_match("~$pattern~i", $uri) == 1 ){
+      if (preg_match("~$pattern~i", $uri) == 1 ){
 
 
 
-              //$internal_route = preg_replace("~$pattern~i", $route, $uri);
-              //echo $internal_route;
-              //return $internal_route;
-              (new Controller)->ToPage($route);
-              return;
+          $internal_route = preg_replace("~$pattern~i", $route, $uri);
+          echo '|'.$internal_route.'|';
+          //return $internal_route;
+          (new Controller)->ToPage($route);
+          return;
 
-
-          }
-
-
-        }
-
-        (new Controller)->Failure();
-        return;
 
       }
+
+
+    }
+
+    (new Controller)->Failure();
+    return;
+
+  } // __/lobby/33
 
 
 
@@ -59,6 +57,7 @@ class Controller{
 
   function ToPage($route){
       require_once ROOT.'/view/'.$route.'/index.php';
+
   }
 
   function Failure(){

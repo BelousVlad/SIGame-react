@@ -7,8 +7,6 @@ require_once(ROOT.'/lib/Router.php');
 
 $rot = new Router(ROOT.'/lib/routes.php');
 
-echo ROOT;
-
 $rot->run();
 ?>
 

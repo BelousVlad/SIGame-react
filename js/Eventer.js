@@ -17,8 +17,7 @@ class Eventer{
 		for(let item of this.events)
 		{
 			if($(htmlObj).is(item.selector))
-			{
-
+			{			
 				let flag = item.event(args); 
 
 				if (!flag || flag === undefined || flag === null)

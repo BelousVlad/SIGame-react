@@ -39,29 +39,31 @@ function ChangePage (page_path) {   //    page changer function
 };
 
 clickEventer.addEvent("a",(event) =>{
+//alert();
 
 	let link = $(event.target).attr("href").trim();
 
 	ChangePage(link).
-    then( response => {
-		
-        let ar = $.parseHTML(response);
+  then( response => {
+	
+      let ar = $.parseHTML(response);
 
-        $(ar).each((i,item) => {
-            let el = $(item);
+      $(ar).each((i,item) => {
+          let el = $(item);
 
-            if(el.is("div.wrapper"))
-            {
-                
-                wrapper.html(el.html());
-            }
-        })
+          if(el.is("div.wrapper"))
+          {
+              wrapper.html(el.html());
+          }
 
-    })
+      })
 
-    return false;
+  })
+
+  return false;
 })
 
 $(document).bind("click",(event) => {
+  //return false;
 	return clickEventer.checkAndRun(event.target,event);
 })
