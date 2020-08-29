@@ -1,3 +1,4 @@
+<?
 class Controller{
 
   // function Switch($route){
@@ -20,3 +21,4 @@ class Controller{
   }
 
 }
+?>

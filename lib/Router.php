@@ -45,9 +45,9 @@ class Router{
             (new Controller)->ToPage($route);
             return;
             }
-            else if (( count( explode('/', $route) ) == 2 ) && (explode('/', $route)[0] == "lobby") && ( preg_match("~[0-9]~",explode('/', $route)[2]) ) {
-              $roomID = explode('/', $route)[2];
-              require_once(ROOT.'/view/lobby/index.php')
+            else if (( count( explode('/', $route) ) == 2 ) && (explode('/', $route)[0] == "lobby") && ( preg_match("~[0-9]~",explode('/', $route)[1]) )) {
+              $roomID = (explode('/', $route))[1];
+              require_once(ROOT.'/view/lobby/index.php');
               return;
             }
 
