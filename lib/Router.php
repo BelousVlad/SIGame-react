@@ -1,14 +1,50 @@
 <?php
 
+
+
 include ROOT.'/lib/Controller.php';
 
 class Router{
 
   private $routes;
 
-  function __construct($rtp){
-    $this->routes = include($rtp);
+  function __construct(){
 
+    $this->SetRoutes(ROOT.'/lib/routes.php');
+
+    // $this->routes = include($rtp);
+  }
+
+  function SetRoutes($rtp){
+    $this->routes = include($rtp);
+  }
+
+  function DeterminePage(){
+
+                                $uri = $this->getURI();
+
+                                      foreach ( $this->routes as $pattern=>$route){
+
+                                    if (preg_match("~$pattern~i", $uri) == 1 ){
+
+
+                                   if ( count( explode('/', $uri) ) == 1 ){
+
+                                      (new Controller)->ToPage($route);
+                                      return;
+                                    }
+                                    else if (( count( explode('/', $uri) ) == 2 ) && (explode('/', $uri)[0] == "lobby") && ( preg_match("~[0-9]~",explode('/', $uri)[1]) )) {
+
+                                      $roomID = (explode('/', $uri))[1];
+                                      require_once(ROOT.'/view/lobby/index.php');
+                                      return;
+
+                                    }
+                                  }
+                                }
+
+                                    (new Controller)->Failure();
+                                    return;
   }
 
   function getURI(){
@@ -29,37 +65,30 @@ class Router{
 
           // echo 12312312321321;
 
-          $uri = $this->getURI();
-
-          if ($uri == ""){
-            (new Controller)->ToPage("");
+          if ( empty($_POST) ){
+            $this->DeterminePage();
             return;
-                        }
-
-                        foreach ( $this->routes as $pattern=>$route){
-// echo "misssssssssssssssssssssssssstake";
-      if (preg_match("~$pattern~i", $uri) == 1 ){
-        // print_r( explode('/', $uri) );
-
-            if ( count( explode('/', $uri) ) == 1 ){
-// (new Controller)->Failure();
-            (new Controller)->ToPage($route);
+          }
+          else if ( isset($_POST['CreateLobby'] )){
             return;
-            }
-            else if (( count( explode('/', $uri) ) == 2 ) && (explode('/', $uri)[0] == "lobby") && ( preg_match("~[0-9]~",explode('/', $uri)[1]) )) {
-              $roomID = (explode('/', $uri))[1];
-              require_once(ROOT.'/view/lobby/index.php');
-              return;
-            }
+          }
+
+          throw new Exception("no such query allowerd");
+
+
+          // if ($uri == ""){
+          //   (new Controller)->ToPage("");
+          //   return;
+          //               }
+
 
 
                         // if ($uri == ""){
-            }            //     (new Controller)->ToPage("../view");
+                        //     (new Controller)->ToPage("../view");
                         //     return;
 
-          }
-        (new Controller)->Failure();
-        return;
+
+
 
     }
 
@@ -68,10 +97,8 @@ class Router{
 }
 
 
-
-
-
-
+$rout = new Router();
+$rout->run();
 
 
  ?>

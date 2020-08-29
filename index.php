@@ -1,14 +1,17 @@
 <?php
 
-define('ROOT', dirname(__FILE__) );
+
+require_once('config.php');
 
 require_once(ROOT.'/lib/Router.php');
 //require_once(ROOT.'/lib/routes.php');
 
-$rot = new Router(ROOT.'/lib/routes.php');
+// $rot = new Router();
 
-$rot->run();
+// $rot->SetRoutes(ROOT.'/lib/routes.php');
 
+// $rot->run();
+// echo preg_match("~^abc$~","abc_abc");
 // echo 1232132131231;
 // header('Location: ggggggg');
 

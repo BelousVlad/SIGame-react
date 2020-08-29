@@ -11,6 +11,7 @@ include 'header.php';
 </div>
 
 <?
+
 include 'footer.php';
 ?>
 

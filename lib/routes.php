@@ -1,10 +1,11 @@
 <?php
 
 return array(
-'(game){1}' => 'game' ,
-"record" => 'records' ,
-'^(lobby/)([0-9])+' => 'thisgame1',
-'js/main.js' => 'js'
+'^$' => 'index.php',
+'^game$' => 'game/index.php' ,
+"^record$" => 'records/index.php' //,
+// '^(lobby/)([0-9])+' => 'thisgame1/index.php',
+// 'js/main.js' => 'js'
 );
 
 
