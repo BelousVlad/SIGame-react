@@ -2,9 +2,13 @@
 
 
 
-require_once(ROOT.'\config.php');
+// require_once(ROOT.'\config.php');
 
-include ROOT.'/lib/Controller.php';
+
+// include ROOT.'/lib/Controller.php';
+
+
+
 
 class Router{
 

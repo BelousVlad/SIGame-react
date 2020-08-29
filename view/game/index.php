@@ -9,11 +9,13 @@ include ROOT.'\view\header.php';
 <section>
 	<div class="container">
 		<div class="lobby-list-container">
-			<? foreach ($lobbies as $key => $lobby): ?>
+			 <?
+			 // foreach ($lobbies as $key => $lobby): ?>
 
 				<div class="lobby-list-item"><? echo $lobby['title']; ?></div>
 
-			<? endforeach; ?>
+			<?
+		// endforeach; ?>
 		</div>
 	</div>
 </section>
@@ -23,7 +25,7 @@ include ROOT.'\view\header.php';
 
 GetLobbyList = function (){
 console.log("start of request");
-(new XMLRequest("../../lib/Router.php", "GetLobbyList=1")).then(
+(new XMLRequest("../../index.php", "GetLobbyList=1")).then(
 
 	(res) => {
 		console.log(res);

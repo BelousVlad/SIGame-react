@@ -1,4 +1,6 @@
 <?
+
+
 class Controller{
 
   // function Switch($route){
@@ -10,8 +12,8 @@ class Controller{
   function ToPage($route){
 
     if (strcmp($route, "game/index.php")) {
-      $lobbies = $db->getLobbies();
-    }    
+      // $lobbies = $db->getLobbies();
+    }
 
     require_once ROOT.'/view/'.$route;
 
@@ -23,7 +25,7 @@ class Controller{
   }
 
   function GetLobbyList(){
-  	return "maybe it's created, but i don't sure";
+  	return $_GLOBAL['db']->getLobbies();
   }
 
   function CreateLobby(){
