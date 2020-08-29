@@ -39,14 +39,15 @@ class Router{
                         foreach ( $this->routes as $pattern=>$route){
 // echo "misssssssssssssssssssssssssstake";
       if (preg_match("~$pattern~i", $uri) == 1 ){
+        // print_r( explode('/', $uri) );
 
-            if ( count( explode('/', $route) ) == 1 ){
+            if ( count( explode('/', $uri) ) == 1 ){
 // (new Controller)->Failure();
             (new Controller)->ToPage($route);
             return;
             }
-            else if (( count( explode('/', $route) ) == 2 ) && (explode('/', $route)[0] == "lobby") && ( preg_match("~[0-9]~",explode('/', $route)[1]) )) {
-              $roomID = (explode('/', $route))[1];
+            else if (( count( explode('/', $uri) ) == 2 ) && (explode('/', $uri)[0] == "lobby") && ( preg_match("~[0-9]~",explode('/', $uri)[1]) )) {
+              $roomID = (explode('/', $uri))[1];
               require_once(ROOT.'/view/lobby/index.php');
               return;
             }
