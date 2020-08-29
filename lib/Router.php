@@ -1,5 +1,7 @@
 <?php
 
+include ROOT.'/lib/Controller.php';
+
 class Router{
 
   private $routes;
@@ -43,9 +45,10 @@ class Router{
             (new Controller)->ToPage($route);
             return;
             }
-            else{
-
-            // return;
+            else if (( count( explode('/', $route) ) == 2 ) && (explode('/', $route)[0] == "lobby") && ( preg_match("~[0-9]~",explode('/', $route)[2]) ) {
+              $roomID = explode('/', $route)[2];
+              require_once(ROOT.'/view/lobby/index.php')
+              return;
             }
 
 
@@ -63,28 +66,7 @@ class Router{
 
 }
 
-class Controller{
 
-  // function Switch($route){
-
-
-
-  // }
-
-  function ToPage($route){
-
-
-
-      require_once ROOT.'/view/'.$route.'/index.php';
-
-  }
-
-  function Failure(){
-    // echo "WARNING WARNING!!!";
-      require_once ROOT.'/lib/FailurePage.php';
-  }
-
-}
 
 
 

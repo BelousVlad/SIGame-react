@@ -8,7 +8,9 @@ require_once(ROOT.'/lib/Router.php');
 $rot = new Router(ROOT.'/lib/routes.php');
 
 $rot->run();
-header('Location: ggggggg');
+
+// echo 1232132131231;
+// header('Location: ggggggg');
 
 ?>
 
