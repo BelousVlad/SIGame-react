@@ -1,9 +1,3 @@
-
-
-let clickEventer = new Eventer();
-
-let wrapper = $("div.wrapper");
-
 function XMLRequest(path, message){ 
   
   return new Promise((resolve, reject) => {
@@ -26,44 +20,29 @@ function XMLRequest(path, message){
   })
 };
 
-function ChangePage (page_path) {   //    page changer function
+let clickEventer = new Eventer();
+let pager = new Pager(XMLRequest);
 
-  Change = function(page)
-  {
-    document.body.innerHTML = page
+let wrapper = $("div.wrapper");
 
-    history.pushState(null,null, page_path)
-  };
 
-  return XMLRequest(page_path, null);
-};
 
 clickEventer.addEvent("a",(event) =>{
-//alert();
 
 	let link = $(event.target).attr("href").trim();
 
-	ChangePage(link).
-  then( response => {
-	
-      let ar = $.parseHTML(response);
-
-      $(ar).each((i,item) => {
-          let el = $(item);
-
-          if(el.is("div.wrapper"))
-          {
-              wrapper.html(el.html());
-          }
-
-      })
-
-  })
+  pager.changePage(link);
 
   return false;
 })
+
+
 
 $(document).bind("click",(event) => {
   //return false;
 	return clickEventer.checkAndRun(event.target,event);
 })
+
+window.onpopstate = function() {
+  pager.changePage(document.URL,false)
+}
