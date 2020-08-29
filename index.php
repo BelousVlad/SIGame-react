@@ -9,8 +9,9 @@ require_once(ROOT.'/lib/DataBase.php');
 $rot = new Router(ROOT.'/lib/routes.php');
 //phpinfo();
 
-DataBase::getConnection();
+$db = new DataBase();
 
+var_dump($db->getLobbies());
 
 /*
 ob_end_clean();
