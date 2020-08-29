@@ -2,7 +2,7 @@
 
 
 
-require_once('W:\domains\test123.com\\config.php');
+require_once(ROOT.'\config.php');
 
 include ROOT.'/lib/Controller.php';
 
