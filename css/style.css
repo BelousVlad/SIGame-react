@@ -39,4 +39,15 @@
   padding: 15px;
   display: flex;
   flex-direction: column;
+  width: 100%;
+}
+.lobby-list-item{
+  border-bottom: 1px solid black;
+  transition: 1s all;
+  cursor: pointer;
+  padding-top: 5px;
+}
+.lobby-list-item:hover{
+  padding-left: 10px;
+  background: orange;
 }
