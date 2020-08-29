@@ -3,12 +3,20 @@ class DataBase{
 
 	public static $connection;
 
+
+
 	public static function getConnection()
 	{
 		if (is_null($connection)) {
 			$connection = mysqli_connect("localhost","root","root","sigame");
 		}
-		return $connection; 
+		return $connection;
+	}
+
+	public static function closeConnection(){
+		if (!(is_null($connection))) {
+			$connection->close();
+		}
 	}
 
 	public function getLobbies()
@@ -17,29 +25,45 @@ class DataBase{
 
 		$sql = "SELECT * FROM lobbies";
 
+		$arr = [];
+
 		$result = $con->query($sql);
 
-		return $result->fetch_assoc();
+
+
+		if ( $result ->num_rows > 0){
+			while ( $row = $result->fetch_assoc()){
+				array_push($arr,$row);
+			}
+		}
+		else {
+			$arr = "0 results";
+		}
+
+
+		return $arr;
 	}
 
 	public function addLobby($lobby)
 	{
 		$con = self::getConnection();
 
-		$sql = "INSERT INTO `lobbies` (`title`, `path`, `password`, `max_size`, `current_round`) VALUES (?, ?, ?, ?, ?);";
+		$sql = "INSERT INTO `lobbies` (`title`, `path`, `password`, `max_size`, `current_round`) VALUES (?, ?, ?, ?, 1);";
 
-		$stmt = $con->prepare($sql);
+		$bool = $stmt = $con->prepare($sql);
 
-		$stmt->bind_param("sssii",
+		$stmt->bind_param("sssi",
 							$lobby['title'],
 							$lobby['path'],
 							$lobby['password'],
-							$lobby['max_size'],
-							$lobby['current_round']
+							$lobby['max_size']
 		);
 
 		$stmt->execute();
 		$stmt->close();
+
+		return $bool;
+
 	}
 
 

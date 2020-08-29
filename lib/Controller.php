@@ -25,10 +25,16 @@ class Controller{
   }
 
   function GetLobbyList(){
-  	return $_GLOBAL['db']->getLobbies();
+  	return $GLOBALS['db']->getLobbies();
   }
 
-  function CreateLobby(){
+  function CreateLobby($title, $path, $password, $max_size){
+  	if ($GLOBALS['db']->addLobby( ['title' => $title, 'path' => $path, 'password' => $password, 'max_size' => $max_size] ) === 1){
+  		return "succeed";
+  	}
+  	else{
+  		return "failure";
+  	}
 
   }
 

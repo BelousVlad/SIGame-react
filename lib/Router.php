@@ -27,18 +27,19 @@ class Router{
 
   function DeterminePage(){
 
-    $uri = $this->getURI();
+           $uri = $this->getURI();
 
           foreach ( $this->routes as $pattern=>$route){
-
         if (preg_match("~$pattern~i", $uri) == 1 ){
 
 
-       if ( count( explode('/', $uri) ) == 1 ){
+       if (( count( explode('/', $uri) ) == 1 ) || (( count( explode('/', $uri) ) == 2 ) && ( explode('/', $uri)[0] == "game" ) && (explode('/', $uri)[1] == "create") )){
 
           (new Controller)->ToPage($route);
           return;
         }
+
+
         else if (( count( explode('/', $uri) ) == 2 ) && (explode('/', $uri)[0] == "lobby") && ( preg_match("~[0-9]~",explode('/', $uri)[1]) )) {
 
           $roomID = (explode('/', $uri))[1];
@@ -76,11 +77,11 @@ class Router{
             return;
           }
           else if ( $_POST['CreateLobby'] == 1){
-            (new Controller)->CreateLobby();
+            echo (new Controller)->CreateLobby( $_POST['title'], $_POST['path'], $_POST['passwrod'], $_POST['max_size'] );
             return;
           }
           else if ($_POST['GetLobbyList'] == 1){
-            echo (new Controller)->GetLobbyList();
+            print_r ((new Controller)->GetLobbyList());
             return;
           }
 
@@ -108,8 +109,7 @@ class Router{
 }
 
 
-$rout = new Router();
-$rout->run();
+
 
 
  ?>
