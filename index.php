@@ -12,8 +12,6 @@ $rot = new Router(ROOT.'/lib/routes.php');
 
 $db = new DataBase();
 
-var_dump($db->getLobbies());
-
 /*
 ob_end_clean();
 header("Connection: close\r\n");

@@ -34,3 +34,9 @@
     width: 1140px;
   }
 }
+
+.lobby-list-container{
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+}
