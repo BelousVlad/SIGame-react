@@ -21,7 +21,7 @@ class Controller{
   }
 
   function GetLobbyList(){
-
+  	return "maybe it's created, but i don't sure";
   }
 
   function CreateLobby(){

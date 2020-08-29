@@ -3,6 +3,8 @@
 
 require_once('config.php');
 
+echo ROOT;
+
 require_once(ROOT.'/lib/Router.php');
 //require_once(ROOT.'/lib/routes.php');
 
