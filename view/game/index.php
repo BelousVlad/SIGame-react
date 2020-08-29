@@ -2,7 +2,8 @@
 include ROOT.'\view\header.php';
 ?>
 <h1>GAME PAGEtest</h1>
-<a href = "../records">go to records page</a>
+<a href = "../records">go to records page|</a>
+<a href="http://test123.com/">go to main page</a>
 <input type="button" name="create game" value="create game"/>
 <input type="button" name="GetLobbyList" value="getlobbylist"/>
 
