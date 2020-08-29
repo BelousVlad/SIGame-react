@@ -19,7 +19,14 @@ class DataBase{
 
 		$result = $con->query($sql);
 
-		return $result->fetch_assoc();
+		$arr = array();
+
+		while($temp = $result->fetch_assoc())
+		{
+			array_push($arr, $temp);
+		}
+
+		return $arr;
 	}
 
 	public function addLobby($lobby)

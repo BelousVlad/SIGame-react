@@ -4,6 +4,7 @@
 
 require_once(ROOT.'\config.php');
 
+
 include ROOT.'/lib/Controller.php';
 
 class Router{
@@ -31,6 +32,7 @@ class Router{
 
 
        if ( count( explode('/', $uri) ) == 1 ){
+
 
           (new Controller)->ToPage($route);
           return;
@@ -81,22 +83,6 @@ class Router{
           }
 
           throw new Exception("no such query allowerd");
-
-
-          // if ($uri == ""){
-          //   (new Controller)->ToPage("");
-          //   return;
-          //               }
-
-
-
-                        // if ($uri == ""){
-                        //     (new Controller)->ToPage("../view");
-                        //     return;
-
-
-
-
     }
 
 

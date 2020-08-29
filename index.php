@@ -2,15 +2,15 @@
 
 
 require_once('config.php');
+require_once(ROOT.'/lib/DataBase.php');
+$db = new DataBase();
 
 require_once(ROOT.'/lib/Router.php');
-require_once(ROOT.'/lib/DataBase.php');
 //require_once(ROOT.'/lib/routes.php');
 
-$rot = new Router(ROOT.'/lib/routes.php');
+//$rot = new Router(ROOT.'/lib/routes.php');
 
 
-$db = new DataBase();
 
 /*
 ob_end_clean();

@@ -9,8 +9,9 @@ class Controller{
 
   function ToPage($route){
 
-    if (strcmp($route, "game/index.php")) {
-      $lobbies = $db->getLobbies();
+    if ( $route == "game/index.php") {
+
+      $lobbies = $GLOBALS['db']->getLobbies();
     }    
 
     require_once ROOT.'/view/'.$route;

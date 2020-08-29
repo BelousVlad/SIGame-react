@@ -9,9 +9,9 @@ include ROOT.'\view\header.php';
 <section>
 	<div class="container">
 		<div class="lobby-list-container">
-			<? foreach ($lobbies as $key => $lobby): ?>
-
-				<div class="lobby-list-item"><? echo $lobby['title']; ?></div>
+			<? foreach ($lobbies as $key => $item): ?>
+				
+				<div class="lobby-list-item"><? echo $item['title']; ?></div>
 
 			<? endforeach; ?>
 		</div>
