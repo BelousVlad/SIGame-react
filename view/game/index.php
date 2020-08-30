@@ -8,6 +8,7 @@ include ROOT.'\view\header.php';
 <input type="button" name="GetLobbyList" value="getlobbylist"/>
 <section>
 	<div class="container">
+		<div class="lobbies-list-refresh-btn"></div>
 		<div class="lobby-list-container">
 
 		</div>
@@ -15,20 +16,31 @@ include ROOT.'\view\header.php';
 </section>
 <script>
 
-// alert(123);
-
-GetLobbyList = function (){
-console.log("start of request");
-(new XMLRequest("../../index.php", "GetLobbyList=1")).then(
-	(res) => {
-		console.log(res);
-	}
-)
+function getLobbies (){
+	return XMLRequest("../../index.php", "GetLobbyList=1");
 }
 
-// GetLobbyList();
+function refresh_lobbies()
+{
+	return getLobbies().
+	then( (result) => {
+		let arr = JSON.parse(result);
+		console.log(arr);
+		let lob_html = arr.reduce((t,item) =>
+			t + `<div class="lobby-list-item">${item.title}</div>`
+		,"");
 
-document.getElementsByName("GetLobbyList")[0].onclick = GetLobbyList;
+		$(".lobby-list-container").html(lob_html);
+	})
+}
+
+//refresh_lobbies();
+
+$(".lobbies-list-refresh-btn").click((event) => {
+		refresh_lobbies();
+	}
+)
+
 
 </script>
 

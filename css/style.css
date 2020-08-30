@@ -51,3 +51,13 @@
   padding-left: 10px;
   background: orange;
 }
+.lobbies-list-refresh-btn{
+  height: 40px;
+  width: 43px;
+  border-radius: 50%;
+  background: green;
+  transition: .3s all;
+}
+.lobbies-list-refresh-btn:active{
+  transform: scale(1.2);
+}
