@@ -23,9 +23,6 @@ function XMLRequest(path, message){
 let clickEventer = new Eventer();
 let pager = new Pager(XMLRequest);
 
-let wrapper = $("div.wrapper");
-
-
 
 clickEventer.addEvent("a",(event) =>{
 
@@ -39,7 +36,6 @@ clickEventer.addEvent("a",(event) =>{
 
 
 $(document).bind("click",(event) => {
-  //return false;
 	return clickEventer.checkAndRun(event.target,event);
 })
 

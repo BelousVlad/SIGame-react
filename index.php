@@ -6,8 +6,7 @@ require_once('config.php');
 
 require_once(ROOT.'/lib/DataBase.php');
 
-$GLOBALS['db'] = new DataBase();
-$GLOBALS['db']::getConnection();
+$db = new DataBase();
 
 // echo 0 == $GLOBALS['db']->addLobby(['title' => 'title', 'path' => 'path', 'password' => 'password', 'max_size' => 'max_size']);
 

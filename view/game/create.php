@@ -20,23 +20,18 @@
 
 
 <script type="text/javascript">
+	alert();
 	document.getElementsByName('send')[0].onclick = () =>{
+		console.log("start of request");
 
-	console.log("start of request");
+		let message = "&title=" + document.querySelector('#title').value + "&password=123&max_size=5&path=gg.pdf";
 
-	let message = "&title=" + document.querySelector('#title').value + "&password=123&max_size=5&path=gg.pdf";
-
-	(new XMLRequest("../../index.php", "CreateLobby=1" + message)).then(
-
-	(res) => {
-		console.log(res);
+		(new XMLRequest("../../index.php", "CreateLobby=1" + message)).then(
+			(res) => {
+				console.log(res);
+			}
+		)
 	}
-	)
-	}
-
-
-
-
 </script>
 
 
