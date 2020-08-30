@@ -1,16 +1,24 @@
 <? include ROOT.'/view/header.php' ?>
 
-
-
-
 <script type="text/javascript">
 
-	alert(312);
+	const socket = new WebSocket('ws://sigame:8640');
+
+	socket.addEventListener('open', function (event) {
+	    socket.send('Hello Server!');
+	});
+
+	socket.addEventListener('message', function (event) {
+	    console.log('Message from server ', event.data);
+	});
+
+	socket.onerror = function(event)
+	{
+		console.log(event);
+		console.log(event.message);
+	}
+
 
 </script>
 
-
-
-
-
-<? include ROOT.'/view/header.php' ?>
+<? include ROOT.'/view/footer.php' ?>
