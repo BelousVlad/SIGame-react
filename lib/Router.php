@@ -81,7 +81,7 @@ class Router{
             return;
           }
           else if ($_POST['GetLobbyList'] == 1){
-            print_r ((new Controller)->GetLobbyList());
+            echo json_encode(((new Controller)->GetLobbyList()));
             return;
           }
           else if ($_POST['ConnectToLobby'] == 1){

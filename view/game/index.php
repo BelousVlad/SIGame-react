@@ -15,20 +15,17 @@ include ROOT.'\view\header.php';
 </section>
 <script>
 
-alert(123);
+function getLobbies (){
 
-GetLobbyList = function (){
-console.log("start of request");
-(new XMLRequest("../../index.php", "GetLobbyList=1")).then(
-	(res) => {
-		console.log(res);
-	}
-)
-}
+XMLRequest("../../index.php", "GetLobbyList=1").
+then( (result) => {
+	let arr = JSON.parse(result);
+	arr.reduce(item => {
+		
+	})
+})
 
-// GetLobbyList();
 
-document.getElementsByName("GetLobbyList")[0].onclick = GetLobbyList;
 
 </script>
 
