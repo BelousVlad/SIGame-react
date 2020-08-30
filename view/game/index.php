@@ -10,7 +10,7 @@ include ROOT.'\view\header.php';
 	<div class="container">
 		<div class="lobbies-list-refresh-btn"></div>
 		<div class="lobby-list-container">
-			
+
 		</div>
 	</div>
 </section>

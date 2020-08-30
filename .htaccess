@@ -1,5 +1,8 @@
 AddDefaultCharset utf-8
 
+#set max post size
+php_value post_max_size 100M
+
 RewriteEngine on
 RewriteBase /
 

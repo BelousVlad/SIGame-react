@@ -77,11 +77,11 @@ class Router{
             return;
           }
           else if ( $_POST['CreateLobby'] == 1){
-            echo (new Controller)->CreateLobby( $_POST['title'], $_POST['path'], $_POST['passwrod'], $_POST['max_size'] );
+            (new Controller)->CreateLobby( $_POST['title'], $_POST['path'], $_POST['passwrod'], $_POST['max_size'] );
             return;
           }
           else if ($_POST['GetLobbyList'] == 1){
-            echo json_encode(((new Controller)->GetLobbyList()));
+            (new Controller)->GetLobbyList();
             return;
           }
           else if ($_POST['ConnectToLobby'] == 1){

@@ -11,4 +11,6 @@
 	<script type="text/javascript" src="../js/GetLobbyList.js"></script>
 </head>
 <body>
-	<div class="wrapper">	
+
+	<input type="file" name="" value="" id="file_uploader" style="display: none;"/>
+	<div class="wrapper">

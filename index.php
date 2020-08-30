@@ -18,6 +18,12 @@ require_once(ROOT.'/lib/Router.php');
 $rout = new Router();
 $rout->run();
 
+// $GLOBALS['db']->CreateFile(ROOT."/database/packs/test1", "someContent");
+//
+//
+// $file = fopen(ROOT."/database/packs/test2.jpg",'w');
+// fclose($file);
+
 
 //require_once(ROOT.'/lib/routes.php');
 

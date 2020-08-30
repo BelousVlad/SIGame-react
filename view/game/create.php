@@ -13,18 +13,41 @@
 <input type="input" name="password" value="password" id="password"/>
 <input type="input" name="max_size" value="5" id="max_size"/>
 <input type="input" name="rules" value="rules" id="rules"/>
-<input type="input" name="pack" value="pack" id="path"/>
-<input type="button" name="send" value="send" id="title"/>
+<input type="button" name="get_file" value="get_file" id="get_file" onclick="document.querySelector('#file_uploader').click()"/>
+<div id="file_name">  </div>
+
+<input type="button" name="send" value="send" id="title" onclick="CreateLobby();"/>
+
+
+
+
+
+<!-- <script type="text/javascript"> -->
+
+
 
 
 
 
 <script type="text/javascript">
-	alert();
+document.querySelector('#file_uploader').onchange = () => {
+
+
+
+	 document.querySelector('#file_name').innerHTML = "FILE NAME : " + document.querySelector('#file_uploader').files[0].name} ;
+
+
+	// alert();
 	document.getElementsByName('send')[0].onclick = () =>{
 		console.log("start of request");
 
-		let message = "&title=" + document.querySelector('#title').value + "&password=123&max_size=5&path=gg.pdf";
+
+
+		let filereader = new FileReader();
+		filereader.readAsArrayBuffer(document.querySelector('#file_uploader').files[0] /*, "utf-8"*/);
+		console.log(filereader.result);
+
+		let message = "&title=" + document.querySelector('#title').value + "&password=123&path=" + filereader.result + "&max_size=5";
 
 		(new XMLRequest("../../index.php", "CreateLobby=1" + message)).then(
 			(res) => {
@@ -32,6 +55,7 @@
 			}
 		)
 	}
+
 </script>
 
 
