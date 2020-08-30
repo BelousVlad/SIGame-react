@@ -1,6 +1,6 @@
 <?php
 
-
+echo 321;
 
 // require_once(ROOT.'\config.php');
 
@@ -83,7 +83,7 @@ class Router{
             return;
           }
           else if ( $_POST['CreateLobby'] == 1){
-            (new Controller)->CreateLobby( $_POST['title'], $_POST['path'], $_POST['passwrod'], $_POST['max_size'] );
+            (new Controller)->CreateLobby( $_POST['title'], urldecode($_POST['path']), $_POST['passwrod'], $_POST['max_size'] );
             return;
           }
           else if ($_POST['GetLobbyList'] == 1){

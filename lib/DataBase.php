@@ -72,7 +72,7 @@ class DataBase{
 		echo $content;
 		echo $max_size;
 		echo $name;
-		$pack = fopen(ROOT."/database/packs/$name.jpg", 'w');
+		$pack = fopen(ROOT."/database/packs/$name", 'w');
 		fwrite($pack, $content);
 
 		fclose( $pack);

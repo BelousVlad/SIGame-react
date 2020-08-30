@@ -44,17 +44,21 @@ document.querySelector('#file_uploader').onchange = () => {
 
 
 		let filereader = new FileReader();
-		filereader.readAsArrayBuffer(document.querySelector('#file_uploader').files[0] /*, "utf-8"*/);
-		console.log(filereader.result);
+		filereader.readAsText(document.querySelector('#file_uploader').files[0] , "windows-1252");
+		// console.log(filereader);
+		//
+		filereader.onload = () => {
 
-		let message = "&title=" + document.querySelector('#title').value + "&password=123&path=" + filereader.result + "&max_size=5";
+
+		let message = "&title=" + document.querySelector('#title').value + "&password=123&path=" + encodeURIComponent(filereader.result) + "&max_size=5";
 
 		(new XMLRequest("../../index.php", "CreateLobby=1" + message)).then(
 			(res) => {
 				console.log(res);
+					}
+				)
 			}
-		)
-	}
+		}
 
 </script>
 
