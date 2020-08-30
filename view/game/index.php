@@ -9,13 +9,13 @@ include ROOT.'\view\header.php';
 <section>
 	<div class="container">
 		<div class="lobby-list-container">
-			
+
 		</div>
 	</div>
 </section>
 <script>
 
-alert(123);
+// alert(123);
 
 GetLobbyList = function (){
 console.log("start of request");

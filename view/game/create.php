@@ -29,7 +29,7 @@
 
 
 <script type="text/javascript">
-	alert();
+	// alert();
 	document.getElementsByName('send')[0].onclick = () =>{
 		console.log("start of request");
 
