@@ -4,8 +4,8 @@
 
 
 <script type="text/javascript">
-	
-	alert();
+
+	alert(312);
 
 </script>
 
