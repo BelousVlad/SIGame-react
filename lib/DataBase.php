@@ -29,15 +29,13 @@ class DataBase{
 
 		$result = $con->query($sql);
 
-
-
 		if ( $result ->num_rows > 0){
 			while ( $row = $result->fetch_assoc()){
 				array_push($arr,$row);
 			}
 		}
 		else {
-			$arr = "0 results";
+			$arr = false;
 		}
 
 

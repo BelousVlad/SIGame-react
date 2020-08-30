@@ -17,15 +17,16 @@ class Pager{
 
 		return XMLRequest(page_path,null).
 		then((resolve,reject) => {
-			let ar = $.parseHTML(resolve);
+			let ar = $(resolve);
 
 			$(ar).each((i,item) => {
+				
 
 				let el = $(item);
 
 				if(el.is("div.wrapper"))
 				{
-					wrapper.html(el.html());
+					$("div.wrapper").html(el.html());
 				}
 
 			})
