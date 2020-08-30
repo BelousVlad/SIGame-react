@@ -84,8 +84,12 @@ class Router{
             print_r ((new Controller)->GetLobbyList());
             return;
           }
+          else if ($_POST['ConnectToLobby'] == 1){
+            (new Controller)->ConnectToLobby( $_POST['title'], $_POST['password'] );
+            return;
+          }
 
-          throw new Exception("no such query allowerd");
+          throw new Exception("no such query in POST allowerd");
 
 
           // if ($uri == ""){

@@ -66,6 +66,10 @@ class DataBase{
 
 	}
 
+	public function ConnectToLobby($title, $password){
+
+	}
+
 
 }
 

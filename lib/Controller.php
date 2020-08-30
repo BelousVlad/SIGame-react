@@ -38,5 +38,10 @@ class Controller{
 
   }
 
+  function ConnectToLobby($title,$password){
+  	$GLOBALS['db']->ConnectToLobby($title,$password);
+  	return;
+  }
+
 }
 ?>
