@@ -5,4 +5,6 @@
 	<link rel="stylesheet" type="text/css" href="../css/style.css">
 </head>
 <body>
-	<div class="wrapper">	
+
+	<input type="file" name="" value="" id="file_uploader" style="display: none;"/>
+	<div class="wrapper">
