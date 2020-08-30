@@ -1,14 +1,28 @@
 <?php
 
+// echo 123123213;
 
 require_once('config.php');
+
 require_once(ROOT.'/lib/DataBase.php');
-$db = new DataBase();
+
+$GLOBALS['db'] = new DataBase();
+$GLOBALS['db']::getConnection();
+
+// echo 0 == $GLOBALS['db']->addLobby(['title' => 'title', 'path' => 'path', 'password' => 'password', 'max_size' => 'max_size']);
+
+// print_r ($GLOBALS['db']->getLobbies());
+require_once(ROOT.'/lib/Controller.php');
 
 require_once(ROOT.'/lib/Router.php');
+
+$rout = new Router();
+$rout->run();
+
+
 //require_once(ROOT.'/lib/routes.php');
 
-//$rot = new Router(ROOT.'/lib/routes.php');
+// $rot = new Router(ROOT.'/lib/routes.php');
 
 
 

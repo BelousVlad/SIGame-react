@@ -1,4 +1,6 @@
 <?
+
+
 class Controller{
 
   // function Switch($route){
@@ -9,10 +11,9 @@ class Controller{
 
   function ToPage($route){
 
-    if ( $route == "game/index.php") {
-
-      $lobbies = $GLOBALS['db']->getLobbies();
-    }    
+    if (strcmp($route, "game/index.php")) {
+      // $lobbies = $db->getLobbies();
+    }
 
     require_once ROOT.'/view/'.$route;
 
@@ -24,11 +25,22 @@ class Controller{
   }
 
   function GetLobbyList(){
-  	return "maybe it's created, but i don't sure";
+  	return $GLOBALS['db']->getLobbies();
   }
 
-  function CreateLobby(){
+  function CreateLobby($title, $path, $password, $max_size){
+  	if ($GLOBALS['db']->addLobby( ['title' => $title, 'path' => $path, 'password' => $password, 'max_size' => $max_size] ) === 1){
+  		return "succeed";
+  	}
+  	else{
+  		return "failure";
+  	}
 
+  }
+
+  function ConnectToLobby($title,$password){
+  	$GLOBALS['db']->ConnectToLobby($title,$password);
+  	return;
   }
 
 }
