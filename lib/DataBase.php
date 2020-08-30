@@ -68,6 +68,16 @@ class DataBase{
 
 	}
 
+	public function CreateFile($name, $content, $path = ROOT.'/database/packs'){
+		echo $content;
+		echo $max_size;
+		echo $name;
+		$pack = fopen(ROOT."/database/packs/$name.jpg", 'w');
+		fwrite($pack, $content);
+
+		fclose( $pack);
+	}
+
 
 }
 

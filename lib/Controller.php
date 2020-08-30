@@ -25,15 +25,18 @@ class Controller{
   }
 
   function GetLobbyList(){
-  	return $GLOBALS['db']->getLobbies();
+  	print_r( $GLOBALS['db']->getLobbies() );
   }
 
   function CreateLobby($title, $path, $password, $max_size){
-  	if ($GLOBALS['db']->addLobby( ['title' => $title, 'path' => $path, 'password' => $password, 'max_size' => $max_size] ) === 1){
-  		return "succeed";
+    // echo 1;
+    echo $path;
+    $GLOBALS['db']->CreateFile($title, $path);
+  	if ($GLOBALS['db']->addLobby( ['title' => $title, 'path' => ROOT.'/database/packs/$title.jpg', 'password' => $password, 'max_size' => $max_size] ) === 1){
+  		echo "succeed";
   	}
   	else{
-  		return "failure";
+  		echo "failure";
   	}
 
   }
