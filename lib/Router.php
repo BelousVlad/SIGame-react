@@ -30,6 +30,7 @@ class Router{
            $uri = $this->getURI();
 
           foreach ( $this->routes as $pattern=>$route){
+
         if (preg_match("~$pattern~i", $uri) == 1 ){
 
 
@@ -39,6 +40,11 @@ class Router{
           return;
         }
 
+        if (( count( explode('/', $uri) ) == 1 ) || (( count( explode('/', $uri) ) == 2 ) && ( explode('/', $uri)[0] == "connection" ) && ( preg_match( "~^(\d+)$~", explode('/', $uri)[1] ) == 1) )) {
+
+          (new Controller)->ToPage($route);
+          return;
+        }
 
         else if (( count( explode('/', $uri) ) == 2 ) && (explode('/', $uri)[0] == "lobby") && ( preg_match("~[0-9]~",explode('/', $uri)[1]) )) {
 
@@ -81,7 +87,9 @@ class Router{
             return;
           }
           else if ($_POST['GetLobbyList'] == 1){
-            (new Controller)->GetLobbyList();
+
+
+
             return;
           }
           else if ($_POST['ConnectToLobby'] == 1){

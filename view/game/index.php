@@ -16,7 +16,6 @@ include ROOT.'\view\header.php';
 </section>
 <script>
 
-
 function getLobbies (){
 	return XMLRequest("../../index.php", "GetLobbyList=1");
 }
@@ -27,7 +26,7 @@ function refresh_lobbies()
 	then( (result) => {
 		let arr = JSON.parse(result);
 		console.log(arr);
-		let lob_html = arr.reduce((t,item) => 
+		let lob_html = arr.reduce((t,item) =>
 			t + `<div class="lobby-list-item">${item.title}</div>`
 		,"");
 

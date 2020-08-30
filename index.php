@@ -18,6 +18,8 @@ require_once(ROOT.'/lib/Router.php');
 $rout = new Router();
 $rout->run();
 
+// echo preg_match("~connection/\d+~", 'connection/123');
+
 // $GLOBALS['db']->CreateFile(ROOT."/database/packs/test1", "someContent");
 //
 //
