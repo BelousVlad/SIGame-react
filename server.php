@@ -1,63 +1,60 @@
 <?
 
-use Ratchet\Server\IoServer;
-use Ratchet\Http\HttpServer;
-use Ratchet\WebSocket\WsServer;
-use Ratchet\MessageComponentInterface;
-use Ratchet\ConnectionInterface;
+$host = "sigame";
+$port = "8640";
 
-require 'vendor/autoload.php';
+$socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
+socket_set_option($socket, SOL_SOCKET, SO_REUSEADDR, 1);
+$res = socket_bind($socket, "0", $port);
 
-class Chat implements MessageComponentInterface {
-    protected $clients;
+$res = socket_listen($socket);
 
-    public function __construct() {
-        $this->clients = new \SplObjectStorage;
-    }
+echo "Listen\n";
 
-    public function onOpen(ConnectionInterface $conn) {
-        // Store the new connection to send messages to later
-        $this->clients->attach($conn);
+do {
+	$accept = socket_accept($socket);
 
-        echo "New connection! ({$conn->resourceId})\n";
-    }
+	echo "accepted\n"; 
 
-    public function onMessage(ConnectionInterface $from, $msg) {
-        $numRecv = count($this->clients) - 1;
-        echo sprintf('Connection %d sending message "%s" to %d other connection%s' . "\n"
-            , $from->resourceId, $msg, $numRecv, $numRecv == 1 ? '' : 's');
+	$msg = socket_read($accept, 2048);
 
-        foreach ($this->clients as $client) {
-            if ($from !== $client) {
-                // The sender is not the receiver, send to each client connected
-                $client->send($msg);
-            }
-        }
-    }
+	echo $msg;
 
-    public function onClose(ConnectionInterface $conn) {
-        // The connection is closed, remove it, as we can no longer send it messages
-        $this->clients->detach($conn);
+	$temp = preg_split("~\r\n~", $msg);
 
-        echo "Connection {$conn->resourceId} has disconnected\n";
-    }
+	$headers = array();
 
-    public function onError(ConnectionInterface $conn, \Exception $e) {
-        echo "An error has occurred: {$e->getMessage()}\n";
 
-        $conn->close();
-    }
-}
+	foreach ($temp as $line) {
+		$line = rtrim($line);
 
- $server = IoServer::factory(
-        new HttpServer(
-            new WsServer(
-                new Chat()
-            )
-        ),
-        8640
-    );
+		if (preg_match('~\A(\S+): (.*)\z~', $line, $matches)) {
+			$headers[$matches[1]] = $matches[2];
 
-$server->run();
+		}
+	}
+
+	$key = $headers['Sec-WebSocket-Key'];
+
+	$hash = $key.'258EAFA5-E914-47DA-95CA-C5AB0DC85B11'; 
+	$hash = sha1($hash,true);
+	$sKey = base64_encode($hash); 
+
+	$headersResp = "	
+		HTTP/1.1 101 Switching Protocols\n\r
+		Upgrade: websocket\n\r
+		Connection: Upgrade\n\r
+		Sec-WebSocket-Accept: $sKey\n\r
+		Access-Control-Allow-Origin: http://sigame\n\r
+	";
+
+	echo $headersResp;
+
+	socket_write($accept, $headersResp);
+
+
+} while(true);
+
+socket_close($socket);
 
 ?>
