@@ -8,32 +8,33 @@
 // include ROOT.'/lib/Controller.php';
 class Router{
 
-  private $routes;
 
-  function __construct(){
+    private $routes;
+
+    function __construct(){
 
     $this->SetRoutes(ROOT.'/lib/routes.php');
 
     // $this->routes = include($rtp);
-  }
+    }
 
-  function SetRoutes($rtp){
-    $this->routes = include($rtp);
-  }
+    function SetRoutes($rtp){
+        $this->routes = include($rtp);
+    }
 
-  function DeterminePage(){
+    function DeterminePage(){
 
-           $uri = $this->getURI();
+        $uri = $this->getURI();
 
-          foreach ( $this->routes as $pattern=>$route){
+        foreach ( $this->routes as $pattern=>$route){
 
         if (preg_match("~$pattern~i", $uri) == 1 ){
 
 
-       if (( count( explode('/', $uri) ) == 1 ) || (( count( explode('/', $uri) ) == 2 ) && ( explode('/', $uri)[0] == "game" ) && (explode('/', $uri)[1] == "create") )){
+        if (( count( explode('/', $uri) ) == 1 ) || (( count( explode('/', $uri) ) == 2 ) && ( explode('/', $uri)[0] == "game" ) && (explode('/', $uri)[1] == "create") )){
 
-          (new Controller)->ToPage($route);
-          return;
+            (new Controller)->ToPage($route);
+            return;
         }
 
         if (( count( explode('/', $uri) ) == 1 ) || (( count( explode('/', $uri) ) == 2 ) && ( explode('/', $uri)[0] == "connection" ) && ( preg_match( "~^(\d+)$~", explode('/', $uri)[1] ) == 1) )) {
@@ -52,33 +53,49 @@ class Router{
       }
     }
 
-        (new Controller)->Failure();
-        return;
-  }
+            (new Controller)->Failure();
+            return;
+      }
 
-  function getURI(){
-          if(!empty($_SERVER['REQUEST_URI'])) {
-              return trim($_SERVER['REQUEST_URI'], '/');
-          }
-
-          if(!empty($_SERVER['PATH_INFO'])) {
-              return trim($_SERVER['PATH_INFO'], '/');
-          }
-
-          if(!empty($_SERVER['QUERY_STRING'])) {
-              return trim($_SERVER['QUERY_STRING'], '/');
-          }
+      public static function getURI()
+      {
+        if(!empty($_SERVER['REQUEST_URI'])) {
+            return trim($_SERVER['REQUEST_URI'], '/');
         }
 
-        function run(){
-          // print_r($_POST['GetLobbyList']);
-          // echo 12312312321321;
+        if(!empty($_SERVER['PATH_INFO'])) {
+            return trim($_SERVER['PATH_INFO'], '/');
+        }
 
-          if ( empty($_POST) ){
-            $this->DeterminePage();
-            return;
-          }
-          else if ( $_POST['CreateLobby'] == 1){
+        if(!empty($_SERVER['QUERY_STRING'])) {
+            return trim($_SERVER['QUERY_STRING'], '/');
+        }
+      }
+
+        function run(){
+
+            $uri = self::getURI();
+
+            foreach ($this->routes as $pattern => $address) {
+               if (preg_match("~$pattern~", $uri,$matches)) {
+
+                    $iternal = preg_replace("~$pattern~", $address, $uri);
+
+                    $exp = explode('/', $iternal);
+
+                    $contName = array_shift($exp)."Controller";
+                    $actionName = "action".ucfirst(array_shift($exp));
+
+                    include_once (ROOT."/lib/controllers/".$contName.".php");
+
+                    $controller = new $contName;
+
+                    call_user_func_array(array($controller,$actionName), $exp);
+               }
+            }
+
+            /*
+          if ( $_POST['CreateLobby'] == 1){
             (new Controller)->CreateLobby( $_POST['title'], $_POST['path'], $_POST['passwrod'], $_POST['max_size'] );
             return;
           }
@@ -96,7 +113,7 @@ class Router{
           }
 
           throw new Exception("no such query in POST allowerd");
-
+        */
 
           // if ($uri == ""){
           //   (new Controller)->ToPage("");
@@ -108,18 +125,8 @@ class Router{
                         // if ($uri == ""){
                         //     (new Controller)->ToPage("../view");
                         //     return;
-
-
-
-
     }
-
-
-
 }
-
-
-
 
 
  ?>

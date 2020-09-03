@@ -1,9 +1,5 @@
 <? include ROOT.'/view/header.php' ?>
 
-
-
-
-
 <h1> GAME CREATE PAGE</h1>
 
 <a href="../../"> back to main page</a>
@@ -18,26 +14,13 @@
 
 <input type="button" name="send" value="send" id="title" onclick="CreateLobby();"/>
 
-
-
-
-
-<!-- <script type="text/javascript"> -->
-
-
-
-
-
-
 <script type="text/javascript">
 document.querySelector('#file_uploader').onchange = () => {
 
+	document.querySelector('#file_name').innerHTML = "FILE NAME : " + document.querySelector('#file_uploader').files[0].name
+};
 
 
-	 document.querySelector('#file_name').innerHTML = "FILE NAME : " + document.querySelector('#file_uploader').files[0].name} ;
-
-
-	// alert();
 	document.getElementsByName('send')[0].onclick = () =>{
 		console.log("start of request");
 
@@ -56,9 +39,7 @@ document.querySelector('#file_uploader').onchange = () => {
 		)
 	}
 
+
 </script>
-
-
-
 
 <? include ROOT.'/view/footer.php '?>
