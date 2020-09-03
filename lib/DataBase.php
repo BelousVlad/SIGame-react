@@ -3,8 +3,6 @@ class DataBase{
 
 	public static $connection;
 
-
-
 	public static function getConnection()
 	{
 		if (is_null($connection)) {
@@ -21,6 +19,7 @@ class DataBase{
 
 	public function getLobbies()
 	{
+
 		$con = self::getConnection();
 
 		$sql = "SELECT * FROM lobbies";

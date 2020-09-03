@@ -6,10 +6,6 @@
 
 
 // include ROOT.'/lib/Controller.php';
-
-
-
-
 class Router{
 
   private $routes;
@@ -88,7 +84,9 @@ class Router{
           }
           else if ($_POST['GetLobbyList'] == 1){
 
+            $lobs = $GLOBALS['db']->getLobbies();
 
+            echo json_encode($lobs);
 
             return;
           }

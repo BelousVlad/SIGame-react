@@ -24,6 +24,7 @@ function refresh_lobbies()
 {
 	return getLobbies().
 	then( (result) => {
+		console.log(result);
 		let arr = JSON.parse(result);
 		console.log(arr);
 		let lob_html = arr.reduce((t,item) =>
