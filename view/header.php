@@ -12,5 +12,4 @@
 </head>
 <body>
 
-	<input type="file" name="" value="" id="file_uploader" style="display: none;"/>
 	<div class="wrapper">

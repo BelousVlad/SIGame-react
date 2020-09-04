@@ -42,3 +42,21 @@ $(document).bind("click",(event) => {
 window.onpopstate = function() {
   pager.changePage(document.URL,false)
 }
+
+const socket = new WebSocket('ws://sigame:8640');
+
+socket.binaryType = "blob";
+
+socket.addEventListener('open', function (event) {
+  
+});
+
+socket.addEventListener('message', function (event) {
+    console.log('Message from server ', event.data);
+});
+
+socket.onerror = function(event)
+{
+  console.log(event);
+  console.log(event.message);
+}
