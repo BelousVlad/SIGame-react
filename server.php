@@ -1,20 +1,25 @@
-<?
+<?php
 use Ratchet\Server\IoServer;
 use Ratchet\Http\HttpServer;
 use Ratchet\WebSocket\WsServer;
 
 require 'vendor/autoload.php';
-
+require 'server/GameServer.php';
+require 'server/Lobby.php';
 require 'server/Chat.php';
 
- $server = IoServer::factory(
-        new HttpServer(
-            new WsServer(
-                new Chat()
-            )
-        ),
-        8640
-    );
+
+$gameServer = new GameServer();
+$chat = new Chat($gameServer);
+
+$server = IoServer::factory(
+    new HttpServer(
+        new WsServer(
+            $chat
+        )
+    ),
+    8640
+);
 
 $server->run();
 

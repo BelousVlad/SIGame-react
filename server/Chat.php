@@ -1,4 +1,4 @@
-<?
+<?php
 use Ratchet\MessageComponentInterface;
 use Ratchet\ConnectionInterface;
 
@@ -19,14 +19,16 @@ require "Client.php";
 class Chat implements MessageComponentInterface {
     protected $connections;
     protected $lobbies;
+    protected $server;
 
-    public function __construct() {
+    public function __construct($gameServer) {
         $this->connections = new \SplObjectStorage;
+        $this->server = $gameServer;
     }
 
     public function onOpen(ConnectionInterface $conn) {
         // Store the new connection to send messages to later
-        $client = new Client($conn);
+        $client = new Client($conn, $this->server);
         $conn->client = $client;
 
 
@@ -39,7 +41,8 @@ class Chat implements MessageComponentInterface {
 
         //var_dump($this->connections);
 
-        echo $this->connections->contains($from);
+        $from->client->answerer->answer($msg);
+        
 
         /*
         echo "\n---------------------\n";

@@ -1,14 +1,14 @@
-<?
+<?php
 
 class Client {
 	public $lobby;
 	public $connection;
 	public $answerer;
 
-	public function __construct($connection)
+	public function __construct($connection, $server)
 	{
-		$this->connection = $connetion;
-		$this->answerer = new Answerer($this);
+		$this->connection = $connection;
+		$this->answerer = new Answerer($this, $server);
 	}
 
 }
