@@ -19,7 +19,7 @@
 	/*
 document.querySelector('#file_uploader').onchange = () => {
 
-	document.querySelector('#file_name').innerHTML = "FILE NAME : " + document.querySelector('#file_uploader').files[0].name
+	document.querySelector('#file_name').innerHTML = "FILE NAME : " + document.querySelector('#file_uploader').files[0	].name
 };
 
 
@@ -42,32 +42,55 @@ document.querySelector('#file_uploader').onchange = () => {
 	}
 */
 
+
+
 let reader = new FileReader();
 let fileByteArray = [];
 let a;
-reader.onloadend = function (evt) {
+let file;
+
+
+
+$("input[type=submit]").click(function(event) {
+		
+	console.log(event);
+
+	let title = $("input[name=title]").val();
+	let max = $("input[name=max_size]").val();
+	let file = $("input[type=file]").get(0).files[0];
+
+	reader.onloadend = function (evt) {
+
+	a = evt.target.result;
+
+	//file = `{"action": "test", "test": "${a.split(',')[1]}"}`;
+
+	let action = {
+		"action" : "create_lobby",
+		"data" : {
+			"title" : title,
+			"max_players" : max,
+			"pack" : a.split(',')[1]
+		}
+	}
+
+	console.log(action);
+
+	socket.send(JSON.stringify(action));
+
+	/*
     if (evt.target.readyState == FileReader.DONE) {
-       let arrayBuffer = evt.target.result,
-           array = new Uint8Array(arrayBuffer);
+
+       arrayBuffer = evt.target.result;
+       array = new Uint8Array(arrayBuffer);	
        for (let i = 0; i < array.length; i++) {
            fileByteArray.push(array[i]);
         }
     }
+    */
 }
 
-
-$("input[type=submit]").click(function(event) {
-	
-	console.log(event);
-	
-	console.log($("input[type=file]").val());
-	console.log($("input[type=file]"));
-	console.log($("input[type=file]").get(0).files);
-
-	a = $("input[type=file]").get(0).files[0];
-
-
-	reader.readAsArrayBuffer($("input[type=file]").get(0).files[0]);
+	reader.readAsDataURL(file);
 
 	//return false;
 } )

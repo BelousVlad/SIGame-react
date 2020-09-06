@@ -45,7 +45,7 @@ window.onpopstate = function() {
 
 const socket = new WebSocket('ws://sigame:8640');
 
-socket.binaryType = "blob";
+socket.binaryType = "arraybuffer";
 
 socket.addEventListener('open', function (event) {
   

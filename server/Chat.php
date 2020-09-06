@@ -18,7 +18,6 @@ require "Client.php";
 
 class Chat implements MessageComponentInterface {
     protected $connections;
-    protected $lobbies;
     protected $server;
 
     public function __construct($gameServer) {
@@ -39,7 +38,24 @@ class Chat implements MessageComponentInterface {
 
     public function onMessage(ConnectionInterface $from, $msg) {
 
+        //echo "\n-----\n$msg\n------\n";
+
         //var_dump($this->connections);
+        /*
+        echo "$msg";
+
+        $test = json_decode($msg,true);
+
+        echo $test;
+
+        if ($test['action'] == "test") {
+            echo "YES";
+
+            file_put_contents("test.mp4", base64_decode($test["test"]));
+
+        }
+
+        */
 
         $from->client->answerer->answer($msg);
         
