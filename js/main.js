@@ -40,23 +40,45 @@ $(document).bind("click",(event) => {
 })
 
 window.onpopstate = function() {
-  pager.changePage(document.URL,false)
+    pager.changePage(document.URL,false)
 }
 
-const socket = new WebSocket('ws://sigame:8640');
-
-socket.binaryType = "arraybuffer";
-
-socket.addEventListener('open', function (event) {
-  
-});
-
-socket.addEventListener('message', function (event) {
-    console.log('Message from server ', event.data);
-});
-
-socket.onerror = function(event)
+function viewLoader()
 {
-  console.log(event);
-  console.log(event.message);
+    $("wrapper").addClass("dnone");
+    $(".main-loader").addClass("active");
+    $(".main-loader").removeClass("unactive");
 }
+
+function hideLoader()
+{
+    $("wrapper").removeClass("dnone");
+    $(".main-loader").addClass("unactive");
+    $(".main-loader").removeClass("active");
+}
+
+let socket;
+
+function openSocket()
+{
+    let socket = new WebSocket('ws://sigame:8640');
+
+    socket.binaryType = "arraybuffer";
+
+    socket.onopen = function (event) {
+        hideLoader();
+    };  
+
+    socket.addEventListener('message', function (event) {
+        console.log('Message from server ', event.data);
+    });
+
+    socket.onclose = function(event)
+    {
+        viewLoader();
+        socket = openSocket();
+    }
+}
+
+
+socket = openSocket();
