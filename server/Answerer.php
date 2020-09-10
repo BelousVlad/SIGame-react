@@ -10,7 +10,8 @@ class Answerer
 		"create_lobby" => "createLobby",
 		"get_lobbies" => "getLobbies",
 		"part_of_pack" => "getPartOfPack",
-		"end_of_pack" => "endPartOfPack"
+		"end_of_pack" => "endPartOfPack",
+		"connect_to_lobby" => "connectToLobby"
 	);
 	
 	public function __construct($client, $server)
@@ -108,7 +109,6 @@ class Answerer
 
 	private function getLobbies()
 	{
-		var_dump($this->server->lobbies);
 		$this->send(json_encode($this->server->lobbies));
 	}
 
@@ -120,7 +120,12 @@ class Answerer
 
 		$lobby = $this->server->getLobbybyId($lobby_id);
 
-		var_dump($lobby);
+		$key = $lobby->connect($this->client, $msg);
+
+		if (!empty($key)) {
+			$this->send($key);
+		}
+
 	}
 
 }

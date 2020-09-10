@@ -31,7 +31,14 @@ class GameServer{
 
 	public function getLobbyById($id)
 	{
-		return array_search("id", array_column($this->lobbies, "id"));
+
+		foreach ($this->lobbies as $item) {
+			if ($item->id == $id) {
+				return $item;
+			}
+		}
+
+		return null;
 	}
 
 	public function getNextLobbyId()
