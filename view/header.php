@@ -8,6 +8,8 @@
 
 	<script type="text/javascript" src="../js/Eventer.js"></script>
 	<script type="text/javascript" src="../js/Pager.js"></script>
+	<script type="text/javascript" src="../js/ViewModel.js"></script>
+	<script type="text/javascript" src="../js/App.js"></script>
 	<script type="text/javascript" src="../js/main.js"></script>
 	<script type="text/javascript" src="../js/GetLobbyList.js"></script>
 </head>
