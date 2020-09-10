@@ -61,23 +61,31 @@ let socket;
 
 function openSocket()
 {
-    let socket = new WebSocket('ws://sigame:8640');
+    let socket1 = new WebSocket('ws://sigame:8640');
 
-    socket.binaryType = "arraybuffer";
+    socket1.binaryType = "arraybuffer";
 
-    socket.onopen = function (event) {
+    socket1.onopen = function (event) {
         hideLoader();
     };  
 
-    socket.addEventListener('message', function (event) {
+    socket1.addEventListener('message', function (event) {
         console.log('Message from server ', event.data);
     });
 
-    socket.onclose = function(event)
+    socket1.onerror = function(event)
+    {
+        console.log("error");
+        console.log(event.msg);
+    }
+
+    socket1.onclose = function(event)
     {
         viewLoader();
         socket = openSocket();
     }
+
+    return socket1;
 }
 
 
