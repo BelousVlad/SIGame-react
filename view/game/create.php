@@ -85,7 +85,7 @@ $("input[type=submit]").click(function(event) {
 
 			let json = JSON.stringify(action);
 
-			socket.send(json);
+			app.speaker.socket.send(json);
 		}
 		else 
 		{
@@ -121,19 +121,6 @@ $("input[type=submit]").click(function(event) {
 			socket.send(JSON.stringify(action));
 
 		}
-		
-
-
-		/*
-	    if (evt.target.readyState == FileReader.DONE) {
-
-	       arrayBuffer = evt.target.result;
-	       array = new Uint8Array(arrayBuffer);	
-	       for (let i = 0; i < array.length; i++) {
-	           fileByteArray.push(array[i]);
-	        }
-	    }
-	    */
 	}
 
 	reader.readAsDataURL(file);

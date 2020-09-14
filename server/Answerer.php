@@ -107,9 +107,15 @@ class Answerer
 		}
 	}
 
-	private function getLobbies()
+	private function getLobbies($msg)
 	{
-		$this->send(json_encode($this->server->lobbies));
+
+		var_dump($this->server->lobbies);
+
+		$ans->action = $msg->action;
+		$ans->data = $this->server->lobbies;
+
+		$this->send(json_encode($ans));
 	}
 
 	private function connectToLobby($msg)

@@ -2,12 +2,12 @@ class App{
 
 	constructor()
 	{
-		this.socket = this.openSocket();
+		this.view_model = new ViewModel();
+		this.initSpeker();
+		this.initRoutes();
 
 		this.clickEventer = new Eventer();
 		this.pager = new Pager(this.XMLRequest);
-		this.view_model = new ViewModel();
-
 
 		this.clickEventer.addEvent("a", (event) => {
 
@@ -28,35 +28,40 @@ class App{
 
 	}
 
-	openSocket()
+	initRoutes()
 	{
-		let socket;
+		this.routes = {
+			"get_lobbies" : "viewLobbies"
+		};
+	}
 
-	    let socket1 = new WebSocket('ws://sigame:8640');
-
-	    socket1.binaryType = "arraybuffer";
-
-	    socket1.onopen = (event) => {
+	initSpeker()
+	{
+		
+		this.speaker = new ServerSpeaker();
+	    
+	    this.speaker.onopen = (event) => {
 	        this.view_model.hideLoader();
 	    };  
 
-	    socket1.addEventListener('message', (event) => {
-	        console.log('Message from server ', event.data);
-	    });
+	    this.speaker.onmessage = (event) => {
+	        console.log(event.data);
+	        this.getServerMessage(event.data);
+	    };
 
-	    socket1.onerror = (event) =>
+	    this.speaker.onerror = (event) =>
 	    {
 	        console.log("error");
 	        console.log(event.msg);
 	    }
 
-	    socket1.onclose = (event) =>
+	    this.speaker.onclose = (event) =>
 	    {
 	        this.view_model.viewLoader();
-	        socket = this.openSocket();
+	        this.speaker.openSocket();
 	    }
 
-	    return socket1;
+	    this.speaker.openSocket();
 	}
 
 	XMLRequest(path, message){ 
@@ -84,7 +89,29 @@ class App{
 	  })
 	};
 
+	getServerMessage(message)
+	{
+		console.log(this);
 
+		let ans = JSON.parse(message);
+		this[this.routes[ans.action]](ans);
+
+
+	}
+	refreshLobbies()
+	{
+		//console.log(this);
+
+		this.speaker.getLobbies();
+	}
+
+	viewLobbies(json)
+	{
+		let arr = json.data;
+		
+		this.view_model.viewLobbies(arr);
+
+	}
 
 
 
