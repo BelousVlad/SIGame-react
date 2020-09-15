@@ -25,7 +25,7 @@ class Controller{
   }
 
   function GetLobbyList(){
-  	echo json_encode(((new Controller)->GetLobbyList()));
+  	echo json_encode(($GLOBALS['db']->getLobbies()));
   }
 
   function CreateLobby($title, $path, $password, $max_size){
