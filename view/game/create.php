@@ -61,34 +61,67 @@ $("input[type=submit]").click(function(event) {
 
 	reader.onloadend = function (evt) {
 
-	a = evt.target.result;
+		a = evt.target.result;
 
-	//file = `{"action": "test", "test": "${a.split(',')[1]}"}`;
+		//file = `{"action": "test", "test": "${a.split(',')[1]}"}`;
 
-	let action = {
-		"action" : "create_lobby",
-		"data" : {
-			"title" : title,
-			"max_players" : max,
-			"pack" : a.split(',')[1]
+		let pack = a.split(',')[1];
+
+		let max_packsize = 32 * 1000000;
+	
+
+		console.log(pack.length);
+		if (pack.length < max_packsize)
+		{
+
+			let action = {
+				"action" : "create_lobby",
+				"data" : {
+					"title" : title,
+					"max_players" : max,
+					"pack" : pack
+				}
+			}
+
+			let json = JSON.stringify(action);
+
+			app.speaker.socket.send(json);
+		}
+		else 
+		{
+
+			let action = {
+				"action" : "create_lobby",
+				"data" : {
+					"title" : title,
+					"max_players" : max,
+					"pack" : "large_pack"
+				}
+			}
+			console.log("large pack");
+
+			socket.send(JSON.stringify(action));
+
+
+			for (let i = 0 ; i < pack.length / max_packsize ; i++) {
+				let str = pack.substr(i * max_packsize, max_packsize);
+
+				action = {
+					"action" : "part_of_pack",
+					"data" : str
+				}
+
+				socket.send(JSON.stringify(action));
+
+			}
+			action = {
+				"action" : "end_of_pack"
+			}
+
+			socket.send(JSON.stringify(action));
+
 		}
 	}
-
-	console.log(action);
-
-	socket.send(JSON.stringify(action));
-
-	/*
-    if (evt.target.readyState == FileReader.DONE) {
-
-       arrayBuffer = evt.target.result;
-       array = new Uint8Array(arrayBuffer);	
-       for (let i = 0; i < array.length; i++) {
-           fileByteArray.push(array[i]);
-        }
-    }
-    */
-}
 
 	reader.readAsDataURL(file);
 

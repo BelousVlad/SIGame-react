@@ -9,12 +9,17 @@ class Answerer
 	private static $commands = array(
 		"create_lobby" => "createLobby",
 		"get_lobbies" => "getLobbies",
+		"part_of_pack" => "getPartOfPack",
+		"end_of_pack" => "endPartOfPack",
+		"connect_to_lobby" => "connectToLobby"
 	);
 	
 	public function __construct($client, $server)
 	{
 		$this->client = $client;
 		$this->server = $server;
+		$this->temp_lobby_data = array();
+		$this->getting_large_pack_flag = false;
 	}
 
 
@@ -24,9 +29,6 @@ class Answerer
 
 	public function answer($msg)
 	{
-
-
-
 		$message = json_decode($msg);
 
 		$action = $message->action;
@@ -34,18 +36,10 @@ class Answerer
 		if (!empty($action)) {
 			call_user_func(array($this, self::$commands[$action]), $message);
 		}
-
-		return;
-
-		if ($msg == "create lobby")
-		{
-			$this->server->createLobby("test_lobby", 12);
-		}
-		else if ($msg == "get lobbies")
-		{
-			$this->send(json_encode($this->server->lobbies));
-		}
 	}
+
+	private $temp_lobby_data;
+	private $getting_large_pack_flag;
 
 	private function createLobby($message)
 	{
@@ -53,24 +47,91 @@ class Answerer
 
 		$data = $message->data;
 
+
 		$title = $data->title;
 		$max = $data->max_players;
-		$binary_pack = base64_decode($data->pack);
 
-		$id = $this->server->getNextLobbyId();
+		if ($data->pack == "large_pack") {
 
-		$path = "packs/pack$id.siq";
+			echo "large_pack";
 
-		file_put_contents($path, $binary_pack);
+			$this->getting_large_pack_flag = true;
 
-		$this->server->createLobbyWithId($id, $title, $max, $path);
+			$this->temp_lobby_data["title"] = $title;
+			$this->temp_lobby_data["max"] = $max;
+			$this->temp_lobby_data["pack"] = "";
+
+		}
+		else
+		{
+
+			$binary_pack = base64_decode($data->pack);
+
+			$id = $this->server->getNextLobbyId();
+
+			$path = "packs/pack$id.siq";
+
+			file_put_contents($path, $binary_pack);
+
+			$this->server->createLobbyWithId($id, $title, $max, $path);
+		}
+
 
 	}
 
-	private function getLobbies()
+	private function getPartOfPack($msg)
 	{
+		if ($this->getting_large_pack_flag) {
+			$this->temp_lobby_data["pack"] .= $msg->data;
+		}
+	}
+
+	private function endPartOfPack($msg)
+	{
+		if ($this->getting_large_pack_flag) {
+			$this->getting_large_pack_flag = false;
+
+			$title = $this->temp_lobby_data["title"];
+			$max =   $this->temp_lobby_data["max"];
+			$pack =  $this->temp_lobby_data["pack"];
+
+			$binary_pack = base64_decode($pack);
+
+			$id = $this->server->getNextLobbyId();
+
+			$path = "packs/pack$id.siq";
+
+			file_put_contents($path, $binary_pack);
+
+			$this->server->createLobbyWithId($id, $title, $max, $path);
+		}
+	}
+
+	private function getLobbies($msg)
+	{
+
 		var_dump($this->server->lobbies);
-		$this->send(json_encode($this->server->lobbies));
+
+		$ans->action = $msg->action;
+		$ans->data = $this->server->lobbies;
+
+		$this->send(json_encode($ans));
+	}
+
+	private function connectToLobby($msg)
+	{
+		$data = $msg->data;
+
+		$lobby_id = $data->lobby_id;
+
+		$lobby = $this->server->getLobbybyId($lobby_id);
+
+		$key = $lobby->connect($this->client, $msg);
+
+		if (!empty($key)) {
+			$this->send($key);
+		}
+
 	}
 
 }

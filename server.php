@@ -1,15 +1,21 @@
 <?php
 
+
 require 'config.php';
+
+ini_set('memory_limit', '1024M');
 
 use Ratchet\Server\IoServer;
 use Ratchet\Http\HttpServer;
 use Ratchet\WebSocket\WsServer;
 
+
 require ROOT.'/vendor/autoload.php';
 require ROOT.'/server/GameServer.php';
 require ROOT.'/server/Lobby.php';
 require ROOT.'/server/Chat.php';
+
+
 
 
 $gameServer = new GameServer();

@@ -4,7 +4,7 @@ class GameServer{
 	public $clients;
 	public $lobbies;
 
-	private $id = -1;
+	private $id = 0;
 
 	public function __construct()
 	{
@@ -27,13 +27,23 @@ class GameServer{
 	public function createLobby($title, $max_players, $path_to_pack)
 	{
 		//array_push($this->lobbies ,new Lobby($title, $max_players) );
+	}
 
+	public function getLobbyById($id)
+	{
 
+		foreach ($this->lobbies as $item) {
+			if ($item->id == $id) {
+				return $item;
+			}
+		}
+
+		return null;
 	}
 
 	public function getNextLobbyId()
 	{
-		return count($this->lobbies);
+		return $this->id++;
 	}
 
 }

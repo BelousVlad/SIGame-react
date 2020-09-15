@@ -15,7 +15,7 @@ class Pager{
 		this.history.push(document.URL);
 
 
-		return XMLRequest(page_path,null).
+		return this.XMLRequest(page_path,null).
 		then((resolve,reject) => {
 			let ar = $(resolve);
 
