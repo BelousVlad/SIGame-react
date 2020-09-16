@@ -10,6 +10,7 @@ use Ratchet\Http\HttpServer;
 use Ratchet\WebSocket\WsServer;
 
 
+require ROOT.'/FuncHelper.php';
 require ROOT.'/vendor/autoload.php';
 require ROOT.'/server/GameServer.php';
 require ROOT.'/server/Lobby.php';

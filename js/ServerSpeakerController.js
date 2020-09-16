@@ -25,4 +25,12 @@ class ServerSpeakerController{
 		this.speaker.send ( { "action" : "fast_init" } );
 	}
 
+	sendClientCode( code ){
+		this.speaker.send ( { "action" : "check_client_code", "data" : code } );
+	}
+
+	makeSecretCode(  ){
+		this.speaker.send ( {"action" : "make_secret_code" } ) ;
+	}
+
 }

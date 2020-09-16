@@ -8,14 +8,18 @@ class Answerer
 
 	// TODO move field server to Client ;
 
+	private function dummy(){};
+
 	private static $commands = array(
+		"check_client_code" => "dummy",
 		"create_lobby" => "createLobby",
 		"get_lobbies" => "getLobbies",
 		"part_of_pack" => "getPartOfPack",
 		"end_of_pack" => "endPartOfPack",
 		"connect_to_lobby" => "connectToLobby",
 		"stop" => "stopServer",
-		"fast_init" => "fastInit"
+		"fast_init" => "fastInit",
+		"make_secret_code" => "makeSecretCode"
 	);
 
 	public function __construct($client, $server)
@@ -33,6 +37,7 @@ class Answerer
 
 	public function answer($msg)
 	{
+		echo $msg;
 		$message = json_decode($msg);
 
 		$action = $message->action;
@@ -152,7 +157,7 @@ class Answerer
 
 		$key = $lobby->connect($this->client, $data);
 
-		$ans = [];
+		$ans = (object)[];
 
 		$ans["data"] = $key;
 
@@ -171,8 +176,17 @@ class Answerer
 	private function fastInit(){
 		$this->createLobby( ["data" => [ "title" => "test", "max_players" => 5 ]] );
 		$this->connectToLobby( (object)[ "data" => [ "lobby_id" => 0 , "name" => "pif1" ] ] );
+		$this->connectToLobby( (object)[ "data" => [ "lobby_id" => 0 , "name" => "pif2" ] ] );
 
 
+	}
+
+	private function makeSecretCode(){
+		$ans = (object)[];
+		$ans->data = 123;//rundom_code(); //TODO function
+		$ans->action = "set_secret_code";
+
+		$this->send ( json_encode( $ans ) );
 	}
 
 }
