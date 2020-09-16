@@ -110,6 +110,10 @@ class App{
 
 	}
 
+	fastInit(){
+		this.speakerctrl.fastInit();
+	}
+
 //  -------------------
 	//  END of Actions block
 //  -------------------

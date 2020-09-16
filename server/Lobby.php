@@ -2,7 +2,7 @@
 
 class Lobby{
 
-	public $id; 
+	public $id;
 	public $title;
 	public $max_players;
 	public $path;
@@ -13,6 +13,7 @@ class Lobby{
 		$this->id = $id;
 		$this->title = $title;
 		$this->max_players = $max_players;
+		$this->path = $path;
 		$this->players = array();
 	}
 
@@ -36,9 +37,9 @@ class Lobby{
 		return false;
 	}
 
-	private static function random_string($length_of_string) { 
-    	return substr( md5( time() ), 0, $length_of_string ); 
-	} 
+	private static function random_string($length_of_string) {
+    	return substr( md5( time() ), 0, $length_of_string );
+	}
 
 }
 

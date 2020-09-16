@@ -47,13 +47,18 @@ class Answerer
 
 	private function createLobby($message)
 	{
-		echo "CREATE LOBBY";
+		echo "CREATE LOBBY \n";
 
-		$data = $message->data;
+		$data = ( (object ) ((object)$message)->data );
 
+		// print_r( $data );
 
 		$title = $data->title;
 		$max = $data->max_players;
+
+		// echo $title;
+
+		// echo 1;
 /*
 		if ($data->pack == "large_pack") {
 
@@ -81,9 +86,11 @@ class Answerer
 		}
 */
 
+		$id = $this->server->getNextLobbyId();
+
 		$path = "packs/pack$id.siq";
 
-		$id = $this->server->getNextLobbyId();
+		echo $path;
 
 		$this->server->createLobbyWithId($id, $title, $max, $path);
 
@@ -122,23 +129,28 @@ class Answerer
 
 		var_dump($this->server->lobbies);
 
+		// $ans = [];
 		$ans->action = $msg->action;
 		$ans->data = $this->server->lobbies;
 
 		$this->send(json_encode($ans));
 	}
 
-	private function connectToLobby($msg1)
+	private function connectToLobby($msg)
 	{
-		$msg = json_decode( $msg1 );
 
-		$data = $msg->data;
+
+		$data = (object) ($msg->data);
+
+
 
 		$lobby_id = $data->lobby_id;
 
+		// echo "$lobby_id --- \n";
+
 		$lobby = $this->server->getLobbybyId($lobby_id);
 
-		$key = $lobby->connect($this->client, $msg);
+		$key = $lobby->connect($this->client, $data);
 
 		$ans = [];
 
@@ -157,7 +169,10 @@ class Answerer
 	}
 
 	private function fastInit(){
-		createLobby( ["data" => [ "title" => "test", "max_players" => 5 ]] );
+		$this->createLobby( ["data" => [ "title" => "test", "max_players" => 5 ]] );
+		$this->connectToLobby( (object)[ "data" => [ "lobby_id" => 0 , "name" => "pif1" ] ] );
+
+
 	}
 
 }

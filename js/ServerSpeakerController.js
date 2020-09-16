@@ -21,4 +21,8 @@ class ServerSpeakerController{
 		this.speaker.send ( { "action" : "create_lobby", "data" : json } ); /* require title, pass, max_size, path*/
 	}
 
+	fastInit(){
+		this.speaker.send ( { "action" : "fast_init" } );
+	}
+
 }
