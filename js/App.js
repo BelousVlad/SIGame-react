@@ -33,6 +33,9 @@ class App{
 
 	}
 
+//
+// 	SecretCodeBlock
+//
 	async getSecretCode(){
 
 		if ( window.localStorage.getItem( 'sercretCode' ) == null ){
@@ -59,6 +62,11 @@ class App{
 		return await prom;
 
 	}
+
+//
+//  end ---
+//
+
 
 	initRoutes()
 	{
