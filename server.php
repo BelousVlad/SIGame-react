@@ -14,6 +14,7 @@ require ROOT.'/vendor/autoload.php';
 require ROOT.'/server/GameServer.php';
 require ROOT.'/server/Lobby.php';
 require ROOT.'/server/Chat.php';
+require ROOT.'/server/Player.php';
 
 
 

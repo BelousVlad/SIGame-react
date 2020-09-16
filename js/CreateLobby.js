@@ -18,7 +18,7 @@
 	//
 	CreateLobby = () => {
 
-	console.log("start of request");
+	// console.log("start of request");
 
 	let message = "&title=" + document.querySelector('#title').value + "&password=123&max_size=5&path=gg.pdf";
 
@@ -29,3 +29,7 @@
 	}
 	)
 	}
+
+
+
+	// USELESS DUMP

@@ -24,22 +24,44 @@ class ServerSpeaker {
 		return this.socket.readyState == WebSocket.OPEN;
 	}
 
-	getLobbies()
-	{
-		this.send({ action: "get_lobbies" });
-	}
+
 
 	send(action)
 	{
-		if (this.isOpen()) 
+		if (this.isOpen())
 		{
 			this.socket.send(JSON.stringify(action));
 		}
 	}
 
 
+// XMLHttpsRequest
+//-------------
 
+	XMLRequest(path, message){
 
+	 	return new Promise((resolve, reject) => {
 
+	      	var xhr = new XMLHttpRequest();
+
+	     	xhr.open('POST', path, true);
+
+		  	xhr.onload = function(){
+
+				if (xhr.status >= 200 && xhr.status < 300) {
+					resolve(xhr.response);
+				}
+				else {
+					reject(xhr.statusText);
+				}
+
+		  	};
+
+	      xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	      xhr.send( message );
+
+	  })
+	}
+// -------
 
 }

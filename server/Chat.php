@@ -6,8 +6,8 @@ require "Answerer.php";
 require "Client.php";
 
 /*
-    Chat have collection of connections 
-    Any connection has Client 
+    Chat have collection of connections
+    Any connection has Client
     Any Client has Asnwerer
 
     Answerer can refer to his Client
@@ -29,6 +29,7 @@ class Chat implements MessageComponentInterface {
         // Store the new connection to send messages to later
         $client = new Client($conn, $this->server);
         $conn->client = $client;
+
 
 
         $this->connections->attach($conn);
@@ -58,7 +59,7 @@ class Chat implements MessageComponentInterface {
         */
 
         $from->client->answerer->answer($msg);
-        
+
 
         /*
         echo "\n---------------------\n";

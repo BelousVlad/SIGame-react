@@ -9,6 +9,9 @@ class Client {
 	{
 		$this->connection = $connection;
 		$this->answerer = new Answerer($this, $server);
+
+// TODO move var server to Client ;
+
 	}
 
 }

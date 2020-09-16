@@ -6,20 +6,24 @@ class Answerer
 	public $client;
 	public $server;
 
+	// TODO move field server to Client ;
+
 	private static $commands = array(
 		"create_lobby" => "createLobby",
 		"get_lobbies" => "getLobbies",
 		"part_of_pack" => "getPartOfPack",
 		"end_of_pack" => "endPartOfPack",
-		"connect_to_lobby" => "connectToLobby"
+		"connect_to_lobby" => "connectToLobby",
+		"stop" => "stopServer",
+		"fast_init" => "fastInit"
 	);
-	
+
 	public function __construct($client, $server)
 	{
 		$this->client = $client;
 		$this->server = $server;
 		$this->temp_lobby_data = array();
-		$this->getting_large_pack_flag = false;
+		$this->getting_large_pack_flag = false;// TODO (maybe) change pack_flag to variable in function, not in class
 	}
 
 
@@ -50,7 +54,7 @@ class Answerer
 
 		$title = $data->title;
 		$max = $data->max_players;
-
+/*
 		if ($data->pack == "large_pack") {
 
 			echo "large_pack";
@@ -67,15 +71,21 @@ class Answerer
 
 			$binary_pack = base64_decode($data->pack);
 
-			$id = $this->server->getNextLobbyId();
+			//$id = $this->server->getNextLobbyId();
 
-			$path = "packs/pack$id.siq";
+			//$path = "packs/pack$id.siq";
 
 			file_put_contents($path, $binary_pack);
 
-			$this->server->createLobbyWithId($id, $title, $max, $path);
+			//$this->server->createLobbyWithId($id, $title, $max, $path);
 		}
+*/
 
+		$path = "packs/pack$id.siq";
+
+		$id = $this->server->getNextLobbyId();
+
+		$this->server->createLobbyWithId($id, $title, $max, $path);
 
 	}
 
@@ -118,8 +128,10 @@ class Answerer
 		$this->send(json_encode($ans));
 	}
 
-	private function connectToLobby($msg)
+	private function connectToLobby($msg1)
 	{
+		$msg = json_decode( $msg1 );
+
 		$data = $msg->data;
 
 		$lobby_id = $data->lobby_id;
@@ -128,10 +140,24 @@ class Answerer
 
 		$key = $lobby->connect($this->client, $msg);
 
+		$ans = [];
+
+		$ans["data"] = $key;
+
+		$ans["action"] = "setPlayerUniqueKey";
+
 		if (!empty($key)) {
-			$this->send($key);
+			$this->send( json_encode($ans) );
 		}
 
+	}
+
+	private function stopServer(){
+		die(" -- server has stopped by Administrator");
+	}
+
+	private function fastInit(){
+		createLobby( ["data" => [ "title" => "test", "max_players" => 5 ]] );
 	}
 
 }

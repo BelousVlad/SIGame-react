@@ -31,63 +31,42 @@ class App{
 	initRoutes()
 	{
 		this.routes = {
-			"get_lobbies" : "viewLobbies"
+			"get_lobbies" : "viewLobbies",
+			"connect_to_lobby" : "lobbyConnect",
+			"setPlayerUniqueKey" : "setPlayerKey"
 		};
 	}
 
 	initSpeker()
 	{
-		
-		this.speaker = new ServerSpeaker();
-	    
-	    this.speaker.onopen = (event) => {
-	        this.view_model.hideLoader();
-	    };  
 
-	    this.speaker.onmessage = (event) => {
+		this.speakerctrl = new ServerSpeakerController();
+
+	    this.speakerctrl.speaker.onopen = (event) => {
+	        this.view_model.hideLoader();
+	    };
+
+	    this.speakerctrl.speaker.onmessage = (event) => {
 	        console.log(event.data);
 	        this.getServerMessage(event.data);
 	    };
 
-	    this.speaker.onerror = (event) =>
+	    this.speakerctrl.speaker.onerror = (event) =>
 	    {
 	        console.log("error");
 	        console.log(event.msg);
 	    }
 
-	    this.speaker.onclose = (event) =>
+	    this.speakerctrl.speaker.onclose = (event) =>
 	    {
 	        this.view_model.viewLoader();
-	        this.speaker.openSocket();
+	        this.speakerctrl.speaker.openSocket();
 	    }
 
-	    this.speaker.openSocket();
+	    this.speakerctrl.speaker.openSocket();
 	}
 
-	XMLRequest(path, message){ 
 
-	 	return new Promise((resolve, reject) => {
-
-	      	var xhr = new XMLHttpRequest();
-	                                                    
-	     	xhr.open('POST', path, true);
-
-		  	xhr.onload = function(){
-
-				if (xhr.status >= 200 && xhr.status < 300) {
-					resolve(xhr.response);
-				} 
-				else {
-					reject(xhr.statusText);
-				}
-
-		  	};
-
-	      xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-	      xhr.send( message );
-
-	  })
-	};
 
 	getServerMessage(message)
 	{
@@ -98,21 +77,41 @@ class App{
 
 
 	}
-	refreshLobbies()
-	{
-		//console.log(this);
-
-		this.speaker.getLobbies();
-	}
 
 	viewLobbies(json)
 	{
 		let arr = json.data;
-		
+
 		this.view_model.viewLobbies(arr);
 
 	}
 
 
+//  -------------------
+	// Actions (routes)
+//  -------------------
+
+	refreshLobbies()
+	{
+		//console.log(this);
+
+		this.speakerctrl.getLobbies();
+	}
+
+
+
+	lobbyConnect(json){
+
+		this.speakerctrl.lobbyConnect(json);
+
+	}
+
+	setPlayerKey (json) {
+
+	}
+
+//  -------------------
+	//  END of Actions block
+//  -------------------
 
 }
