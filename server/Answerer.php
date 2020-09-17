@@ -4,9 +4,9 @@ class Answerer
 {
 
 	public $client;
-	public $server;
 
-	// TODO move field server to Client ;
+
+
 
 	private function dummy(){};
 
@@ -22,10 +22,10 @@ class Answerer
 		"make_secret_code" => "makeSecretCode"
 	);
 
-	public function __construct($client, $server)
+	public function __construct($client)
 	{
 		$this->client = $client;
-		$this->server = $server;
+
 		$this->temp_lobby_data = array();
 		$this->getting_large_pack_flag = false;// TODO (maybe) change pack_flag to variable in function, not in class
 	}
@@ -91,13 +91,13 @@ class Answerer
 		}
 */
 
-		$id = $this->server->getNextLobbyId();
+		$id = $this->client->server->getNextLobbyId();
 
 		$path = "packs/pack$id.siq";
 
 		echo $path;
 
-		$this->server->createLobbyWithId($id, $title, $max, $path);
+		$this->client->server->createLobbyWithId($id, $title, $max, $path);
 
 	}
 
@@ -119,24 +119,24 @@ class Answerer
 
 			$binary_pack = base64_decode($pack);
 
-			$id = $this->server->getNextLobbyId();
+			$id = $this->client->server->getNextLobbyId();
 
 			$path = "packs/pack$id.siq";
 
 			file_put_contents($path, $binary_pack);
 
-			$this->server->createLobbyWithId($id, $title, $max, $path);
+			$this->client->server->createLobbyWithId($id, $title, $max, $path);
 		}
 	}
 
 	private function getLobbies($msg)
 	{
 
-		var_dump($this->server->lobbies);
+		var_dump($this->client->server->lobbies);
 
 		// $ans = [];
 		$ans->action = $msg->action;
-		$ans->data = $this->server->lobbies;
+		$ans->data = $this->client->server->lobbies;
 
 		$this->send(json_encode($ans));
 	}
@@ -153,7 +153,7 @@ class Answerer
 
 		// echo "$lobby_id --- \n";
 
-		$lobby = $this->server->getLobbybyId($lobby_id);
+		$lobby = $this->client->server->getLobbybyId($lobby_id);
 
 		$key = $lobby->connect($this->client, $data);
 
@@ -181,13 +181,27 @@ class Answerer
 
 	}
 
+	//
+	//  SecretCodeBlock
+	//
+
 	private function makeSecretCode(){
 		$ans = (object)[];
 		$ans->data = 123;//rundom_code(); //TODO function
 		$ans->action = "set_secret_code";
 
+		// $this->client->secretCode = $ans->data;  TODO
+
 		$this->send ( json_encode( $ans ) );
 	}
+
+	private function checkSecretCode( $code ){
+		;
+	}
+
+	//
+	// end of block
+	//
 
 }
 

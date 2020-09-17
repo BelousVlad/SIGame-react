@@ -5,6 +5,7 @@ class Client {
 	public $connection;
 	public $answerer;
 	public $server;
+	private $secretCode;
 
 	public function __construct($connection, $server)
 	{

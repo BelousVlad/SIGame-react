@@ -36,7 +36,7 @@ class App{
 //
 // 	SecretCodeBlock
 //
-	async getSecretCode(){
+	async getSecretCode(){ // RETURN PROMISE
 
 		if ( window.localStorage.getItem( 'sercretCode' ) == null ){
 			let val = await this.makeSecretCode.call(this)
