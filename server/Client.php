@@ -5,16 +5,22 @@ class Client {
 	public $connection;
 	public $answerer;
 	public $server;
-	private $secretCode;
+	private $clientCode;
 
-	public function __construct($connection, $server)
+	public function __construct($code)
 	{
-		$this->connection = $connection;
-		$this->server = $server;
-		$this->answerer = new Answerer($this, $server);
+		// $this->connection = $connection;
+		// $this->server = $server;
+		// $this->answerer = new Answerer($this, $server);
 
-// TODO move var server to Client ;
+		$this->clientCode = $code;
 
+
+
+	}
+
+	public function getClientCode(){
+		return $clientCode;
 	}
 
 }

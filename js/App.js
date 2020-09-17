@@ -34,34 +34,34 @@ class App{
 	}
 
 //
-// 	SecretCodeBlock
+// 	SecretCodeBlock (don't work)
 //
-	async getSecretCode(){ // RETURN PROMISE
+	// async getSecretCode(){ // RETURN PROMISE
 
-		if ( window.localStorage.getItem( 'sercretCode' ) == null ){
-			let val = await this.makeSecretCode.call(this)
+	// 	if ( window.localStorage.getItem( 'sercretCode' ) == null ){
+	// 		let val = await this.makeSecretCode.call(this)
 
-			window.localStorage.setItem ( 'secretCode', val);
-		}
-		return window.localStorage.getItem( 'secretCode' );
+	// 		window.localStorage.setItem ( 'secretCode', val);
+	// 	}
+	// 	return window.localStorage.getItem( 'secretCode' );
 
-	}
+	// }
 
-	async setSecretCode( json ){
+	// async setSecretCode( json ){
 
-		let code = json.data;
-		window.localStorage.setItem( 'secretCode', code );
-		window.dispatchEvent( new CustomEvent( 'secretCodeReceived', { detail : { data : code } } ) );    // WARNING X WARNING X WARNING. CustomEvent object don't deleted in future and keep storing after func (maybe)
+	// 	let code = json.data;
+	// 	window.localStorage.setItem( 'secretCode', code );
+	// 	window.dispatchEvent( new CustomEvent( 'secretCodeReceived', { detail : { data : code } } ) );    // WARNING X WARNING X WARNING. CustomEvent object don't deleted in future and keep storing after func (maybe)
 
-	}
+	// }
 
-	async makeSecretCode(){
+	// async makeSecretCode(){
 
-		let prom = new Promise( (resolve, reject) => { window.addEventListener( 'secretCodeReceived',  (e) => { resolve( e.detail.data )} ) } /* */ );
-		this.speakerctrl.makeSecretCode();
-		return await prom;
+	// 	let prom = new Promise( (resolve, reject) => { window.addEventListener( 'secretCodeReceived',  (e) => { resolve( e.detail.data )} ) } /* */ );
+	// 	this.speakerctrl.makeSecretCode();
+	// 	return await prom;
 
-	}
+	// }
 
 //
 //  end ---
@@ -71,6 +71,7 @@ class App{
 	initRoutes()
 	{
 		this.routes = {
+			"set_client_code" : "setClientCode",
 			"get_lobbies" : "viewLobbies",
 			"connect_to_lobby" : "lobbyConnect",
 			"setPlayerUniqueKey" : "setPlayerKey",
@@ -85,7 +86,7 @@ class App{
 
 	    this.speakerctrl.speaker.onopen = (event) => {
 	        this.view_model.hideLoader();
-	        this.speakerctrl.sendClientCode(  );
+	        this.speakerctrl.sendClientCode( window.localStorage.getItem('secretCode') );
 	    };
 
 	    this.speakerctrl.speaker.onmessage = (event) => {
@@ -154,6 +155,13 @@ class App{
 
 	fastInit(){
 		this.speakerctrl.fastInit();
+	}
+
+	setClientCode( json ) {
+		// alert(1);
+		let data = json.data;
+		window.localStorage.setItem( "client_code", data);
+		console.log(data);
 	}
 
 //  -------------------

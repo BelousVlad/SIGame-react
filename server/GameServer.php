@@ -8,7 +8,7 @@ class GameServer{
 
 	public function __construct()
 	{
-		$this->clients = new \SplObjectStorage;
+		$this->clients = array();
 		$this->lobbies = array();
 	}
 

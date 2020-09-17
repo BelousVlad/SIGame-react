@@ -20,17 +20,21 @@ class Chat implements MessageComponentInterface {
     protected $connections;
     protected $server;
 
+
     public function __construct($gameServer) {
         $this->connections = new \SplObjectStorage;
         $this->server = $gameServer;
+        // $this->server->clients = array();
     }
 
     public function onOpen(ConnectionInterface $conn) {
         // Store the new connection to send messages to later
-        $client = new Client($conn, $this->server);
-        $conn->client = $client;
+        // $client = new Client($conn, $this->server);
+        //
+        // $conn->client = $client;
 
-
+        $conn->answerer = new Answerer( $conn );
+        $conn->server = $this->server;
 
         $this->connections->attach($conn);
 
@@ -58,7 +62,7 @@ class Chat implements MessageComponentInterface {
 
         */
 
-        $from->client->answerer->answer($msg);
+        $from->answerer->answer($msg);
 
 
         /*

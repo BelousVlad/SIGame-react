@@ -1,17 +1,17 @@
 <?php
 
-class Answerer
+class Answerer // TODO change everywere where field client to fiel con ***
 {
 
-	public $client;
+	public $con;
 
 
 
 
-	private function dummy(){};
+	// private function dummy(){};
 
 	private static $commands = array(
-		"check_client_code" => "dummy",
+		"check_client_code" => "checkClientCode",
 		"create_lobby" => "createLobby",
 		"get_lobbies" => "getLobbies",
 		"part_of_pack" => "getPartOfPack",
@@ -22,9 +22,9 @@ class Answerer
 		"make_secret_code" => "makeSecretCode"
 	);
 
-	public function __construct($client)
+	public function __construct($con)
 	{
-		$this->client = $client;
+		$this->con = $con;
 
 		$this->temp_lobby_data = array();
 		$this->getting_large_pack_flag = false;// TODO (maybe) change pack_flag to variable in function, not in class
@@ -32,7 +32,7 @@ class Answerer
 
 
 	public function send($msg){
-		$this->client->connection->send($msg);
+		$this->con->send($msg);
 	}
 
 	public function answer($msg)
@@ -91,13 +91,13 @@ class Answerer
 		}
 */
 
-		$id = $this->client->server->getNextLobbyId();
+		$id = $this->con->server->getNextLobbyId();
 
 		$path = "packs/pack$id.siq";
 
 		echo $path;
 
-		$this->client->server->createLobbyWithId($id, $title, $max, $path);
+		$this->con->server->createLobbyWithId($id, $title, $max, $path);
 
 	}
 
@@ -119,20 +119,20 @@ class Answerer
 
 			$binary_pack = base64_decode($pack);
 
-			$id = $this->client->server->getNextLobbyId();
+			$id = $this->con->server->getNextLobbyId();
 
 			$path = "packs/pack$id.siq";
 
 			file_put_contents($path, $binary_pack);
 
-			$this->client->server->createLobbyWithId($id, $title, $max, $path);
+			$this->con->server->createLobbyWithId($id, $title, $max, $path);
 		}
 	}
 
 	private function getLobbies($msg)
 	{
 
-		var_dump($this->client->server->lobbies);
+		var_dump($this->con->server->lobbies);
 
 		// $ans = [];
 		$ans->action = $msg->action;
@@ -153,7 +153,7 @@ class Answerer
 
 		// echo "$lobby_id --- \n";
 
-		$lobby = $this->client->server->getLobbybyId($lobby_id);
+		$lobby = $this->con->server->getLobbybyId($lobby_id);
 
 		$key = $lobby->connect($this->client, $data);
 
@@ -181,27 +181,70 @@ class Answerer
 
 	}
 
+	private function getClients(){
+		$this->con->server->clients;
+	}
+
 	//
 	//  SecretCodeBlock
 	//
 
-	private function makeSecretCode(){
-		$ans = (object)[];
-		$ans->data = 123;//rundom_code(); //TODO function
-		$ans->action = "set_secret_code";
+	// private function makeSecretCode(){
+	// 	$ans = (object)[];
+	// 	$ans->data = 123;//rundom_code(); //TODO function
+	// 	$ans->action = "set_secret_code";
 
-		// $this->client->secretCode = $ans->data;  TODO
+	// 	// $this->client->secretCode = $ans->data;  TODO
+	// 	//
 
-		$this->send ( json_encode( $ans ) );
+	// 	$this->send ( json_encode( $ans ) );
+	// }
+
+
+
+
+
+	private function checkClientCode( $msg ){
+
+		$code = $msg->data;
+
+
+		if ( ! ($this->doesClientCodeExist( $code )) ){
+
+			$code = FuncHelper::random_string(10);
+
+			array_push ( $this->con->server->clients , new Client( $code ) );
+
+			$ans = (object)[];
+			$ans->action = "set_client_code";
+			$ans->data = $code;
+			$this->con->send( json_encode( $ans ) );
+
+			// echo "\n";
+			// print_r( $this->con->server->clients );
+		}
 	}
 
-	private function checkSecretCode( $code ){
-		;
+	private function doesClientCodeExist( $code ){
+
+		if ( $code == 'NULL' ){
+			return false;
+		}
+
+		foreach( $this->con->server->clients as $key ){
+			if ( $key->getClientCode() == $code ){
+				return true;
+			}
+		}
+
+		return false;
+
 	}
 
 	//
 	// end of block
 	//
+
 
 }
 
