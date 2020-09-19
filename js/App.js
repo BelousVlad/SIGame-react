@@ -75,7 +75,8 @@ class App{
 			"get_lobbies" : "viewLobbies",
 			"connect_to_lobby" : "lobbyConnect",
 			"setPlayerUniqueKey" : "setPlayerKey",
-			"set_secret_code" : "setSecretCode"
+			"set_secret_code" : "setSecretCode",
+			"view_clients" : "viewClients"
 		};
 	}
 
@@ -121,6 +122,10 @@ class App{
 
 	}
 
+//  -------------------
+	// Actions (routes)
+//  -------------------
+
 	viewLobbies(json)
 	{
 		let arr = json.data;
@@ -130,9 +135,7 @@ class App{
 	}
 
 
-//  -------------------
-	// Actions (routes)
-//  -------------------
+
 
 	refreshLobbies()
 	{
@@ -158,9 +161,17 @@ class App{
 	}
 
 	setClientCode( json ) {
-		// alert(1);
 		let data = json.data;
 		window.localStorage.setItem( "client_code", data);
+		console.log(data);
+	}
+
+	getClients(){
+		this.speakerctrl.getClients();
+	}
+
+	viewClients( json ){
+		let data = json.data;
 		console.log(data);
 	}
 

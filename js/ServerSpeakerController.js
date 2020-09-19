@@ -33,4 +33,8 @@ class ServerSpeakerController{
 		this.speaker.send ( {"action" : "make_secret_code" } ) ;
 	}
 
+	getClients (){
+		this.speaker.send ( {"action" : "get_clients"} );
+	}
+
 }

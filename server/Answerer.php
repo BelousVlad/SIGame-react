@@ -19,7 +19,8 @@ class Answerer // TODO change everywere where field client to fiel con ***
 		"connect_to_lobby" => "connectToLobby",
 		"stop" => "stopServer",
 		"fast_init" => "fastInit",
-		"make_secret_code" => "makeSecretCode"
+		"make_secret_code" => "makeSecretCode",
+		"get_clients" => "getClients"
 	);
 
 	public function __construct($con)
@@ -239,6 +240,13 @@ class Answerer // TODO change everywere where field client to fiel con ***
 
 		return false;
 
+	}
+
+	private function getClients( $msg ){
+		$ans = (object) [];
+		$ans->action = "view_clients";
+		$ans->data = $this->con->server->clients;
+		$this->con->send( $ans );
 	}
 
 	//
