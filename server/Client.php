@@ -2,10 +2,7 @@
 
 class Client {
 	public $lobby;
-	public $connection;
-	public $answerer;
-	public $server;
-	private $clientCode;
+	public $clientCode;
 
 	public function __construct($code)
 	{
@@ -20,7 +17,7 @@ class Client {
 	}
 
 	public function getClientCode(){
-		return $clientCode;
+		return $this->clientCode;
 	}
 
 }

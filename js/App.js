@@ -8,6 +8,7 @@ class App{
 		this.view_model = new ViewModel();
 		this.initSpeker();
 		this.initRoutes();
+		// this.initEventListeners();
 
 
 
@@ -68,15 +69,21 @@ class App{
 //
 
 
+	// initEventListeners(){
+	// 	window.addEventListener( "client_code_succeed", ()=>{} );
+	// }
+
 	initRoutes()
 	{
 		this.routes = {
+			"client_code_checked" : "clientCodeSucceed",
 			"set_client_code" : "setClientCode",
 			"get_lobbies" : "viewLobbies",
 			"connect_to_lobby" : "lobbyConnect",
 			"setPlayerUniqueKey" : "setPlayerKey",
 			"set_secret_code" : "setSecretCode",
-			"view_clients" : "viewClients"
+			"view_clients" : "viewClients",
+			"view_broadcast" : "viewBroadcast"
 		};
 	}
 
@@ -86,8 +93,8 @@ class App{
 		this.speakerctrl = new ServerSpeakerController();
 
 	    this.speakerctrl.speaker.onopen = (event) => {
-	        this.view_model.hideLoader();
-	        this.speakerctrl.sendClientCode( window.localStorage.getItem('secretCode') );
+
+	        this.speakerctrl.sendClientCode( window.localStorage.getItem('client_code') );
 	    };
 
 	    this.speakerctrl.speaker.onmessage = (event) => {
@@ -160,19 +167,30 @@ class App{
 		this.speakerctrl.fastInit();
 	}
 
-	setClientCode( json ) {
-		let data = json.data;
-		window.localStorage.setItem( "client_code", data);
-		console.log(data);
-	}
-
 	getClients(){
 		this.speakerctrl.getClients();
 	}
 
 	viewClients( json ){
 		let data = json.data;
-		console.log(data);
+		console.log( json );
+	}
+
+
+	setClientCode( json ) {
+		let data = json.data;
+		window.localStorage.setItem( "client_code", data);
+		this.clientCodeSucceed();
+	}
+
+	clientCodeSucceed(){
+		this.view_model.hideLoader();
+	}
+
+
+	viewBroadcast ( msg ) {
+		let data = msg.data;
+		console.log ( "\n \n --- \n " + data + " \n --- \n \n " );
 	}
 
 //  -------------------

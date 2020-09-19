@@ -182,9 +182,14 @@ class Answerer // TODO change everywere where field client to fiel con ***
 
 	}
 
-	private function getClients(){
-		$this->con->server->clients;
+	private function sendBroadcast( $msg ){
+		$ans = (object)[];
+		$ans->action = "view_broadcast";
+		$ans->data = $msg;
+		$this->con->send( json_encode( $ans ) );
 	}
+
+
 
 	//
 	//  SecretCodeBlock
@@ -212,7 +217,7 @@ class Answerer // TODO change everywere where field client to fiel con ***
 
 		if ( ! ($this->doesClientCodeExist( $code )) ){
 
-			$code = FuncHelper::random_string(10);
+			$code = $this->generateClientCode ( 10 ) ;
 
 			array_push ( $this->con->server->clients , new Client( $code ) );
 
@@ -223,6 +228,12 @@ class Answerer // TODO change everywere where field client to fiel con ***
 
 			// echo "\n";
 			// print_r( $this->con->server->clients );
+		} else {
+
+			$ans = (object)[];
+			$ans->action = "client_code_checked";
+			$ans->data = "";
+			$this->con->send ( json_encode ( $ans ) );
 		}
 	}
 
@@ -242,11 +253,19 @@ class Answerer // TODO change everywere where field client to fiel con ***
 
 	}
 
+	private function generateClientCode( $len ){
+		do {
+			$code = FuncHelper::random_string( $len );
+		} while ( doesClientCodeExist( $code ) )
+
+		return $code;
+	}
+
 	private function getClients( $msg ){
 		$ans = (object) [];
 		$ans->action = "view_clients";
 		$ans->data = $this->con->server->clients;
-		$this->con->send( $ans );
+		$this->con->send( json_encode( $ans ) );
 	}
 
 	//
