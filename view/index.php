@@ -4,6 +4,7 @@ include 'header.php';
 
 <div class="container">
   <div class="main-menu-container">
+    <button> click </button>
     <a href="game" class="main-menu-btn main-menu-play-btn">
         Play
     </a>
@@ -21,6 +22,14 @@ include 'header.php';
     </a>
   </div>
 </div>
+
+<script>
+
+
+
+app.fileLoader.createLoadManager( "question-pack" ).bindToElement( document.querySelector("button") );
+
+</script>
 
 <?
 

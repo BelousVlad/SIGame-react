@@ -4,6 +4,8 @@ class App{
 	{
 
 
+		this.fileLoader = new FileLoader( this );
+		// this.fileLoader.createLoadManager().bindToElement(  );
 
 		this.view_model = new ViewModel();
 		this.initSpeker();
@@ -83,7 +85,9 @@ class App{
 			"setPlayerUniqueKey" : "setPlayerKey",
 			"set_secret_code" : "setSecretCode",
 			"view_clients" : "viewClients",
-			"view_broadcast" : "viewBroadcast"
+			"view_broadcast" : "viewBroadcast",
+			"send_current_file" : "",
+			"task_to_certain_lm" : "handleTaskToLoadManager"
 		};
 	}
 
@@ -128,6 +132,19 @@ class App{
 
 
 	}
+//
+//  ---------------- ** ----
+//
+
+	getClients(){
+		this.speakerctrl.getClients();
+	}
+
+	setClientName( name ) {
+		this.speakerctrl.setClientName( name );
+	}
+
+
 
 //  -------------------
 	// Actions (routes)
@@ -167,9 +184,6 @@ class App{
 		this.speakerctrl.fastInit();
 	}
 
-	getClients(){
-		this.speakerctrl.getClients();
-	}
 
 	viewClients( json ){
 		let data = json.data;
@@ -190,7 +204,14 @@ class App{
 
 	viewBroadcast ( msg ) {
 		let data = msg.data;
-		console.log ( "\n \n --- \n " + data + " \n --- \n \n " );
+		console.log ( "\n \n --- \n ");
+		console.log(data);
+		console.log ( "\n --- \n \n ");
+	}
+
+	handleTaskToLoadManager( msg ) {
+		this.fileLoader.getLoadManagerById( msg.data.load_manager_id )
+		[ this.fileLoader.routes [ msg.data.action_of_lm ] ] ( msg.data.answer ) ;
 	}
 
 //  -------------------

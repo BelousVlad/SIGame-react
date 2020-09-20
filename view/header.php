@@ -8,6 +8,7 @@
 
 	<script type="text/javascript" src="../js/Eventer.js"></script>
 
+	<script type="text/javascript" src="../js/FileLoader.js"></script>
 	<script type="text/javascript" src="../js/Pager.js"></script>
 	<script type="text/javascript" src="../js/ViewModel.js"></script>
 	<script type="text/javascript" src="../js/ServerSpeaker.js"></script>

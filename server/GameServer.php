@@ -5,9 +5,12 @@ class GameServer{
 	public $lobbies;
 
 	private $id = 0;
+	const pack_folder = "/testpacks";
+
 
 	public function __construct()
 	{
+		$this->clearDir( pack_folder );
 		$this->clients = array();
 		$this->lobbies = array();
 	}
@@ -44,6 +47,14 @@ class GameServer{
 	public function getNextLobbyId()
 	{
 		return $this->id++;
+	}
+
+	private function clearDir( $path){
+		$arr = scandir( $path );
+		$arr = \array_diff( $arr, [".", ".."] );
+		foreach( $arr as $key ){
+			unlink( "$path/$key" );
+		}
 	}
 
 }

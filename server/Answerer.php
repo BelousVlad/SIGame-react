@@ -20,7 +20,13 @@ class Answerer // TODO change everywere where field client to fiel con ***
 		"stop" => "stopServer",
 		"fast_init" => "fastInit",
 		"make_secret_code" => "makeSecretCode",
-		"get_clients" => "getClients"
+		"get_clients" => "getClients",
+		"set_client_name" => "setClientName",
+		"get_client_by_code" => "sendClientByCode",
+		"handle_file_info" => "handleFileInfo",
+		"handle_request_to_upload_file" => "handleRequestToUploadFile",
+		"handle_file" => "handleFile",
+		"ping" => "pong"
 	);
 
 	public function __construct($con)
@@ -33,7 +39,7 @@ class Answerer // TODO change everywere where field client to fiel con ***
 
 
 	public function send($msg){
-		$this->con->send($msg);
+		$this->con->send( json_encode ($msg ) );
 	}
 
 	public function answer($msg)
@@ -96,7 +102,7 @@ class Answerer // TODO change everywere where field client to fiel con ***
 
 		$path = "packs/pack$id.siq";
 
-		echo $path;
+		// echo $path;
 
 		$this->con->server->createLobbyWithId($id, $title, $max, $path);
 
@@ -158,15 +164,15 @@ class Answerer // TODO change everywere where field client to fiel con ***
 
 		$key = $lobby->connect($this->client, $data);
 
-		$ans = (object)[];
+		// $ans = (object)[];
 
-		$ans["data"] = $key;
+		// $ans["data"] = $key;
 
-		$ans["action"] = "setPlayerUniqueKey";
+		// $ans["action"] = "setPlayerUniqueKey";
 
-		if (!empty($key)) {
-			$this->send( json_encode($ans) );
-		}
+		// if (!empty($key)) {
+		// 	$this->send( json_encode($ans) );
+		// }
 
 	}
 
@@ -185,8 +191,12 @@ class Answerer // TODO change everywere where field client to fiel con ***
 	private function sendBroadcast( $msg ){
 		$ans = (object)[];
 		$ans->action = "view_broadcast";
-		$ans->data = $msg;
+		$ans->data = $msg ;
 		$this->con->send( json_encode( $ans ) );
+	}
+
+	private function pong( $msg ){
+		$this->sendBroadcast( $msg );
 	}
 
 
@@ -206,10 +216,6 @@ class Answerer // TODO change everywere where field client to fiel con ***
 	// 	$this->send ( json_encode( $ans ) );
 	// }
 
-
-
-
-
 	private function checkClientCode( $msg ){
 
 		$code = $msg->data;
@@ -219,7 +225,11 @@ class Answerer // TODO change everywere where field client to fiel con ***
 
 			$code = $this->generateClientCode ( 10 ) ;
 
-			array_push ( $this->con->server->clients , new Client( $code ) );
+			$client = new Client( $code );
+
+			$this->con->client = $client;
+
+			array_push ( $this->con->server->clients , $client );
 
 			$ans = (object)[];
 			$ans->action = "set_client_code";
@@ -229,6 +239,8 @@ class Answerer // TODO change everywere where field client to fiel con ***
 			// echo "\n";
 			// print_r( $this->con->server->clients );
 		} else {
+
+			$this->client = $this->getClientByCode( $code );
 
 			$ans = (object)[];
 			$ans->action = "client_code_checked";
@@ -253,10 +265,27 @@ class Answerer // TODO change everywere where field client to fiel con ***
 
 	}
 
+	private function getClientByCode( $code ){
+
+		if ( $code == 'NULL' ){
+			return false;
+		}
+
+		foreach( $this->con->server->clients as $key ){
+			if ( $key->getClientCode() == $code ){
+				return $key;
+			}
+		}
+
+		return false;
+
+	}
+
+
 	private function generateClientCode( $len ){
 		do {
 			$code = FuncHelper::random_string( $len );
-		} while ( doesClientCodeExist( $code ) )
+		} while ( $this->doesClientCodeExist( $code ) );
 
 		return $code;
 	}
@@ -266,6 +295,80 @@ class Answerer // TODO change everywere where field client to fiel con ***
 		$ans->action = "view_clients";
 		$ans->data = $this->con->server->clients;
 		$this->con->send( json_encode( $ans ) );
+	}
+
+	private function sendClientByCode ( $msg ){  //TODO
+		$this->con->send ();
+	}
+
+	private function setClientName( $name ){
+		$this->con->client->userName = $name;
+	}
+
+
+	// private function handleFileInfo ( $msg ){
+	// 	$details = $msg->details;
+
+	// 	const max_size = 3 * 10000;
+
+	// 	if ( $details->size <= max_size ){
+	// 		$ans = (object)[];
+	// 		$ans->action = "send_current_file";
+	// 		$ans->data = "";
+
+	// 		$this->con->send( $ans )
+	// 	} else {
+	// 		$parts = ceil ($details->size / max_size );
+	// 	}
+	// }
+
+	private function handleRequestToUploadFile( $msg ){
+
+		// TODO checkout of load_manager_id be less then some number ( for example 5);
+
+		$details = $msg->data->details;
+		$size = $details->size;
+		$type = $details->type;
+		$lmId = $details->load_manager_id;
+
+		$ans = (object)[];
+
+		if ( $type == "question-pack" ){
+			if ( $size > 0 ){ // TODO comparing with max_pack_size
+				$ans->action = "task_to_certain_lm";
+				$ans->data->load_manager_id = $lmId;
+				$ans->data->action_of_lm = "start_uploading_file";
+				$ans->data->asnwer = "";
+
+				$this->send( $ans );
+
+			} else {
+				;
+			}
+		} else if ( $type == "avatar-image" ) {
+			;
+		}
+
+	}
+
+	private function handleFile( $msg ){
+		$details = $msg->data->details;
+		$size = $details->size;
+		$type = $details->type;
+		$lmId = $details->load_manager_id;
+		$fileContent = $msg->data->file;
+
+		$ans = (object)[];
+		$fileContent = str_replace(' ','+',$fileContent);
+		$fileContent = base64_decode($fileContent);
+
+		$clientId = $this->con->client->getClientCode();
+		$filew = fopen( "testpacks/sipack _ $clientId _ $lmId _ .rar", "w" );
+		fwrite( $filew, $fileContent );
+	}
+
+	private function isFileOk(){
+		;
 	}
 
 	//

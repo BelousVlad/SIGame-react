@@ -2,6 +2,7 @@
 
 class Client {
 	public $lobby;
+	public $userName;
 	public $clientCode;
 
 	public function __construct($code)
