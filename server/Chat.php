@@ -35,6 +35,10 @@ class Chat implements MessageComponentInterface {
 
         $conn->answerer = new Answerer( $conn );
         $conn->server = $this->server;
+        $conn->lmList = array();
+        // $conn->lmList[0]->tempData = array();
+        // $conn->lmList[0]->temlData['FileParts'] = ;
+        $conn->answerer->sendBroadcast( $conn->lmList);
 
         $this->connections->attach($conn);
 

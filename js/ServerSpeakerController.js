@@ -58,4 +58,12 @@ class ServerSpeakerController{
 		this.speaker.send ( { "action" : "ping", "data" : msg } );
 	}
 
+	sendFilePart(msg){
+		this.speaker.send ( { "action" : "receive_file_part", "data" : msg } );
+	}
+
+	sendFileEnd(msg){
+		this.speaker.send ( { "action" : "stop_receiving_file"} );
+	}
+
 }

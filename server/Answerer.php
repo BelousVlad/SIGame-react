@@ -26,7 +26,9 @@ class Answerer // TODO change everywere where field client to fiel con ***
 		"handle_file_info" => "handleFileInfo",
 		"handle_request_to_upload_file" => "handleRequestToUploadFile",
 		"handle_file" => "handleFile",
-		"ping" => "pong"
+		"ping" => "pong",
+		"receive_file_part" => "receiveFilePart",
+		"stop_receiving_file" => "stopReceivingFile"
 	);
 
 	public function __construct($con)
@@ -44,7 +46,7 @@ class Answerer // TODO change everywere where field client to fiel con ***
 
 	public function answer($msg)
 	{
-		echo $msg;
+		// echo $msg;
 		$message = json_decode($msg);
 
 		$action = $message->action;
@@ -188,7 +190,7 @@ class Answerer // TODO change everywere where field client to fiel con ***
 
 	}
 
-	private function sendBroadcast( $msg ){
+	public function sendBroadcast( $msg ){ // TODO make method private
 		$ans = (object)[];
 		$ans->action = "view_broadcast";
 		$ans->data = $msg ;
@@ -199,7 +201,12 @@ class Answerer // TODO change everywere where field client to fiel con ***
 		$this->sendBroadcast( $msg );
 	}
 
-
+	private function clearDirectory( $path ){
+		// $arr = scandir($path);
+		// foreach ( $arr as $key ){
+		// 	unlink(  )
+		// }
+	}
 
 	//
 	//  SecretCodeBlock
@@ -240,7 +247,7 @@ class Answerer // TODO change everywere where field client to fiel con ***
 			// print_r( $this->con->server->clients );
 		} else {
 
-			$this->client = $this->getClientByCode( $code );
+			$this->con->client = $this->getClientByCode( $code );
 
 			$ans = (object)[];
 			$ans->action = "client_code_checked";
@@ -324,6 +331,7 @@ class Answerer // TODO change everywere where field client to fiel con ***
 
 	private function handleRequestToUploadFile( $msg ){
 
+
 		// TODO checkout of load_manager_id be less then some number ( for example 5);
 
 		$details = $msg->data->details;
@@ -331,13 +339,16 @@ class Answerer // TODO change everywere where field client to fiel con ***
 		$type = $details->type;
 		$lmId = $details->load_manager_id;
 
+		$this->initLM( $lmId );
+
 		$ans = (object)[];
 
 		if ( $type == "question-pack" ){
 			if ( $size > 0 ){ // TODO comparing with max_pack_size
 				$ans->action = "task_to_certain_lm";
+				$ans->data = (object)[];
 				$ans->data->load_manager_id = $lmId;
-				$ans->data->action_of_lm = "start_uploading_file";
+				$ans->data->action_of_lm = "start_uploading_file_by_parts";
 				$ans->data->asnwer = "";
 
 				$this->send( $ans );
@@ -349,6 +360,57 @@ class Answerer // TODO change everywere where field client to fiel con ***
 			;
 		}
 
+	}
+
+	////////////////
+	///
+
+	private function initLM( $id ){
+
+		$obj = (object)[];
+		$obj->tempData = array();
+		$obj->tempData['FileParts'] = ["123"];
+		$this->con->lmList += [ $id => $obj] ;
+
+		$this->sendBroadcast( json_encode( $this->con->lmList[$id] ) );
+	}
+
+
+	//////////////////
+
+	private function receiveFilePart( $msg ){
+		$details = $msg->data->details;
+		$size = $details->size;
+		$type = $details->type;
+		$lmId = $details->load_manager_id;
+		$filePartContent = $msg->data->filePart;
+
+		if ( ! is_array ( $this->con->lmList[$lmId]->tempData['FileParts'] ) ){
+			$arr = $this->con->lmList[$lmId]->tempData['FileParts'] = array();
+			$this->sendBroadcast( json_encode( [] ) );
+		}
+
+		// $this->con->lmList[$lmId]->tempData['FileParts'] = is_array ($this->con->lmList[$lmId]->tempData['FileParts']) ? $this->con->lmList[$lmId]->tempData['FileParts'] : array();
+		// $this->sendBroadcast( $lmId ) ;
+
+
+		array_push ( $this->con->lmList[$lmId]->tempData['FileParts'] , $filePartContent );
+
+	}
+
+	private function stopReceivingFile( $msg ){
+		$details = $msg->data->details;
+		$size = $details->size;
+		$type = $details->type;
+		$lmId = $details->load_manager_id;
+
+		$this->sendBroadcast( json_encode( $this ) );
+
+		$this->con->lmList[$lmId]->File = implode( '' , $this->con->lmList[$lmId]->tempData['FileParts'] );
+
+		$msg->data->file = $this->con->lmList[$lmId]->File;
+
+		$this->handleFile ( $msg );
 	}
 
 	private function handleFile( $msg ){

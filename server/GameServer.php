@@ -1,16 +1,19 @@
 <?php
 
+
+
 class GameServer{
 	public $clients;
 	public $lobbies;
 
 	private $id = 0;
-	const pack_folder = "/testpacks";
+
 
 
 	public function __construct()
 	{
-		$this->clearDir( pack_folder );
+		// $pack_folder = dirname(__FILE__)."/testpacks";
+		// $this->clearDir( $pack_folder );
 		$this->clients = array();
 		$this->lobbies = array();
 	}

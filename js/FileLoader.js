@@ -1,12 +1,17 @@
 class LoadManager{
 	constructor( fileLoader, type ){
 
+		this.max_size = 1000000;
 
 		this.type = type; // now just 2 must exist : question-pack , avatar-image;
 		this.fileLoader = fileLoader;
+
+
 		this.id = fileLoader.lastId;
 		fileLoader.lastId++;
 		this.fileReader = new FileReader();
+
+		this.fileReader.onload = ( e ) => { this.sendRequestToUploadFile(); };
 	}
 
 	sendRequestToUploadFile(){
@@ -15,16 +20,19 @@ class LoadManager{
 
 	sendFilePart(){
 		;
+		return;
 	}
 
 	sendFile(){
-		// alert(1);
-		let send = () => { this.fileLoader.app.speakerctrl.sendFile( { file : this.fileReader.result, details : { size : this.currentFile.size, type : this.type, load_manager_id : this.id } } ) }
-		if ( this.fileReader.readyState < 2 ){
-			this.fileReader.onload = ( e ) => { send() };
-		} else {
-			send();
-		}
+
+		// let send = () => { this.fileLoader.app.speakerctrl.sendFile( { file : this.fileReader.result, details : { size : this.currentFile.size, type : this.type, load_manager_id : this.id } } ) }
+		// if ( this.fileReader.readyState < 2 ){
+		// 	this.fileReader.onload = ( e ) => { send() };
+		// } else {
+		// 	send();
+		// }
+		//
+
 	}
 
 	bindToElement( elem ){
@@ -33,7 +41,7 @@ class LoadManager{
 			input.type = "file";
 			input.onchange = ( e ) => {
 				this.currentFile = input.files[0];
-				this.sendRequestToUploadFile();
+
 				this.fileReader.readAsDataURL( input.files[0] );
 			} ;
 			input.click();
@@ -44,6 +52,24 @@ class LoadManager{
 	getId(){
 		return this.id;
 	}
+
+	sendFileByParts(){
+		for (let i = 0; i < this.fileReader.result.length / this.max_size ; i++){
+			this.sendFilePart( i );
+		}
+		this.sendFileEnd();
+	}
+
+	sendFilePart( part ){
+		console.log("part with index " + part + "attempt to sends");
+		let filePart = this.fileReader.result.substr( this.max_size * part, this.max_size );
+		this.fileLoader.app.speakerctrl.sendFilePart( { filePart : filePart , details : { size : this.currentFile.size, type : this.type, load_manager_id : this.id } } );
+	}
+
+	sendFileEnd(){
+		this.fileLoader.app.speakerctrl.sendFileEnd();
+	}
+
 
 
 }
@@ -77,7 +103,8 @@ class FileLoader{ // TODO maybe FILE Loader Answerer in APP object wich will Ð¾Ð
 
 	initRoutes(){
 		this.routes = {
-			"start_uploading_file" : "sendFile"
+			"start_uploading_file" : "sendFile",
+			"start_uploading_file_by_parts" : "sendFileByParts"
 		};
 	}
 
