@@ -63,10 +63,10 @@ class httpRouter{
 					if (err)
 						console.log( chalk.red( err ) );
 					// res.write(data);
-					fs.readFile( path_, 'utf-8', (err, dataMain) => {
-						if (err){
-							fs.readFile( config.errorPagePath, 'utf-8', (err, data) =>{
-								if (err){
+					fs.readFile( path_, 'utf-8', async (err, dataMain) => {
+						if (err || dataMain === 'undefined'){
+							await fs.readFile( config.errorPagePath, 'utf-8', (err, data) =>{
+								if (err ){
 
 									res.end('no way =(');
 								}

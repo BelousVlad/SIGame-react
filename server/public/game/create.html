@@ -1,4 +1,4 @@
-<? include ROOT.'/view/header.php' ?>
+
 
 <h1> GAME CREATE PAGE</h1>
 
@@ -29,7 +29,7 @@ document.querySelector('#file_uploader').onchange = () => {
 
 
 		let filereader = new FileReader();
-		filereader.readAsArrayBuffer(document.querySelector('#file_uploader').files[0] 
+		filereader.readAsArrayBuffer(document.querySelector('#file_uploader').files[0]
 		console.log(filereader.result);
 
 		let message = "&title=" + document.querySelector('#title').value + "&password=123&path=" + filereader.result + "&max_size=5";
@@ -52,7 +52,7 @@ let file;
 
 
 $("input[type=submit]").click(function(event) {
-		
+
 	console.log(event);
 
 	let title = $("input[name=title]").val();
@@ -68,7 +68,7 @@ $("input[type=submit]").click(function(event) {
 		let pack = a.split(',')[1];
 
 		let max_packsize = 32 * 1000000;
-	
+
 
 		console.log(pack.length);
 		if (pack.length < max_packsize)
@@ -87,7 +87,7 @@ $("input[type=submit]").click(function(event) {
 
 			app.speaker.socket.send(json);
 		}
-		else 
+		else
 		{
 
 			let action = {
@@ -129,5 +129,3 @@ $("input[type=submit]").click(function(event) {
 } )
 
 </script>
-
-<? include ROOT.'/view/footer.php '?>
