@@ -38,7 +38,7 @@ http.createServer( (req, res) => {
 		}
 	}
 
-	router.invoke( req, (data) => {res.end(data)} );
+	router.invoke( req, res );
 
 
 
