@@ -12,15 +12,20 @@ class LoadManager{
 		this.fileReader = new FileReader();
 
 		this.fileReader.onload = ( e ) => { this.sendRequestToUploadFile(); };
+
+		this.init();
+	}
+
+	init(){
+		let data = {
+			load_manager_id : this.id,
+			load_manager_type : this.type
+		};
+		this.fileLoader.app.speakerctrl.initLM( data );
 	}
 
 	sendRequestToUploadFile(){
 		this.fileLoader.app.speakerctrl.sendRequestToUploadFile( { details : { size : this.currentFile.size, type : this.type, load_manager_id : this.id } } );
-	}
-
-	sendFilePart(){
-		;
-		return;
 	}
 
 	sendFile(){
@@ -67,7 +72,7 @@ class LoadManager{
 	}
 
 	sendFileEnd(){
-		this.fileLoader.app.speakerctrl.sendFileEnd();
+		this.fileLoader.app.speakerctrl.sendFileEnd( { details : { size : this.currentFile.size, type : this.type, load_manager_id : this.id } } );
 	}
 
 

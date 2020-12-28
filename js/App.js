@@ -10,6 +10,9 @@ class App{
 		this.view_model = new ViewModel();
 		this.initSpeker();
 		this.initRoutes();
+
+		/*this.speakerctrl.ping("test2");this.initMetaData();*/
+		// };
 		// this.initEventListeners();
 
 
@@ -35,6 +38,8 @@ class App{
 		}
 
 	}
+
+	dummy(){};
 
 //
 // 	SecretCodeBlock (don't work)
@@ -78,6 +83,8 @@ class App{
 	initRoutes()
 	{
 		this.routes = {
+			"dummy" : "dummy",
+			"call_actions_array" : "callActionsArray",
 			"client_code_checked" : "clientCodeSucceed",
 			"set_client_code" : "setClientCode",
 			"get_lobbies" : "viewLobbies",
@@ -87,7 +94,8 @@ class App{
 			"view_clients" : "viewClients",
 			"view_broadcast" : "viewBroadcast",
 			"send_current_file" : "",
-			"task_to_certain_lm" : "handleTaskToLoadManager"
+			"task_to_certain_lm" : "handleTaskToLoadManager",
+			"resolve_meta_data" : "resolveMetaData"
 		};
 	}
 
@@ -97,8 +105,7 @@ class App{
 		this.speakerctrl = new ServerSpeakerController();
 
 	    this.speakerctrl.speaker.onopen = (event) => {
-
-	        this.speakerctrl.sendClientCode( window.localStorage.getItem('client_code') );
+	    	this.initMetaData();
 	    };
 
 	    this.speakerctrl.speaker.onmessage = (event) => {
@@ -121,16 +128,41 @@ class App{
 	    this.speakerctrl.speaker.openSocket();
 	}
 
+	initMetaData(){
+		// this.speakerctrl.ping("test1");
+		let clientCode = window.localStorage.getItem('client_code') || "empty?"; // TODO find name to empty field
+
+		let data = {
+			client_code : clientCode
+			// lm_list : lmList
+		}
+		this.speakerctrl.initMetaData( data );
+	}
+
+	resolveMetaData( msg ){
+
+		this.view_model.hideLoader();
+	}
+
 
 
 	getServerMessage(message)
 	{
+		// console.log(message);
 
 
 		let ans = JSON.parse(message);
 		this[this.routes[ans.action]](ans);
 
 
+	}
+
+	callActionsArray(message){
+		// this.speacialfield = message.data.actionList;
+		let actionList = message.data.actionList;
+		for ( const field in actionList ){
+			this[ this.routes[ actionList[field].action ] ]( actionList[field] );
+		}
 	}
 //
 //  ---------------- ** ----
@@ -192,9 +224,10 @@ class App{
 
 
 	setClientCode( json ) {
+		// console.log(1);
 		let data = json.data;
 		window.localStorage.setItem( "client_code", data);
-		this.clientCodeSucceed();
+		// this.clientCodeSucceed();
 	}
 
 	clientCodeSucceed(){

@@ -63,7 +63,19 @@ class ServerSpeakerController{
 	}
 
 	sendFileEnd(msg){
-		this.speaker.send ( { "action" : "stop_receiving_file"} );
+		this.speaker.send ( { "action" : "stop_receiving_file", "data" : msg } );
+	}
+
+	initMetaData(msg){
+		this.speaker.send ( {"action" : "init_meta_data", "data" : msg} );
+	}
+
+	initLM( data ){
+		this.speaker.send ( {"action" : "init_load_manager", "data" : data } );
+	}
+
+	testT( data ){
+		this.speaker.send ( {"action" : "try_to_sleep", "data" : { "time" : data.time, "data" : data.data } } );
 	}
 
 }

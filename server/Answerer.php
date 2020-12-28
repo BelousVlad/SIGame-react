@@ -4,6 +4,7 @@ class Answerer // TODO change everywere where field client to fiel con ***
 {
 
 	public $con;
+	public $meta_data_isset = false;
 
 
 
@@ -28,7 +29,10 @@ class Answerer // TODO change everywere where field client to fiel con ***
 		"handle_file" => "handleFile",
 		"ping" => "pong",
 		"receive_file_part" => "receiveFilePart",
-		"stop_receiving_file" => "stopReceivingFile"
+		"stop_receiving_file" => "stopReceivingFile",
+		"init_meta_data" => "initMetaData",
+		"init_load_manager" => "initLM",
+		"try_to_sleep" => "tryToSleep"
 	);
 
 	public function __construct($con)
@@ -46,18 +50,49 @@ class Answerer // TODO change everywere where field client to fiel con ***
 
 	public function answer($msg)
 	{
+
+		// $this->sendBroadcast( $msg );
+
 		// echo $msg;
+
 		$message = json_decode($msg);
 
 		$action = $message->action;
+		$action = !empty($action) ? $action : die("empty action received");
 
-		if (!empty($action)) {
-			call_user_func(array($this, self::$commands[$action]), $message);
+		if ( $this->meta_data_isset ){
+				call_user_func(array($this, self::$commands[$action]), $message);
+		} else {
+			if ( $action == "init_meta_data" ){
+				$this->initMetaData($message);
+			}
 		}
 	}
 
-	private $temp_lobby_data;
-	private $getting_large_pack_flag;
+	// private $temp_lobby_data;
+	// private $getting_large_pack_flag;
+
+	private function initMetaData( $msg ){
+
+		// $this->sendBroadcast(3);
+
+		$data = $msg->data;
+		$ans = (object)[
+			"action" => "call_actions_array",
+			"data" => (object)[]
+		];
+		$actEnd = (object)[
+			"action" => "resolve_meta_data"
+		];
+		$ans->data->actionList = array();
+		array_push( $ans->data->actionList, $this->checkClientCode( $data->client_code ) );
+		array_push( $ans->data->actionList, $actEnd );
+
+		$this->meta_data_isset = true;
+
+		$this->send ( $ans );
+
+	}
 
 	private function createLobby($message)
 	{
@@ -223,9 +258,9 @@ class Answerer // TODO change everywere where field client to fiel con ***
 	// 	$this->send ( json_encode( $ans ) );
 	// }
 
-	private function checkClientCode( $msg ){
+	private function checkClientCode( $code ){
 
-		$code = $msg->data;
+		// $code = $msg->data;
 
 
 		if ( ! ($this->doesClientCodeExist( $code )) ){
@@ -241,7 +276,7 @@ class Answerer // TODO change everywere where field client to fiel con ***
 			$ans = (object)[];
 			$ans->action = "set_client_code";
 			$ans->data = $code;
-			$this->con->send( json_encode( $ans ) );
+			return $ans;
 
 			// echo "\n";
 			// print_r( $this->con->server->clients );
@@ -250,9 +285,9 @@ class Answerer // TODO change everywere where field client to fiel con ***
 			$this->con->client = $this->getClientByCode( $code );
 
 			$ans = (object)[];
-			$ans->action = "client_code_checked";
+			$ans->action = "dummy";
 			$ans->data = "";
-			$this->con->send ( json_encode ( $ans ) );
+			return $ans;
 		}
 	}
 
@@ -338,8 +373,13 @@ class Answerer // TODO change everywere where field client to fiel con ***
 		$size = $details->size;
 		$type = $details->type;
 		$lmId = $details->load_manager_id;
+		$clientId = $this->con->client->getClientCode();
 
-		$this->initLM( $lmId );
+		// $this->sendBroadcast( json_encode ( $msg->data->details ) );
+
+		// $this->initLM( $lmId );
+
+		file_put_contents( "testpacks/sipack _ $clientId _ $lmId _ .rar", "" );
 
 		$ans = (object)[];
 
@@ -365,14 +405,22 @@ class Answerer // TODO change everywere where field client to fiel con ***
 	////////////////
 	///
 
-	private function initLM( $id ){
+	private function initLM( $msg ){
 
-		$obj = (object)[];
-		$obj->tempData = array();
-		$obj->tempData['FileParts'] = ["123"];
-		$this->con->lmList += [ $id => $obj] ;
+		$id = $msg->data->id;
+		$type = $msg->data->type;
 
-		$this->sendBroadcast( json_encode( $this->con->lmList[$id] ) );
+		// if ( array_key_exists( $id, $this->con->lmList->tempData ) ) // --------- flaf ----
+		$lm = (object)[];
+		$lm ->type = $type;
+		$lm ->tempData = array();
+		$lm ->tempData['FileParts'] = array();
+
+		$this->con->lmList += [$id => $lm];
+
+		var_dump ( $this->con->lmList );
+
+		// $this->sendBroadcast ( $lmId );
 	}
 
 
@@ -385,9 +433,11 @@ class Answerer // TODO change everywere where field client to fiel con ***
 		$lmId = $details->load_manager_id;
 		$filePartContent = $msg->data->filePart;
 
+		// $this->sendBroadcast( json_encode ( $this->con->lmList[$lmId] ) );
+
 		if ( ! is_array ( $this->con->lmList[$lmId]->tempData['FileParts'] ) ){
 			$arr = $this->con->lmList[$lmId]->tempData['FileParts'] = array();
-			$this->sendBroadcast( json_encode( [] ) );
+			// $this->sendBroadcast( json_encode( [] ) );
 		}
 
 		// $this->con->lmList[$lmId]->tempData['FileParts'] = is_array ($this->con->lmList[$lmId]->tempData['FileParts']) ? $this->con->lmList[$lmId]->tempData['FileParts'] : array();
@@ -404,7 +454,9 @@ class Answerer // TODO change everywere where field client to fiel con ***
 		$type = $details->type;
 		$lmId = $details->load_manager_id;
 
-		$this->sendBroadcast( json_encode( $this ) );
+		// $this->sendBroadcast ( $lmId );
+
+		// $this->sendBroadcast( json_encode( $this->con->lmList[$lmId] ) );
 
 		$this->con->lmList[$lmId]->File = implode( '' , $this->con->lmList[$lmId]->tempData['FileParts'] );
 
@@ -427,6 +479,7 @@ class Answerer // TODO change everywere where field client to fiel con ***
 		$clientId = $this->con->client->getClientCode();
 		$filew = fopen( "testpacks/sipack _ $clientId _ $lmId _ .rar", "w" );
 		fwrite( $filew, $fileContent );
+		fclose( $filew );
 	}
 
 	private function isFileOk(){
@@ -437,8 +490,15 @@ class Answerer // TODO change everywere where field client to fiel con ***
 	// end of block
 	//
 
+	private function tryToSleep( $msg ){
+		$data = $msg->data;
+		$time = (int)$data->time;
+		sleep($time);
+		$answer = $this->sendBroadcast($msg->data->data);
+	}
 
 }
+
 
 
 ?>

@@ -2,6 +2,7 @@
 
 
 require 'config.php';
+// define('ROOT', dirname(__FILE__) );
 
 ini_set('memory_limit', '1024M');
 

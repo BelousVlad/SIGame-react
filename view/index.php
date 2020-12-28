@@ -29,10 +29,21 @@ include 'header.php';
 
 app.fileLoader.createLoadManager( "question-pack" ).bindToElement( document.querySelector("button") );
 
+setTimeout( () => {
+app.speakerctrl.testT({data : "1 seconds sleep", time : 1});
+app.speakerctrl.testT({data : "5 seconds sleep", time : 5});
+
+
+// app.speakerctrl.testT({data : "10 seconds sleep", time : 10});
+} , 100 );
+
+setInterval( () => {console.log("1 second passed")} , 1000 );
+
 </script>
 
 <?
 
 include 'footer.php';
+
 ?>
 
