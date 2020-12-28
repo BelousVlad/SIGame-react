@@ -16,6 +16,10 @@ class httpRouter{
 
 	constructor(){
 		this.conditions = {
+			'in-game' : ( req ) => {
+				return false;
+				// check cookies whenether client in certain lobby or not.
+			},
 			'non-html' : ( req ) => {
 					let url = (req.url).split('?')[0];
 					let extname = path.extname(url);
@@ -30,6 +34,10 @@ class httpRouter{
 			'html' : ( req ) => { return true; }
 		}
 		this.methods = {
+			'in-game' : ( req, res ) => {
+				return;
+				//;
+			},
 			'non-html' : ( req, res ) => {
 				let url = (req.url).split('?')[0];
 				let path_ = path.join(__dirname, 'public', url);
