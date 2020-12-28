@@ -7,7 +7,9 @@ const templates = {
 	}
 }
 
-const server = new WebSocket.Server({ port : 3000 });
+const server = new WebSocket.Server({ port : 3001 });
+
+console.log(chalk.yellow('socketServer started.'));
 
 server.on('connection', (ws) => {
 

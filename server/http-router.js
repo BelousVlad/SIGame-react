@@ -21,7 +21,7 @@ class httpRouter{
 					let extname = path.extname(url);
 					switch ( extname ) {
 						case '.css' : { return true;}
-						case '.javascript' : { return true;}
+						case '.js' : { return true;}
 						case '.ico' : { return true;}
 						default : { return false;}
 					}

@@ -105,6 +105,7 @@ class App{
 		this.speakerctrl = new ServerSpeakerController();
 
 	    this.speakerctrl.speaker.onopen = (event) => {
+	    	this.view_model.hideLoader();
 	    	this.initMetaData();
 	    };
 
