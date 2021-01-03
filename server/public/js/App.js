@@ -3,11 +3,14 @@ class App{
 	constructor()
 	{
 
-
+		this.cookie = new Cookie();
 		this.fileLoader = new FileLoader( this );
 		// this.fileLoader.createLoadManager().bindToElement(  );
 
+		// this.Cookie.setCookie('','');
+
 		this.view_model = new ViewModel();
+		this.view_model.hideLoader();
 		this.initSpeker();
 		this.initRoutes();
 
@@ -18,7 +21,7 @@ class App{
 
 
 		this.clickEventer = new Eventer();
-		this.pager = new Pager(this.XMLRequest);
+		this.pager = new Pager(this);
 
 		this.clickEventer.addEvent("a", (event) => {
 
@@ -41,44 +44,6 @@ class App{
 
 	dummy(){};
 
-//
-// 	SecretCodeBlock (don't work)
-//
-	// async getSecretCode(){ // RETURN PROMISE
-
-	// 	if ( window.localStorage.getItem( 'sercretCode' ) == null ){
-	// 		let val = await this.makeSecretCode.call(this)
-
-	// 		window.localStorage.setItem ( 'secretCode', val);
-	// 	}
-	// 	return window.localStorage.getItem( 'secretCode' );
-
-	// }
-
-	// async setSecretCode( json ){
-
-	// 	let code = json.data;
-	// 	window.localStorage.setItem( 'secretCode', code );
-	// 	window.dispatchEvent( new CustomEvent( 'secretCodeReceived', { detail : { data : code } } ) );    // WARNING X WARNING X WARNING. CustomEvent object don't deleted in future and keep storing after func (maybe)
-
-	// }
-
-	// async makeSecretCode(){
-
-	// 	let prom = new Promise( (resolve, reject) => { window.addEventListener( 'secretCodeReceived',  (e) => { resolve( e.detail.data )} ) } /* */ );
-	// 	this.speakerctrl.makeSecretCode();
-	// 	return await prom;
-
-	// }
-
-//
-//  end ---
-//
-
-
-	// initEventListeners(){
-	// 	window.addEventListener( "client_code_succeed", ()=>{} );
-	// }
 
 	initRoutes()
 	{
@@ -95,7 +60,10 @@ class App{
 			"view_broadcast" : "viewBroadcast",
 			"send_current_file" : "",
 			"task_to_certain_lm" : "handleTaskToLoadManager",
-			"resolve_meta_data" : "resolveMetaData"
+			"resolve_meta_data" : "resolveMetaData",
+			"name_is_valid" : "nameIsValid",
+			"name_is_not_valid" : "nameIsNotValid",
+			"go_to_page" : "GOTOPage"
 		};
 	}
 
@@ -105,8 +73,13 @@ class App{
 		this.speakerctrl = new ServerSpeakerController();
 
 	    this.speakerctrl.speaker.onopen = (event) => {
-	    	this.view_model.hideLoader();
-	    	this.initMetaData();
+	    	if ( window.localStorage.getItem('clientName') ){
+	    		this.speakerctrl.checkClientName( window.localStorage.getItem('clientName') );
+	    	} else {
+	    		// TODO this.view_model.getNameInput()l
+	    	}
+	    	// this.view_model.hideLoader();
+	    	// this.initMetaData();
 	    };
 
 	    this.speakerctrl.speaker.onmessage = (event) => {
@@ -122,7 +95,7 @@ class App{
 
 	    this.speakerctrl.speaker.onclose = (event) =>
 	    {
-	        this.view_model.viewLoader();
+	        // this.view_model.viewLoader();
 	        this.speakerctrl.speaker.openSocket();
 	    }
 
@@ -153,7 +126,7 @@ class App{
 
 
 		let ans = JSON.parse(message);
-		this[this.routes[ans.action]](ans);
+		this[this.routes[ans.act]](ans);
 
 
 	}
@@ -246,6 +219,35 @@ class App{
 	handleTaskToLoadManager( msg ) {
 		this.fileLoader.getLoadManagerById( msg.data.load_manager_id )
 		[ this.fileLoader.routes [ msg.data.action_of_lm ] ] ( msg.data.answer ) ;
+	}
+
+	nameIsValid( msg ){
+		this.view_model.hideLoader();
+	}
+
+	nameIsNotValid( msg ){
+		// this.view_model.viewLoader();
+	}
+
+	setClientName( name ){
+		window.localStorage.setItem('clientName', name);
+		this.speakerctrl.checkClientName( window.localStorage.getItem('clientName') );
+	}
+
+	GOTOPage ( msg ) {
+		let path;
+		if ( msg && msg.data && msg.data.path )
+			path = msg.data.path;
+		else{
+
+			path = window.location.href;
+			// path = path.split('/');
+			// path = path.slice(3);
+			// path = path.join('/');
+			// console.log(path);
+		}
+		console.log(path);
+		this.pager.changePage.call( this.pager,  path );
 	}
 
 //  -------------------

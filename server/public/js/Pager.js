@@ -2,7 +2,7 @@ class Pager{
 	constructor(XMLRequest)
 	{
 		this.history = [];
-		this.XMLRequest = XMLRequest;
+		this.XMLRequest = XMLRequest.speakerctrl.speaker.XMLRequest;
 		this.history.push(document.URL);
 	}
 
@@ -20,7 +20,7 @@ class Pager{
 			let ar = $(resolve);
 
 			$(ar).each((i,item) => {
-				
+
 
 				let el = $(item);
 
@@ -32,7 +32,4 @@ class Pager{
 			})
 		});
 	}
-
-
-
 }

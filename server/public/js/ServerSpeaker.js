@@ -44,7 +44,7 @@ class ServerSpeaker {
 
 	      	var xhr = new XMLHttpRequest();
 
-	     	xhr.open('POST', 'localhost' /* ???? */, true);
+	     	xhr.open('POST', path /* ???? */, true);
 
 		  	xhr.onload = function(){
 

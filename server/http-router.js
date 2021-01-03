@@ -2,9 +2,10 @@ const path = require('path');
 const config = require('./config');
 const fs = require('fs');
 const chalk = require('chalk');
+const helper = require( config.helperClassPath );
 
 
-class httpRouter{
+module.exports = class httpRouter{
 	invoke(req, res){
 		for ( let i in this.conditions ){
 			if ( this.conditions[i]( req ) ){
@@ -14,23 +15,33 @@ class httpRouter{
 		}
 	}
 
-	constructor(){
+	constructor( server ){
+		this.initTemplates();
+		this.server = server;
+	}
+
+	initTemplates(){
 		this.conditions = {
 			'in-game' : ( req ) => {
 				return false;
 				// check cookies whenether client in certain lobby or not.
 			},
 			'non-html' : ( req ) => {
-					let url = (req.url).split('?')[0];
-					let extname = path.extname(url);
-					switch ( extname ) {
-						case '.css' : { return true;}
-						case '.js' : { return true;}
-						case '.ico' : { return true;}
-						default : { return false;}
-					}
+				let url = (req.url).split('?')[0];
+				let extname = path.extname(url);
+				switch ( extname ) {
+					case '.css' : { return true;}
+					case '.js' : { return true;}
+					case '.ico' : { return true;}
+					default : { return false;}
+				}
 
 			},
+			'html-no-name' : ( req ) => {
+				let cookies = helper.parseCookies( req );
+				return !helper.isClientNameValid( cookies['clientName'] );
+				// return !cookies['clientName'];
+			 },
 			'html' : ( req ) => { return true; }
 		}
 		this.methods = {
@@ -56,6 +67,21 @@ class httpRouter{
 				})
 
 			},
+			'html-no-name' : ( req, res ) => {
+				helper.readAllFiles( [ config.headerPagePath, config.logInPagePath, config.footerPagePath ], ( err, data ) => {
+					if (err.length){
+						fs.readFile( config.errorPagePath, 'utf-8', ( err_, data_ ) =>{
+							if (err_){
+								res.end('no way=(');
+							} else {
+								res.end( data_ );
+							}
+						})
+					} else {
+						res.end( data.join('') );
+					}
+				} )
+			},
 			'html' : ( req, res ) => {
 				let url = (req.url).split('?')[0];
 				let extname = path.extname(url);
@@ -63,37 +89,53 @@ class httpRouter{
 				if ( extname == '' )
 					path_ = path.join(path_, 'index.html');
 
+				let paths = [ config.headerPagePath, path_, config.footerPagePath ]
+
+				helper.readAllFiles( paths, ( err , data ) =>{
+					if ( err.length ) {
+						fs.readFile( config.errorPagePath, 'utf-8', ( error, data_ )=>{
+							if (error){
+								res.end('no way =(');
+							} else {
+								res.end(data_);
+							}
+						})
+					} else {
+						data = data.join('');
+						res.end(data);
+					}
+				} )
 
 
 
 				// try{
-				fs.readFile( config.headerPagePath, 'utf-8', (err, dataHeader) =>{ // тут идет хардкод добавления хедера и футера всем хтмл страницам.
-					if (err)
-						console.log( chalk.red( err ) );
-					// res.write(data);
-					fs.readFile( path_, 'utf-8', async (err, dataMain) => {
-						if (err || dataMain === 'undefined'){
-							await fs.readFile( config.errorPagePath, 'utf-8', (err, data) =>{
-								if (err ){
+				// fs.readFile( config.headerPagePath, 'utf-8', (err, dataHeader) =>{ // тут идет хардкод добавления хедера и футера всем хтмл страницам.
+				// 	if (err)
+				// 		console.log( chalk.red( err ) );
+				// 	// res.write(data);
+				// 	fs.readFile( path_, 'utf-8', async (err, dataMain) => {
+				// 		if (err || dataMain === 'undefined'){
+				// 			await fs.readFile( config.errorPagePath, 'utf-8', (err, data) =>{
+				// 				if (err ){
 
-									res.end('no way =(');
-								}
-								res.end(data);
-							} )
-							// console.log(1);
-						}
-						// res.write(data);
+				// 					res.end('no way =(');
+				// 				}
+				// 				res.end(data);
+				// 			} )
+				// 			// console.log(1);
+				// 		}
+				// 		// res.write(data);
 
-						fs.readFile( config.footerPagePath, 'utf-8', (err, dataFooter) => {
-							if (err)
-								console.log( chalk.red( err ) );
-							// res.end(data);
-							let data = dataHeader + dataMain + dataFooter;
-							res.end(data);
-						})
-					})
+				// 		fs.readFile( config.footerPagePath, 'utf-8', (err, dataFooter) => {
+				// 			if (err)
+				// 				console.log( chalk.red( err ) );
+				// 			// res.end(data);
+				// 			let data = dataHeader + dataMain + dataFooter;
+				// 			res.end(data);
+				// 		})
+				// 	})
 
-				} ) /////////////////////////////
+				// } ) /////////////////////////////
 				// } catch( e ){
 				// 	console.log( chalk.red(e));
 				// 	fs.readFile( config.errorPagePath, 'utf-8', (err, data) => {
@@ -122,4 +164,3 @@ class httpRouter{
 	}
 }
 
-module.exports = (new httpRouter());

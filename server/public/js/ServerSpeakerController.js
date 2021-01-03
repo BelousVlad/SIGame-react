@@ -4,78 +4,82 @@ class ServerSpeakerController{
 		this.speaker = new ServerSpeaker();
 	}
 
-	lobbyConnect(json){
-		this.speaker.send ( {action : "connect_to_lobby", "data" : json /* json must have "lobby_id", "name" */ }) ;
-	}
+	// lobbyConnect(json){
+	// 	this.speaker.send ( {action : "connect_to_lobby", "data" : json /* json must have "lobby_id", "name" */ }) ;
+	// }
 
-	getLobbies()
-	{
-		this.speaker.send({ action: "get_lobbies" });
-	}
+	// getLobbies()
+	// {
+	// 	this.speaker.send({ action: "get_lobbies" });
+	// }
 
-	stopServer(){
-		this.speaker.send ( { action: "stop" } );
-	}
+	// stopServer(){
+	// 	this.speaker.send ( { action: "stop" } );
+	// }
 
-	createLobby( json ){
-		this.speaker.send ( { "action" : "create_lobby", "data" : json } ); /* require title, pass, max_size, path*/
-	}
+	// createLobby( json ){
+	// 	this.speaker.send ( { "action" : "create_lobby", "data" : json } ); /* require title, pass, max_size, path*/
+	// }
 
-	fastInit(){
-		this.speaker.send ( { "action" : "fast_init" } );
-	}
+	// fastInit(){
+	// 	this.speaker.send ( { "action" : "fast_init" } );
+	// }
 
-	sendClientCode( code ){
-		this.speaker.send ( { "action" : "check_client_code", "data" : code } );
-	}
+	// sendClientCode( code ){
+	// 	this.speaker.send ( { "action" : "check_client_code", "data" : code } );
+	// }
 
-	makeSecretCode(  ){
-		this.speaker.send ( {"action" : "make_secret_code" } ) ;
-	}
+	// makeSecretCode(  ){
+	// 	this.speaker.send ( {"action" : "make_secret_code" } ) ;
+	// }
 
-	getClients (){
-		this.speaker.send ( {"action" : "get_clients"} );
-	}
+	// getClients (){
+	// 	this.speaker.send ( {"action" : "get_clients"} );
+	// }
 
-	setClientName ( name ){
-		this.speaker.send ( {"action" : "set_client_name", "data" : name } );
-	}
+	// setClientName ( name ){
+	// 	this.speaker.send ( {"action" : "set_client_name", "data" : name } );
+	// }
 
 	// sendFileInfo ( details ){
 	// 	this.speaker.send ( {"action" : "handle_file_info", "data" : details } )
 	// }
 
-	sendRequestToUploadFile( data ){
-		// alert(3);
-		this.speaker.send ( { "action" : "handle_request_to_upload_file", "data" : data } );
-	}
+	// sendRequestToUploadFile( data ){
+	// 	// alert(3);
+	// 	this.speaker.send ( { "action" : "handle_request_to_upload_file", "data" : data } );
+	// }
 
-	sendFile( data ){
-		this.speaker.send ( { "action" : "handle_file", "data" : data} );
-	}
+	// sendFile( data ){
+	// 	this.speaker.send ( { "action" : "handle_file", "data" : data} );
+	// }
 
-	ping( msg ){
-		this.speaker.send ( { "action" : "ping", "data" : msg } );
-	}
+	// ping( msg ){
+	// 	this.speaker.send ( { "action" : "ping", "data" : msg } );
+	// }
 
-	sendFilePart(msg){
-		this.speaker.send ( { "action" : "receive_file_part", "data" : msg } );
-	}
+	// sendFilePart(msg){
+	// 	this.speaker.send ( { "action" : "receive_file_part", "data" : msg } );
+	// }
 
-	sendFileEnd(msg){
-		this.speaker.send ( { "action" : "stop_receiving_file", "data" : msg } );
-	}
+	// sendFileEnd(msg){
+	// 	this.speaker.send ( { "action" : "stop_receiving_file", "data" : msg } );
+	// }
 
 	initMetaData(msg){
-		this.speaker.send ( {"action" : "init_meta_data", "data" : msg} );
+		// this.speaker.send ( {"action" : "init_meta_data", "data" : msg} );
 	}
 
-	initLM( data ){
-		this.speaker.send ( {"action" : "init_load_manager", "data" : data } );
-	}
+	// initLM( data ){
+	// 	this.speaker.send ( {"action" : "init_load_manager", "data" : data } );
+	// }
 
-	testT( data ){
-		this.speaker.send ( {"action" : "try_to_sleep", "data" : { "time" : data.time, "data" : data.data } } );
+	// testT( data ){
+	// 	this.speaker.send ( {"action" : "try_to_sleep", "data" : { "time" : data.time, "data" : data.data } } );
+	// }
+
+	checkClientName( data ){
+		this.speaker.send ( {act : 'check_client_name', 'data' : { clientName : data } } );
 	}
 
 }
