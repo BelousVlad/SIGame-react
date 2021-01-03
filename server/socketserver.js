@@ -60,6 +60,9 @@ module.exports = class SocketServerW{
 					ws.send ( JSON.stringify(ans) );
 				}
 			},
+			'get_file' : ( msg ) => {
+				//
+			},
 			'create_lobby' : ( msg ) => {
 				if (!msg)
 					console.log( chalk.red('incorrect input in create lobby function') );
