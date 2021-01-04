@@ -3,6 +3,7 @@ const config = require('./config');
 const fs = require('fs');
 const chalk = require('chalk');
 const helper = require( config.helperClassPath );
+const formidable = require( 'formidable' );
 
 
 module.exports = class httpRouter{
@@ -22,9 +23,12 @@ module.exports = class httpRouter{
 
 	initTemplates(){
 		this.conditions = {
-			'in-game' : ( req ) => {
-				return false;
-				// check cookies whenether client in certain lobby or not.
+			// 'in-game' : ( req ) => {
+			// 	return false;
+			// 	// check cookies whenether client in certain lobby or not.
+			// },
+			'file-upload' : ( req ) => {
+				return req.url === '/api/upload' && req.method.toLowerCase() === 'post';
 			},
 			'non-html' : ( req ) => {
 				let url = (req.url).split('?')[0];
@@ -37,17 +41,29 @@ module.exports = class httpRouter{
 				}
 
 			},
-			'html-no-name' : ( req ) => {
+			'html-no-name' : ( req ) => { // TOP after non-html and file-upload templates
 				let cookies = helper.parseCookies( req );
 				return !helper.isClientNameValid( cookies['clientName'] );
 				// return !cookies['clientName'];
 			 },
+
 			'html' : ( req ) => { return true; }
 		}
 		this.methods = {
-			'in-game' : ( req, res ) => {
-				return;
-				//;
+			// 'in-game' : ( req, res ) => {
+			// 	return;
+			// 	//;
+			// },
+			'file-upload' : ( req, res ) => {
+				let form = formidable({
+					uploadDir : config.packegesPath,
+					keepExtensions : true
+				});
+				form.parse( req, (err, fields, files) => {
+					if (err)
+						throw err;
+
+				});
 			},
 			'non-html' : ( req, res ) => {
 				let url = (req.url).split('?')[0];

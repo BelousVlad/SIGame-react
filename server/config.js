@@ -8,5 +8,6 @@ module.exports = ( {
 	headerPagePath : path.join ( __dirname, 'technical pages', 'header.html' ),
 	footerPagePath : path.join ( __dirname, 'technical pages', 'footer.html' ),
 	logInPagePath : path.join( __dirname, 'technical pages', 'logIn.html'),
-	publicFolderPath : path.join( __dirname, 'public' )
+	publicFolderPath : path.join( __dirname, 'public' ),
+	packegesPath : path.join(__dirname, 'si-packs')
 } );
