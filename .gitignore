@@ -1,4 +1,1 @@
-/vendor
-server/node_modules
-packs/*
-server/*
+/server/node_modules
