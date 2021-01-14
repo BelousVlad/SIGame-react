@@ -27,8 +27,8 @@ module.exports = class httpRouter{
 			// 	return false;
 			// 	// check cookies whenether client in certain lobby or not.
 			// },
-			'file-upload' : ( req ) => {
-				return req.url === '/api/upload' && req.method.toLowerCase() === 'post';
+			'file-upload-pack' : ( req ) => {
+				return req.url === '/api/upload/pack' && req.method.toLowerCase() === 'post';
 			},
 			'non-html' : ( req ) => {
 				let url = (req.url).split('?')[0];
@@ -41,7 +41,7 @@ module.exports = class httpRouter{
 				}
 
 			},
-			'html-no-name' : ( req ) => { // TOP after non-html and file-upload templates
+			'html-no-name' : ( req ) => {
 				let cookies = helper.parseCookies( req );
 				return !helper.isClientNameValid( cookies['clientName'] );
 				// return !cookies['clientName'];
@@ -54,7 +54,7 @@ module.exports = class httpRouter{
 			// 	return;
 			// 	//;
 			// },
-			'file-upload' : ( req, res ) => {
+			'file-upload-pack' : ( req, res ) => {
 				let form = formidable({
 					uploadDir : config.packegesPath,
 					keepExtensions : true
