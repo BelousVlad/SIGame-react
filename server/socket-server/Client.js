@@ -6,6 +6,7 @@ module.exports = class Client{
 	{
 		this.key = key;
 		this.sockets = [];
+		this.name = null;
 	}
 
 	addSocket(ws)
@@ -14,13 +15,13 @@ module.exports = class Client{
 		this.sockets.push(ws);
 	}
 
-	send(msg)
+	send(action, data)
 	{
 		this.clearClosedSockets();
 		this.sockets.forEach( (item, index) => {
 			if (item.readyState == WebSocket.OPEN)
 			{
-				item.send(msg)
+				item.send(JSON.stringify({action: action, data: data}) )
 			}
 		})
 	}

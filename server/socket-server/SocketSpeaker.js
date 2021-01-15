@@ -25,6 +25,17 @@ module.exports = class SocketSpeaker{
 		ws.send(JSON.stringify({action: "ping", data: "pong"}));
 	}
 
+	set_name(ws, msg)
+	{
+		let name = msg.data;
+		let key = msg.key;
+		let client = ClientManager.getClient(key);
+		if (client)
+		{
+			client.name = name;
+			client.send('update_name', name);
+		}
+	}
 	send_key(ws, msg)
 	{
 		let key = msg.data;
@@ -33,14 +44,13 @@ module.exports = class SocketSpeaker{
 
 		if (key != "0") // Игрок имеет ключ
 		{
-			//this.send(ws,{action: "ping" , data: "pong"});
 			let client = ClientManager.getClient(key);
 			if (client == undefined)
 			{
 				let key = ClientManager.createClient();
 				let client = ClientManager.getClient(key);
 				client.addSocket(ws);
-				this.send( ws, { action: "set_key", data: key } );
+				this.send( ws, "set_key", key );
 			}
 			else
 			{
@@ -53,13 +63,13 @@ module.exports = class SocketSpeaker{
 			let key = ClientManager.createClient();
 			let client = ClientManager.getClient(key);
 			client.addSocket(ws);
-			this.send( ws, { action: "set_key", data: key } );
+			this.send( ws, "set_key", key);
 		}
 	}
 
-	send(ws, data)
+	send(ws, action ,data)
 	{
-		ws.send(JSON.stringify(data))
+		ws.send(JSON.stringify({action, data}))
 	}
 
 
@@ -67,7 +77,8 @@ module.exports = class SocketSpeaker{
 	{
 		return {
 			"ping" : "ping",
-			"key" : "send_key"
+			"key" : "send_key",
+			"set_name" : "set_name",
 		}
 	}
 }
