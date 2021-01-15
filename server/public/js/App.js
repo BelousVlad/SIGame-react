@@ -3,21 +3,22 @@ class App{
 	constructor()
 	{
 
-		this.cookie = new Cookie();
-		this.fileLoader = new FileLoader( this );
+		//this.cookie = new Cookie();
+		//this.fileLoader = new FileLoader( this );
 		// this.fileLoader.createLoadManager().bindToElement(  );
 
 		// this.Cookie.setCookie('','');
 
 		this.view_model = new ViewModel();
 		this.view_model.hideLoader();
-		this.initSpeker();
 		this.initRoutes();
+		this.initSpeker();
+
 
 		/*this.speakerctrl.ping("test2");this.initMetaData();*/
 		// };
 		// this.initEventListeners();
-
+		
 
 
 		this.clickEventer = new Eventer();
@@ -42,19 +43,18 @@ class App{
 
 	}
 
-	dummy(){};
-
 
 	initRoutes()
 	{
 		this.routes = {
-			"dummy" : "dummy",
+			"ping" : "ping",
+			"set_key" : "setKey",
+			////////////////
 			"call_actions_array" : "callActionsArray",
 			"client_code_checked" : "clientCodeSucceed",
 			"set_client_code" : "setClientCode",
 			"get_lobbies" : "viewLobbies",
 			"connect_to_lobby" : "lobbyConnect",
-			"setPlayerUniqueKey" : "setPlayerKey",
 			"set_secret_code" : "setSecretCode",
 			"view_clients" : "viewClients",
 			"view_broadcast" : "viewBroadcast",
@@ -67,12 +67,21 @@ class App{
 		};
 	}
 
+	ping(json)
+	{
+		console.log(json);
+	}
+
 	initSpeker()
 	{
 
 		this.speakerctrl = new ServerSpeakerController();
 
 	    this.speakerctrl.speaker.onopen = (event) => {
+	    	console.log("connected");
+
+			this.speakerctrl.sendClientKey();
+
 	    	if ( window.localStorage.getItem('clientName') ){
 	    		this.speakerctrl.checkClientName( window.localStorage.getItem('clientName') );
 	    	} else {
@@ -83,7 +92,8 @@ class App{
 	    };
 
 	    this.speakerctrl.speaker.onmessage = (event) => {
-	        // console.log(event.data);
+	    	//console.log(123);
+	        //console.log(event.data);
 	        this.getServerMessage(event.data);
 	    };
 
@@ -96,10 +106,10 @@ class App{
 	    this.speakerctrl.speaker.onclose = (event) =>
 	    {
 	        // this.view_model.viewLoader();
-	        this.speakerctrl.speaker.openSocket();
+	        this.speakerctrl.start();
 	    }
+	    this.speakerctrl.start();
 
-	    this.speakerctrl.speaker.openSocket();
 	}
 
 	initMetaData(){
@@ -122,11 +132,10 @@ class App{
 
 	getServerMessage(message)
 	{
-		// console.log(message);
-
+		//console.log(message);
 
 		let ans = JSON.parse(message);
-		this[this.routes[ans.act]](ans);
+		this[this.routes[ans.action]](ans);
 
 
 	}
@@ -182,8 +191,10 @@ class App{
 
 	}
 
-	setPlayerKey (json) {
-
+	setKey (data) { // Установить уникальный ключь
+		console.log(data);
+		Cookie.set("key", data.data);
+		//this.speakerctrl.key = 
 	}
 
 	fastInit(){
@@ -217,8 +228,8 @@ class App{
 	}
 
 	handleTaskToLoadManager( msg ) {
-		this.fileLoader.getLoadManagerById( msg.data.load_manager_id )
-		[ this.fileLoader.routes [ msg.data.action_of_lm ] ] ( msg.data.answer ) ;
+		//this.fileLoader.getLoadManagerById( msg.data.load_manager_id )
+		//[ this.fileLoader.routes [ msg.data.action_of_lm ] ] ( msg.data.answer ) ;
 	}
 
 	nameIsValid( msg ){

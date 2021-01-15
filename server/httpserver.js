@@ -8,9 +8,9 @@ const Router = require('./http-router')
 module.exports = class HttpServerW{
 	constructor( app ){
 		this.router = new Router( this );
-		this.server = http.createServer( ((req, res) => {
+		this.server = http.createServer( ( (request, response) => {
 
-			let url = req.url;
+			let url = request.url;
 			url = url.split('?')[0]; // erase GET part
 
 			let extname = path.extname(url);
@@ -18,7 +18,7 @@ module.exports = class HttpServerW{
 			switch( extname ){ // set Content-Type header
 				case '.css' : {
 
-					res.setHeader('Content-Type', 'text/css');
+					response.setHeader('Content-Type', 'text/css');
 					break;
 				}
 				case '.ico' : {
@@ -27,24 +27,23 @@ module.exports = class HttpServerW{
 				}
 				case '.js' : {
 
-					res.setHeader('Content-Type', 'text/javascript');
+					response.setHeader('Content-Type', 'text/javascript');
 					break;
 				}
 				case '.html' : case '' : {
 
-					res.setHeader('Content-Type', 'text/html');
+					response.setHeader('Content-Type', 'text/html');
 					break;
 				}
 				default : {
 					// console.log(extname == '');
-					res.setHeader('Content-Type', 'text/plain');
+					response.setHeader('Content-Type', 'text/plain');
 				}
 			}
 
-			this.router.invoke( req, res );
-		})
-		.bind( this )
-		);
+			this.router.invoke( request, response );
+
+		}).bind( this ));
 
 		this.app = app;
 

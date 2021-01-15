@@ -79,7 +79,20 @@ class ServerSpeakerController{
 	// }
 
 	checkClientName( data ){
-		this.speaker.send ( {act : 'check_client_name', 'data' : { clientName : data } } );
+		this.speaker.send ( {action : 'check_client_name', 'data' : { clientName : data } } );
 	}
 
+	sendClientKey(key)
+	{
+		this.speaker.send({action: "key", data: this.key})
+	}
+	start()
+	{
+	    this.speaker.openSocket();
+	}
+
+	get key()
+	{
+		return Cookie.get('key') ?? "0";
+	}
 }

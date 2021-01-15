@@ -31,7 +31,10 @@ class ServerSpeaker {
 		if (this.isOpen())
 		{
 			this.socket.send(JSON.stringify(action));
+			return true;
 		}
+		else
+			return false;
 	}
 
 

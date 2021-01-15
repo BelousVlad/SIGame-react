@@ -1,5 +1,5 @@
 let HttpServerW = require('./httpserver.js');
-let SocketServerW = require('./socketserver.js');
+let SocketServerW = require('./socket-server/socketserver.js');
 
 class App{
 	constructor(  ){
