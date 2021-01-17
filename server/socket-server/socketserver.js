@@ -4,6 +4,7 @@ const config = require('./../config');
 const helper = require(config.helperClassPath);
 const SocketSpeaker = require('./SocketSpeaker.js');
 const ClientManager = require('./ClientManager');
+const LobbyManager = require('./LobbyManager');
 
 
 
@@ -16,7 +17,6 @@ module.exports = class SocketServerW{
 		this.initTemplates();
 		this.app = app;
 		this.lobbies = [];
-		this.clientNames = [];
 		this.speaker = new SocketSpeaker();
 		console.log(chalk.yellow('socket-server started.'));
 	}
@@ -25,15 +25,6 @@ module.exports = class SocketServerW{
 		this.server.on('connection', (ws) => {
 			console.log(chalk.green('client connected.'));
 			ws.on('message', (msg) => {
-				/*
-				msg = JSON.parse(msg);
-				for ( let i in this.templates ){
-					if ( i == msg.act )
-						this.templates[i](msg, ws, server);
-				}
-				*/
-
-				//console.log(msg);
 
 				this.speaker.answer(ws, msg);
 
@@ -45,33 +36,7 @@ module.exports = class SocketServerW{
 	}
 	initTemplates(){
 		this.templates = { // TODO error handler if message is't correct
-			'console_log' : ( msg, ws ) => {
-				console.log( msg.data );
-			},
-			'check_client_name' : ( msg, ws ) => {
-				let clientName = msg.data.clientName;
-				if (helper.isClientNameValid( clientName )){
-					this.server.clientNames.push(clientName);
-					let ans = {
-						act : 'name_is_valid',
-						data : {
-							//
-						}
-					};
-					ws.send( JSON.stringify(ans) );
-				} else {
-					let ans = {
-						act : 'name_is_not_valid',
-						data : {
-							//
-						}
-					};
-					ws.send ( JSON.stringify(ans) );
-				}
-			},
-			'get_file' : ( msg ) => {
-				//
-			},
+			
 			'create_lobby' : ( msg ) => {
 				if (!msg)
 					console.log( chalk.red('incorrect input in create lobby function') );
@@ -94,9 +59,5 @@ module.exports = class SocketServerW{
 				;
 			}
 		}
-	}
-
-	isClientNameFree ( name ){
-			return ( this.clientNames.indexOf(name) == -1 );
 	}
 }

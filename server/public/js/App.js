@@ -3,23 +3,10 @@ class App{
 	constructor()
 	{
 
-		//this.cookie = new Cookie();
-		//this.fileLoader = new FileLoader( this );
-		// this.fileLoader.createLoadManager().bindToElement(  );
-
-		// this.Cookie.setCookie('','');
-
 		this.view_model = new ViewModel();
 		this.view_model.hideLoader();
-		this.initRoutes();
 		this.initSpeker();
-
-
-		/*this.speakerctrl.ping("test2");this.initMetaData();*/
-		// };
-		// this.initEventListeners();
-		
-
+		this.router = new Router();
 
 		this.clickEventer = new Eventer();
 		this.pager = new Pager(this);
@@ -44,27 +31,6 @@ class App{
 	}
 
 
-	initRoutes()
-	{
-		this.routes = {
-			"ping" : "ping",
-			"set_key" : "setKey",
-			"update_name" : "updateName",
-			////////////////
-			"get_lobbies" : "viewLobbies",
-			"connect_to_lobby" : "lobbyConnect",
-			"view_clients" : "viewClients",
-			"view_broadcast" : "viewBroadcast",
-			"send_current_file" : "",
-			"go_to_page" : "GOTOPage"
-		};
-	}
-
-	ping(json)
-	{
-		console.log(json);
-	}
-
 	initSpeker()
 	{
 
@@ -87,7 +53,7 @@ class App{
 	    this.speakerctrl.speaker.onmessage = (event) => {
 	    	//console.log(123);
 	        //console.log(event.data);
-	        this.getServerMessage(event.data);
+	        this.router.getServerMessage(event.data);
 	    };
 
 	    this.speakerctrl.speaker.onerror = (event) =>
@@ -105,22 +71,7 @@ class App{
 
 	}
 
-	getServerMessage(message)
-	{
-		//console.log(message);
-
-		let ans = JSON.parse(message);
-		this[this.routes[ans.action]](ans);
-
-	}
-
-	callActionsArray(message){
-		// this.speacialfield = message.data.actionList;
-		let actionList = message.data.actionList;
-		for ( const field in actionList ){
-			this[ this.routes[ actionList[field].action ] ]( actionList[field] );
-		}
-	}
+	
 //
 //  ---------------- ** ----
 //
@@ -144,23 +95,26 @@ class App{
 //  -------------------
 
 
+	ping(json)
+	{
+		console.log(json);
+	}
 	updateName(msg)
 	{
 		console.log(msg);	
 	}
-
-	refreshLobbies()
-	{
-		this.speakerctrl.getLobbies();
-	}
-
-	lobbyConnect(json){
-
-		this.speakerctrl.lobbyConnect(json);
-	}
-
 	setKey (data) { // Установить уникальный ключь
 		Cookie.set("key", data.data);
+	}
+	lobby_created(msg)
+	{
+		//TODO LOBBY CONNECTED
+		console.log(msg)
+	}
+	lobby_connected(msg)
+	{
+		//TODO LOBBY CONNECTED
+		console.log(msg)
 	}
 
 	handleTaskToLoadManager( msg ) {
