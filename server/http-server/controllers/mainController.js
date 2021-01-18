@@ -9,7 +9,6 @@ module.exports = {
 		let url = (req.url).split('?')[0];
 		let extname = path.extname(url);
 		let path_ = path.join( config.rootPath , 'public', url);
-		console.log(path_);
 		if ( extname == '' )
 			path_ = path.join(path_, 'index.html');
 

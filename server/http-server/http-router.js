@@ -35,10 +35,10 @@ module.exports = class httpRouter{
 
 	initTemplates(){
 		this.templates = {
-			'file/get' : ( req ) => {
+			'mainController/get' : ( req ) => {
 				return req.url === '/api/upload/pack' && req.method.toLowerCase() === 'post';
 			},
-			'file/send' : ( req ) => {
+			'mainController/send' : ( req ) => {
 				let url = (req.url).split('?')[0];
 				let extname = path.extname(url);
 				switch ( extname ) {
@@ -56,7 +56,7 @@ module.exports = class httpRouter{
 			},
 
 			// 'file/html' : ( req ) => { return true; },
-			'file/html' : '.*',
+			'mainController/html' : '.*',
 		}
 		this.methods = {
 			// 'in-game' : ( req, res ) => {
