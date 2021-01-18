@@ -1,5 +1,5 @@
 const path = require('path');
-const config = require('./config');
+const config = require('../config');
 const fs = require('fs');
 const chalk = require('chalk');
 const helper = require( config.helperClassPath );
@@ -13,24 +13,32 @@ module.exports = class httpRouter{
 	}
 
 	invoke(req, res){
-		for ( let i in this.conditions ){
-			if ( this.conditions[i]( req ) ){
-				this.methods[i](req, res);
-				break;
+		for ( let i in this.templates ) {
+
+			if ( typeof this.templates[i] === 'function' ) {
+				if ( this.templates[i]( req ) ) {
+					require(path.join(  config.controllersPath, i.split('/')[0].concat('.js') ) ) /* import object */ [i.split('/')[1]]( req, res ); // use object method
+					return;
+				}
+			}
+			else if ( typeof this.templates[i] === 'string' ) {
+				if ( new RegExp( this.templates[i] ).test( req.url ) ) {
+					require(path.join(  config.controllersPath, i.split('/')[0].concat('.js') ) ) /* import object */ [i.split('/')[1]]( req, res ); // use object method
+					return;
+				}
+			}
+			else{
+				throw 'invalid condition value'
 			}
 		}
 	}
 
 	initTemplates(){
-		this.conditions = {
-			// 'in-game' : ( req ) => {
-			// 	return false;
-			// 	// check cookies whenether client in certain lobby or not.
-			// },
-			'file-upload-pack' : ( req ) => {
+		this.templates = {
+			'file/get' : ( req ) => {
 				return req.url === '/api/upload/pack' && req.method.toLowerCase() === 'post';
 			},
-			'non-html' : ( req ) => {
+			'file/send' : ( req ) => {
 				let url = (req.url).split('?')[0];
 				let extname = path.extname(url);
 				switch ( extname ) {
@@ -41,13 +49,14 @@ module.exports = class httpRouter{
 				}
 
 			},
-			'html-no-name' : ( req ) => {
-				let cookies = helper.parseCookies( req );
-				return !helper.isClientNameValid( cookies['clientName'] );
-				// return !cookies['clientName'];
-			 },
+			'...' : ( req ) => {
+				// let cookies = helper.parseCookies( req );
+				// return !helper.isClientNameValid( cookies['clientName'] );
+				return false;
+			},
 
-			'html' : ( req ) => { return true; }
+			// 'file/html' : ( req ) => { return true; },
+			'file/html' : '.*',
 		}
 		this.methods = {
 			// 'in-game' : ( req, res ) => {
