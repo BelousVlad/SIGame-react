@@ -14,7 +14,6 @@ module.exports = class SocketServerW{
 	constructor( app ){
 		this.server = new WebSocket.Server({ port : 3001 });
 		this.initServer();
-		this.initTemplates();
 		this.app = app;
 		this.lobbies = [];
 		this.speaker = new SocketSpeaker();
@@ -33,31 +32,5 @@ module.exports = class SocketServerW{
 				console.log(chalk.red('client disconnected.'))
 			})
 		})
-	}
-	initTemplates(){
-		this.templates = { // TODO error handler if message is't correct
-			
-			'create_lobby' : ( msg ) => {
-				if (!msg)
-					console.log( chalk.red('incorrect input in create lobby function') );
-				let lobbyName = msg.data.lobbyName;
-				let maxPlayers = msg.data.maxPlayers;
-				let password = msg.data.password;
-				let rules = msg.data.rules;
-				this.lobbies.push( {
-					lobbyName : lobbyName,
-					maxPlayers : maxPlayers,
-					password : password,
-					rules : rules
-				} );
-			},
-			'delete_lobby' : ( msg ) => {
-				if (! (msg && msg.data && msg.data.name) )
-					console.log( chalk.red('incorrect input in delete lobby function') );
-				let name = msg.data.name;
-				this.lobbies.indexOf( name ) || this.lobbies.pop( this.lobbies.indexOf( name ) );
-				;
-			}
-		}
 	}
 }
