@@ -15,31 +15,7 @@ module.exports = class HttpServerW{
 
 			let extname = path.extname(url);
 
-			switch( extname ){ // set Content-Type header
-				case '.css' : {
-
-					res.setHeader('Content-Type', 'text/css');
-					break;
-				}
-				case '.ico' : {
-					// dirty favicon.ico =(
-					break;
-				}
-				case '.js' : {
-
-					res.setHeader('Content-Type', 'text/javascript');
-					break;
-				}
-				case '.html' : case '' : {
-
-					res.setHeader('Content-Type', 'text/html');
-					break;
-				}
-				default : {
-					// console.log(extname == '');
-					res.setHeader('Content-Type', 'text/plain');
-				}
-			}
+			this.setHeaderType( extname, res );
 
 			this.router.invoke( req, res );
 		})
@@ -51,5 +27,32 @@ module.exports = class HttpServerW{
 		this.server.listen( 3000, () =>{
 			console.log( chalk.yellow('http-Server started.' ));
 		});
+	}
+	setHeaderType( extname, res ){
+		switch( extname ){ // set Content-Type header
+			case '.css' : {
+
+				res.setHeader('Content-Type', 'text/css');
+				break;
+			}
+			case '.ico' : {
+				// dirty favicon.ico =(
+				break;
+			}
+			case '.js' : {
+
+				res.setHeader('Content-Type', 'text/javascript');
+				break;
+			}
+			case '.html' : case '' : {
+
+				res.setHeader('Content-Type', 'text/html');
+				break;
+			}
+			default : {
+				// console.log(extname == '');
+				res.setHeader('Content-Type', 'text/plain');
+			}
+		}
 	}
 }
