@@ -2,7 +2,7 @@ class Cookie{
 	constructor(){
 		//
 	}
-	setCookie(name, value, options = {}) {
+	static set(name, value, options = {}) {
 
 		  options = {
 		    path: '/',
@@ -27,15 +27,15 @@ class Cookie{
 		  document.cookie = updatedCookie;
 	}
 
-	getCookie(name) {
+	static get(name) {
 		  let matches = document.cookie.match(new RegExp(
 		    "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
 		  ));
 		  return matches ? decodeURIComponent(matches[1]) : undefined;
 	}
 
-	deleteCookie(name) {
-		  this.setCookie(name, "", {
+	static delete(name) {
+		  this.set(name, "", {
 		    'max-age': -1
 		  })
 	}

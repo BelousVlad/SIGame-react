@@ -16,7 +16,7 @@
 	//
 	//
 	//
-	CreateLobby = () => {
+CreateLobby = () => {
 
 	// console.log("start of request");
 
@@ -28,7 +28,7 @@
 		console.log(res);
 	}
 	)
-	}
+}
 
 
 

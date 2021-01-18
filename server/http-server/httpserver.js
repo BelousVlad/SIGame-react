@@ -8,19 +8,19 @@ const Router = require('./http-router')
 module.exports = class HttpServerW{
 	constructor( app ){
 		this.router = new Router( this );
-		this.server = http.createServer( ((req, res) => {
+		this.server = http.createServer( ( (request, response) => {
 
-			let url = req.url;
+			let url = request.url;
 			url = url.split('?')[0]; // erase GET part
 
 			let extname = path.extname(url);
 
 			this.setHeaderType( extname, res );
 
-			this.router.invoke( req, res );
-		})
-		.bind( this )
-		);
+
+			this.router.invoke( request, response );
+
+		}).bind( this ));
 
 		this.app = app;
 
