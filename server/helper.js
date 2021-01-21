@@ -1,44 +1,71 @@
-
-
 const path = require('path');
 const fs = require('fs');
+const config = require( './config.js' );
 
 
 class helper{
 	constructor(){
 	}
 
-	async readAllFiles(paths, callback, /* Optional */ error_handler ){
+	readAllFiles(paths){
 		let promises = [];
-		let errors = [];
 		for ( let i in paths ){
-			promises.push( new Promise( ( res, rej ) => {
-				fs.readFile( paths[i], 'utf-8', ( err, data ) => {
+			promises.push(new Promise((res, rej) => {
+				fs.readFile(paths[i], 'utf-8',( err, data ) => {
 					if (err){
 						let error_ = { 'index' : i, 'err' : err };
-						let output = error_handler ? error_handler( error_ ) : '';
-						errors.push( error_ );
-						res (output);
+						rej(error_);
 					}
 					else{
-						res( data );
+						res(data);
 					}
 				})
-			}) )
+			}))
 		}
-		Promise.all(promises).then( ( data ) => { callback( errors, data ) } );
+		return Promise.all(promises)
+		.catch((err) => {
+			console.log(err)
+		})
 	}
+	//withHeaderFooter
+	// true - с хедером и футером
+	// false - без
+	getContent(path_, withHeaderFooter = true)
+	{
+		let paths;
+		if (withHeaderFooter)
+			paths = [ config.headerPagePath ,path_ ,config.footerPagePath ]
+		else
+			paths = [ path_ ]
 
-	isClientNameValid( name ){
-		return !!name;
+		return this.readAllFiles(paths)
+		.then((data) => {
+			data = data.join('');
+			return data;
+		})
+		/*
+		.catch((error) => {
+			fs.readFile(config.errorPagePath, 'utf-8', ( error, data_ ) => {
+				if (error) {
+
+					return error;
+
+				} else {
+
+					return data_;
+
+				}
+			})
+		})
+		*/
 	}
 
 	parseCookies (request) {
-	    var list = {},
+	    let list = {},
 	        rc = request.headers.cookie;
 
 	    rc && rc.split(';').forEach(function( cookie ) {
-	        var parts = cookie.split('=');
+	        let parts = cookie.split('=');
 	        list[parts.shift().trim()] = decodeURI(parts.join('='));
 	    });
 

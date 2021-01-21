@@ -2,39 +2,48 @@ const path = require('path');
 const fs = require('fs');
 const config = require( '../../config.js' );
 const helper = require(config.helperClassPath);
+const ClientManager = require('../../socket-server/ClientManager');
 
 
-module.exports = {
-	html( req, res ){
-		let url = (req.url).split('?')[0];
+
+class MainController{
+	html(request, response) {
+		
+		let url = (request.url).split('?')[0];
 		let extname = path.extname(url);
+
 		let path_ = path.join( config.rootPath , 'public', url);
 		if ( extname == '' )
-			path_ = path.join(path_, 'index.html');
+			path_ = path.join(path_, 'main.html');
 
-		let paths = [ config.headerPagePath, path_, config.footerPagePath ]
+		helper.getContent(path_)
+		.then((data) => {
+			response.end(data)
+		})
+	}
 
-		helper.readAllFiles( paths, ( err , data ) =>{
-			if ( err.length ) {
-				fs.readFile( config.errorPagePath, 'utf-8', ( error, data_ )=>{
-					if (error){
-						res.end('no way =(');
-					} else {
-						res.end(data_);
-					}
-				})
-			} else {
-				data = data.join('');
-				res.end(data);
-			}
-		} )
-	},
+	main(request, response)
+	{
+		let cookies = helper.parseCookies(request);
+
+		let client = ClientManager.getClient(cookies.key);
+
+		console.log(client)
+
+		let path_ = config.mainPagePath;
+
+		helper.getContent(path_)
+		.then((data) => {
+			response.end(data)
+		})
+	}
+
 	send( req, res ){
 		let url = (req.url).split('?')[0];
 		let path_ = path.join( config.rootPath , 'public', url);
 		fs.readFile( path_, 'utf-8', ( err, data ) => {
 			if (err){
-				fs.readFile( config.errorPagePath, 'utf-8', (err, data)=>{
+				fs.readFile( config.errorPagePath, 'utf-8', (err, data) => {
 					if (err){
 						res.end('No way man =(.');
 					} else {
@@ -47,3 +56,5 @@ module.exports = {
 		})
 	}
 }
+
+module.exports = new MainController();
