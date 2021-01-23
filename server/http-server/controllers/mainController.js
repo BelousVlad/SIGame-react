@@ -28,12 +28,22 @@ class MainController{
 
 		let client = ClientManager.getClient(cookies.key);
 
-		console.log(client)
-
 		let path_ = config.mainPagePath;
 
 		helper.getContent(path_)
 		.then((data) => {
+			response.write("main");
+			response.end(data)
+		})
+	}
+
+	name(request, response)
+	{
+		let path_ = config.mainPagePath;
+
+		helper.getContent(path_)
+		.then((data) => {
+			response.write("name");
 			response.end(data)
 		})
 	}
