@@ -1,7 +1,7 @@
 const WebSocket = require('ws');
+const event = require('events');
 
-
-module.exports = class Client{
+class Client extends event {
 	constructor(key)
 	{
 		this.key = key;
@@ -35,3 +35,5 @@ module.exports = class Client{
 		})
 	}
 }
+
+module.exports = Client;

@@ -12,7 +12,7 @@ class LobbyManager{
 	createLobby(title, password, max_p)
 	{
 		let lobby = new Lobby(title, max_p, password);
-		this.lobbies.[title] = lobby;
+		this.lobbies[title] = lobby;
 		return lobby;
 	}
 
@@ -41,6 +41,16 @@ class LobbyManager{
 		return lobby.addClient(client);
 	}
 
+	removeClientFromLobby(lobby, client)
+	{
+		let is = this.isPlayerIntoLobby(client);
+		if (!is)
+		{
+			return LobbyManager.NO_SUCH_CLIENT_IN_LOBBY_ERROR;
+		}
+		return lobby.removeClient(client);
+	}
+
 	getLobbyByTitle( title )
 	{
 		for(let lobby in this.lobbies)
@@ -53,10 +63,27 @@ class LobbyManager{
 		return undefined;
 	}
 
-	deleteLobby( lobby ){
-		if ( typeof lobby === 'string' ) {
-			// this.lobby
+	getLobby( lobby )
+	{
+		if ( typeof lobby === 'string' )
+		{
+			return this.getLobbyByTitle( lobby );
 		}
+		else if ( typeof lobby === 'object' && lobby instanceof Lobby )
+		{
+			return this.getLobbyByTitle( lobby.title );
+		}
+		else
+		{
+			throw `invalid lobby value ${lobby}`;
+		}
+	}
+
+	deleteLobby( lobby ){
+		let title = lobby.title;
+
+		lobby.emit('die');
+		this.lobbies[title] = undefined;
 	}
 
 	get LOBBY_CREATED_OK()
@@ -67,6 +94,11 @@ class LobbyManager{
 	get CLIENT_ALLREADY_INTO_LOBBY_ERROR()
 	{
 		return 401;
+	}
+
+	get NO_SUCH_CLIENT_IN_LOBBY_ERROR() // TODO get valid error value
+	{
+		return 402;
 	}
 }
 
