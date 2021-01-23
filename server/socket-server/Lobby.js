@@ -2,13 +2,12 @@ const WebSocket = require('ws');
 
 module.exports = class Lobby{
 
-	constructor(id, title, max_p, pass)
+	constructor( title, max_p, password )
 	{
-		this.id = id;
-		this.clients = [];
+		this.clients = new Array();
 		this.map_players = max_p ;
 		this.title = title ;
-		this.password = pass ;
+		this.password = password ;
 	}
 
 	addClient(client)

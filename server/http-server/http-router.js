@@ -5,7 +5,7 @@ const chalk = require('chalk');
 const helper = require( config.helperClassPath );
 const formidable = require( 'formidable' );
 const ClientManager = require('../socket-server/ClientManager');
-
+const routerTemapltes = require('./router-templates.js');
 
 module.exports = class httpRouter{
 	constructor( server ){
@@ -36,38 +36,7 @@ module.exports = class httpRouter{
 	}
 
 	initTemplates(){
-		this.templates = {
-			'mainController/get' : ( req ) => {
-				return req.url === '/api/upload/pack' && req.method.toLowerCase() === 'post';
-			},
-			'mainController/send' : ( req ) => {
-				let url = (req.url).split('?')[0];
-				let extname = path.extname(url);
-				switch ( extname ) {
-					case '.css' : { return true;}
-					case '.js' : { return true;}
-					case '.ico' : { return true;}
-					default : { return false;}
-				}
-
-			},
-			'mainController/name' : ( req ) => {
-
-				let cookies = helper.parseCookies(req);
-
-				let client = ClientManager.getClient(cookies.key);
-
-				return !(client && client.name);
-			},
-			'...' : ( req ) => {
-				// let cookies = helper.parseCookies( req );
-				// return !helper.isClientNameValid( cookies['clientName'] );
-				return false;
-			},
-
-			// 'file/html' : ( req ) => { return true; },
-			'mainController/main' : '.*',
-		}
+		this.templates = routerTemapltes;
 	}
 }
 

@@ -6,20 +6,13 @@ class LobbyManager{
 
 	constructor()
 	{
-		this.lobbies = [];
-		this.id_increamenter = 0;
-	}
-
-	generateId()
-	{
-		return this.id_increamenter++;
+		this.lobbies = new Object();
 	}
 
 	createLobby(title, password, max_p)
 	{
-		let id = this.generateId();
-		let lobby = new Lobby(id, title, max_p, password)
-		this.lobbies.push(lobby);
+		let lobby = new Lobby(title, max_p, password);
+		this.lobbies.[title] = lobby;
 		return lobby;
 	}
 
@@ -27,10 +20,8 @@ class LobbyManager{
 	{
 		for(let lobby of this.lobbies)
 		{
-			//console.log(lobby + " lobby")
 			for(let client_ of lobby.clients)
 			{
-				//console.log("client " + client.key + " " + client_.key + " " + client.key == client_.key)
 				if(client.key == client_.key)
 				{
 					return true;
@@ -43,7 +34,6 @@ class LobbyManager{
 	addClientToLobby(lobby, client)
 	{
 		let is = this.isPlayerIntoLobby(client);
-		console.log(is);
 		if (is)
 		{
 			return LobbyManager.CLIENT_ALLREADY_INTO_LOBBY_ERROR;
@@ -51,14 +41,21 @@ class LobbyManager{
 		return lobby.addClient(client);
 	}
 
-	getLobbyById(id)
+	getLobbyByTitle( title )
 	{
 		for(let lobby in this.lobbies)
 		{
-			if (lobby.id == id)
+			if (lobby === title)
 		 	{
 		 		return lobby;
 		 	}
+		}
+		return undefined;
+	}
+
+	deleteLobby( lobby ){
+		if ( typeof lobby === 'string' ) {
+			// this.lobby
 		}
 	}
 
