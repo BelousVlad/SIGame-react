@@ -12,15 +12,15 @@ class LobbyManager{
 	createLobby(title, password, max_p)
 	{
 		let lobby = new Lobby(title, max_p, password);
-		this.lobbies.[title] = lobby;
+		this.lobbies[title] = lobby;
 		return lobby;
 	}
 
 	isPlayerIntoLobby(client)
 	{
-		for(let lobby of this.lobbies)
+		for(let lobby in this.lobbies)
 		{
-			for(let client_ of lobby.clients)
+			for(let client_ of this.lobbies[lobby].clients)
 			{
 				if(client.key == client_.key)
 				{

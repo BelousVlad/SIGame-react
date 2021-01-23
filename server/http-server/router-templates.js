@@ -1,4 +1,7 @@
 const path = require('path')
+const config = require('../config');
+const helper = require( config.helperClassPath );
+const ClientManager = require('../socket-server/ClientManager');
 
 module.exports =
 {
@@ -14,14 +17,16 @@ module.exports =
 			case '.ico' : { return true;}
 			default : { return false;}
 		}
-
 	},
-	'...' : ( req ) => {
-		// let cookies = helper.parseCookies( req );
-		// return !helper.isClientNameValid( cookies['clientName'] );
-		return false;
+	'mainController/name' : ( req ) => {
+
+		let cookies = helper.parseCookies(req);
+
+		let client = ClientManager.getClient(cookies.key);
+
+		return !(client && client.name);
 	},
 
-	// 'file/html' : ( req ) => { return true; },
+	'mainController/create_lobby' : 'create-lobby',
 	'mainController/main' : '.*',
 };
