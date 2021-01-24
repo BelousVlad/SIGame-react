@@ -1,10 +1,12 @@
 const WebSocket = require('ws');
 const event = require('events');
 
-class Lobby extends event {
+class Lobby{
 
 	constructor( title, max_p, password )
 	{
+		Object.assign( this, new event() ) // 1-st step of mix-in of events
+
 		this.clients = new Object();
 		this.max_players = max_p ;
 		this.title = title ;
@@ -13,7 +15,7 @@ class Lobby extends event {
 
 	hasClient( client )
 	{
-		this.clients.find(  )
+		return !!this.clients.find( item => { return item.key == client.key } );
 	}
 
 	addClient(client)
@@ -56,5 +58,7 @@ class Lobby extends event {
 		return 402;
 	}
 }
+
+Object.assign( Lobby.prototype, event.prototype ) // 2-nd step of mix-in of event
 
 module.exports = Lobby;

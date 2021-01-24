@@ -1,9 +1,11 @@
 const WebSocket = require('ws');
 const event = require('events');
 
-class Client extends event {
+class Client {
 	constructor(key)
 	{
+		Object.assign( this, new event() ) // 1-st step of mix-in by events
+
 		this.key = key;
 		this.sockets = [];
 		this.name = null;
@@ -35,5 +37,7 @@ class Client extends event {
 		})
 	}
 }
+
+Object.assign( Lobby.prototype, event.prototype ) // 2-nd step of mix-in by event
 
 module.exports = Client;
