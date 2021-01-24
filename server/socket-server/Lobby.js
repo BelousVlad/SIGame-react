@@ -3,7 +3,7 @@ const event = require('events');
 
 class Lobby{
 
-	constructor( title, max_p, password )
+	constructor( title, max_p, password, configuration_ )
 	{
 		Object.assign( this, new event() ) // 1-st step of mix-in of events
 
@@ -11,11 +11,22 @@ class Lobby{
 		this.max_players = max_p ;
 		this.title = title ;
 		this.password = password ;
+
+		for ( let i in Lobby.defaultConfig )
+			this.configuration[i] = typeof configuration_[i] === 'undefined' ? Lobby.defaultConfig[i] : configuration_[i];
+
+		//  configuration is public field of Lobby wich contains parametrs such as password, rules, etc.
+		//  only paramets out of configuration field is lobby title
+		//  TODO after consensus remove max_players field, etc.
+	}
+
+	getClient( client ){
+		return this.clients.find( item => { return item.key == client.key } );
 	}
 
 	hasClient( client )
 	{
-		return !!this.clients.find( item => { return item.key == client.key } );
+		return !!this.getClient(client);
 	}
 
 	addClient(client)
@@ -56,6 +67,14 @@ class Lobby{
 	static get NO_SUCH_CLIENT_IN_LOBBY_ERROR()
 	{
 		return 402;
+	}
+
+	static get defaultConfig(){
+		return {
+			maxPlayers : 2,
+			rules : {},
+			password : '',
+		}
 	}
 }
 
