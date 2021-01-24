@@ -3,6 +3,7 @@ const fs = require('fs');
 const config = require( '../../config.js' );
 const helper = require(config.helperClassPath);
 const ClientManager = require('../../socket-server/ClientManager');
+const LobbyManager = require('../../socket-server/LobbyManager');
 
 
 
@@ -28,9 +29,18 @@ class MainController{
 
 		let client = ClientManager.getClient(cookies.key);
 
-		console.log(client)
-
 		let path_ = config.mainPagePath;
+
+		helper.getContent(path_)
+		.then((data) => {
+			response.write("main");
+			response.end(data)
+		})
+	}
+
+	name(request, response)
+	{
+		let path_ = 'technical pages/login.html';
 
 		helper.getContent(path_)
 		.then((data) => {
@@ -38,6 +48,38 @@ class MainController{
 		})
 	}
 
+	create_lobby(request, response)
+	{
+		let path_ = 'public/lobby/create_lobby.html';
+
+		helper.getContent(path_)
+		.then((data) => {
+			response.end(data)
+		})
+	}
+	/* Хуйня
+	create_lobby_input(request, response)
+	{
+		let cookies = helper.parseCookies(request);
+
+		let client = ClientManager.getClient(cookies.key);
+
+		if (client)
+		{
+			let data = '';
+			request.on('data', (chunk) => {
+				data += chunk;
+			});
+			request.on('end', () => {
+				let post = helper.parseChunk(data);
+
+				let lobby = ClientManager.create_lobby
+
+			});
+
+		}
+	}
+	*/
 	send( req, res ){
 		let url = (req.url).split('?')[0];
 		let path_ = path.join( config.rootPath , 'public', url);

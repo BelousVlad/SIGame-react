@@ -75,6 +75,16 @@ class helper{
 
 	    return list;
 	}
+	parseChunk (str) {
+	    let list = {};
+
+	    str.split('&').forEach(function( cookie ) {
+	        let parts = cookie.split('=');
+	        list[parts.shift().trim()] = decodeURI(parts.join('='));
+	    });
+
+	    return list;
+	}
 
 }
 

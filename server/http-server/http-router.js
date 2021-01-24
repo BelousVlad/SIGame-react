@@ -4,6 +4,7 @@ const fs = require('fs');
 const chalk = require('chalk');
 const helper = require( config.helperClassPath );
 const formidable = require( 'formidable' );
+const ClientManager = require('../socket-server/ClientManager');
 const routerTemapltes = require('./router-templates.js');
 
 module.exports = class httpRouter{
@@ -13,6 +14,7 @@ module.exports = class httpRouter{
 	}
 
 	invoke(req, res){
+
 		for ( let i in this.templates ) {
 
 			if ( typeof this.templates[i] === 'function' ) {

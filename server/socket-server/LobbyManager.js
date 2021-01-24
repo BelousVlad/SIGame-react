@@ -18,9 +18,9 @@ class LobbyManager{
 
 	isPlayerIntoLobby(client)
 	{
-		for(let lobby of this.lobbies)
+		for(let lobby in this.lobbies)
 		{
-			for(let client_ of lobby.clients)
+			for(let client_ of this.lobbies[lobby].clients)
 			{
 				if(client.key == client_.key)
 				{
