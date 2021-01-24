@@ -7,6 +7,10 @@ class helper{
 	constructor(){
 	}
 
+	validLobbyPassword( password ) { // password length should be in range 5 - 15
+		return /\w{5,15}/.test( password )
+	}
+
 	readAllFiles(paths){
 		let promises = [];
 		for ( let i in paths ){
