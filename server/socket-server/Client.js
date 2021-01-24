@@ -38,6 +38,6 @@ class Client {
 	}
 }
 
-Object.assign( Lobby.prototype, event.prototype ) // 2-nd step of mix-in by event
+Object.assign( Client.prototype, event.prototype ) // 2-nd step of mix-in by event
 
 module.exports = Client;

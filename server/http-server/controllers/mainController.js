@@ -25,15 +25,10 @@ class MainController{
 
 	main(request, response)
 	{
-		let cookies = helper.parseCookies(request);
-
-		let client = ClientManager.getClient(cookies.key);
-
 		let path_ = config.mainPagePath;
 
 		helper.getContent(path_)
 		.then((data) => {
-			response.write("main");
 			response.end(data)
 		})
 	}
@@ -56,6 +51,29 @@ class MainController{
 		.then((data) => {
 			response.end(data)
 		})
+	}
+	lobby(request, response)
+	{
+
+		let cookies = helper.parseCookies(request);
+
+		let client = ClientManager.getClient(cookies.key);
+
+		if (client && LobbyManager.isPlayerIntoLobby(client))
+		{
+			let path_ = 'public/lobby/lobby.html';
+
+			helper.getContent(path_)
+			.then((data) => {
+				response.end(data)
+			})
+		}
+		else
+		{
+			response.statusCode = 302;
+			response.setHeader('Location', '/')
+			response.end();
+		}
 	}
 	/* Хуйня
 	create_lobby_input(request, response)

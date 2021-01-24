@@ -20,9 +20,9 @@ class LobbyManager{
 	{
 		for(let lobby in this.lobbies)
 		{
-			for(let client_ of this.lobbies[lobby].clients)
+			for(let client_ in this.lobbies[lobby].clients)
 			{
-				if(client.key == client_.key)
+				if(client.key == client_)
 				{
 					return true;
 				}
@@ -43,35 +43,51 @@ class LobbyManager{
 
 	removeClientFromLobby(lobby, client)
 	{
-		let is = this.isPlayerIntoLobby(client);
+		let is = lobby.hasClient(client);
 		if (!is)
 		{
-			return LobbyManager.NO_SUCH_CLIENT_IN_LOBBY_ERROR;
+			return Lobby.NO_SUCH_CLIENT_IN_LOBBY_ERROR;
 		}
 		return lobby.removeClient(client);
 	}
 
-	getLobbyByTitle( title )
+	getLobbyByClient(Client)
 	{
 		for(let lobby in this.lobbies)
 		{
-			if (lobby === title)
+			if (this.lobbies[lobby].hasClient(Client))
 		 	{
-		 		return lobby;
+		 		return this.lobbies[lobby];
 		 	}
 		}
 		return undefined;
 	}
 
-	getLobby( lobby )
+	getLobbyByTitle(title)
 	{
-		if ( typeof lobby === 'string' )
+		for(let lobby in this.lobbies)
 		{
-			return this.getLobbyByTitle( lobby );
+			if (lobby === title)
+		 	{
+		 		return this.lobbies[lobby];
+		 	}
 		}
-		else if ( typeof lobby === 'object' && lobby instanceof Lobby )
+		return undefined;
+	}
+
+	getLobby( fitler )
+	{
+		if ( typeof fitler === 'string' )
 		{
-			return this.getLobbyByTitle( lobby.title );
+			return this.getLobbyByTitle( fitler );
+		}
+		else if ( typeof fitler === 'object' && fitler instanceof Lobby )
+		{
+			return this.getLobbyByTitle( fitler.title );
+		}
+		else if ( typeof fitler === 'object' && fitler instanceof Client )
+		{
+			return this.getLobbyByClient( fitler );
 		}
 		else
 		{
@@ -95,10 +111,9 @@ class LobbyManager{
 	{
 		return 401;
 	}
-
-	get NO_SUCH_CLIENT_IN_LOBBY_ERROR() // TODO get valid error value
+	get NO_SUCH_LOBBY()
 	{
-		return 402;
+		return 403
 	}
 }
 
