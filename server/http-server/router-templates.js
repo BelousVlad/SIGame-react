@@ -35,5 +35,5 @@ module.exports =
 
 	'mainController/create_lobby' : 'create-lobby',
 	'mainController/lobby' : 'lobby',
-	'mainController/main' : '[/.]*',
+	'mainController/main' : '.*',
 };

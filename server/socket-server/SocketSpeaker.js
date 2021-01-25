@@ -34,7 +34,17 @@ module.exports = class SocketSpeaker{
 			client.name = name;
 			client.send('update_name', name);
 		}
-		console.log(ClientManager.clients);
+	}
+
+	erase_name(ws, msg)
+	{
+		let key = msg.key;
+		let client = ClientManager.getClient(key);
+		if (client)
+		{
+			client.name = undefined;
+			client.send('update_name');
+		}
 	}
 	send_key(ws, msg)
 	{
@@ -70,7 +80,7 @@ module.exports = class SocketSpeaker{
 
 	// Отправка сведений о состоянии пользователя
 	// Имя, параметры лобби
-	status(ws, msg) 
+	status(ws, msg)
 	{
 		let key = msg.key;
 
@@ -194,6 +204,7 @@ module.exports = class SocketSpeaker{
 			"create_lobby" : "create_lobby",
 			"connect_lobby" : "connect_lobby",
 			"lobby_list" : "lobby_list",
+			"erase_name" : "erase_name",
 		}
 	}
 }
