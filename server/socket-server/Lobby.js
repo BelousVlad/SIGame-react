@@ -3,6 +3,8 @@ const event = require('events');
 
 class Lobby{
 
+	lobbyPath = new Object();
+
 	constructor( title, max_p, password, configuration_ )
 	{
 		Object.assign( this, new event() ) // 1-st step of mix-in of events

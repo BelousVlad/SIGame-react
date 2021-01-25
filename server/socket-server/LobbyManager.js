@@ -20,9 +20,9 @@ class LobbyManager{
 	{
 		for(let lobby in this.lobbies)
 		{
-			for(let client_ of this.lobbies[lobby].clients)
+			for(let client_ in this.lobbies[lobby].clients)
 			{
-				if(client.key == client_.key)
+				if(client.key == client_)
 				{
 					return true;
 				}

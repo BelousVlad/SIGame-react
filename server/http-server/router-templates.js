@@ -5,8 +5,12 @@ const ClientManager = require('../socket-server/ClientManager');
 
 module.exports =
 {
-	'mainController/get' : ( req ) => {
-		return req.url === '/api/upload/pack' && req.method.toLowerCase() === 'post';
+	'mainController/upload_pack' : ( req ) => {
+		return req.url === '^/api/upload/pack$' && req.method.toLowerCase() === 'post';
+	},
+
+	'mainController/upload_avatar' : ( req ) => {
+		return req.url === '^/api/upload/avatar$' && req.method.toLowerCase() === 'post';
 	},
 
 	'mainController/send' : ( req ) => {

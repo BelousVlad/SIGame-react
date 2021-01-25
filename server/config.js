@@ -13,4 +13,5 @@ module.exports = ( {
 	packegesPath : path.join(__dirname, 'si-packs'),
 	mainPagePath : path.join(__dirname, 'public', 'main.html'),
 	rootPath : __dirname,
+	packDirPath : path.join( __dirname, 'si-packs'),
 } );

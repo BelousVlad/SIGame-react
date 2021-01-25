@@ -71,7 +71,7 @@ class App{
 
 	}
 
-	
+
 //
 //  ---------------- ** ----
 //
@@ -101,7 +101,7 @@ class App{
 	}
 	updateName(msg)
 	{
-		console.log(msg);	
+		console.log(msg);
 	}
 	setKey (data) { // Установить уникальный ключь
 		Cookie.set("key", data.data);
@@ -134,7 +134,6 @@ class App{
 			// path = path.join('/');
 			// console.log(path);
 		}
-		console.log(path);
 		this.pager.changePage.call( this.pager,  path );
 	}
 

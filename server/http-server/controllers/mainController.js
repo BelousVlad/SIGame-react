@@ -9,7 +9,7 @@ const LobbyManager = require('../../socket-server/LobbyManager');
 
 class MainController{
 	html(request, response) {
-		
+
 		let url = (request.url).split('?')[0];
 		let extname = path.extname(url);
 
@@ -96,6 +96,26 @@ class MainController{
 				res.end(data);
 			}
 		})
+	}
+
+	upload_pack ( req, res ) {
+		const form = formidable({
+			uploadDir : config.packDirPath,
+			maxFileSize : 200e6, //  ~200mb
+			keepExtensions : true,
+			multiple : false,
+		});
+
+		form.parse( req, ( err, fields file ) => {
+			if ( err )
+				return
+
+			LobbyManager.isPlayerIntoLobby( req.data.clientKey ).filePath = file;
+		} );
+	}
+
+	upload_avatar ( req, res ) {
+		//
 	}
 }
 
