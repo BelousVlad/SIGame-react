@@ -8,6 +8,8 @@ class App{
 		this.initSpeker();
 		this.router = new Router();
 
+		this.lobby = undefined;
+
 		this.clickEventer = new Eventer();
 		this.pager = new Pager(this);
 
@@ -81,13 +83,7 @@ class App{
 	}
 
 
-	viewLobbies(json)
-	{
-		let arr = json.data;
 
-		this.view_model.viewLobbies(arr);
-
-	}
 
 
 //  -------------------
@@ -108,13 +104,61 @@ class App{
 	}
 	lobby_created(msg)
 	{
-		//TODO LOBBY CONNECTED
 		console.log(msg)
 	}
 	lobby_connected(msg)
 	{
-		//TODO LOBBY CONNECTED
 		console.log(msg)
+		this.pager.changePage('/lobby');
+		let title = msg.data.title;
+		let max_players = msg.data.max_players;
+		this.lobby = new Lobby(title, max_players);
+	}
+
+	updateStatus(msg)
+	{
+		if (msg.data != 0)
+		{
+			console.log(msg)
+			if (msg.data.name)
+				this.updateName(msg)
+			if (msg.data.lobby) //403 - NO_SUCH_LOBBY
+			{
+				let lobby = msg.data.lobby;
+				this.lobby_connected({ data: 
+						{ title: lobby.title, max_players: lobby.max_players }}
+				)
+			}
+		}
+	}
+
+	lobby_list(json)
+	{
+		let arr = json.data;
+
+		console.log(json)
+
+		this.view_model.viewLobbies(arr, function(e){
+			let is_password = $(this).attr('is_password')
+			let title = $(this).attr('title')
+	        if(is_password)
+	        {
+	            app.view_model.viewPasswordPopup()
+	            .then((data) => {
+	                let password = data.password;
+	                let element = data.element;
+
+
+
+	                app.speakerctrl.connectToLobby(title, password);
+
+	            })
+	            .catch(() => {
+
+	            })
+	        }
+		});
+
 	}
 
 	handleTaskToLoadManager( msg ) {

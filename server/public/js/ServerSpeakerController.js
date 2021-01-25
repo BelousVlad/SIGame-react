@@ -13,6 +13,12 @@ class ServerSpeakerController{
 	{
 		this.send("key", this.key)
 	}
+
+	getLobbyList()
+	{
+		this.send("lobby_list")
+	}
+
 	start()
 	{
 	    this.speaker.openSocket();
@@ -29,6 +35,16 @@ class ServerSpeakerController{
 		{
 			this.sendWithoutKey(action, data);
 		}
+	}
+
+	connectToLobby(title, password)
+	{
+		console.log(password)
+		this.sendWithKey('connect_lobby', { title, password })
+	}
+	createLobby(title , max_players, password)
+	{
+		this.sendWithKey("create_lobby", {title , max_players, password })
 	}
 
 	sendWithKey(action ,msg)

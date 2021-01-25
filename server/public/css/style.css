@@ -35,7 +35,7 @@
   }
 }
 
-.lobby-list-container{
+.lobby-list{
   padding: 15px;
   display: flex;
   flex-direction: column;
@@ -139,4 +139,24 @@
   background: black;
   width: 100vw;
   height: 100vh;
+}
+.lobby-list-item{
+  display: flex;
+  justify-content: space-between; 
+}
+.popup-bg{
+  background: rgba(0,0,0,.5);
+  display: flex;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+
+}
+.popup-container{
+  margin: auto;
+  width: 40%;
+  height: 250px;
+  background: #77ff22;
 }

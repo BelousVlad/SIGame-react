@@ -16,7 +16,7 @@
 
 		if (title && max_players && max_players >= 3)
 		{
-			app.speakerctrl.sendWithKey("create_lobby", {title , max_players, password })
+			app.speakerctrl.createLobby(title , max_players, password)
 		}
 	});
 </script>

@@ -26,14 +26,14 @@ module.exports =
 
 	'mainController/name' : ( req ) => {
 
-		let cookies = helper.parseCookies(req);
+        let cookies = helper.parseCookies(req);
 
-		let client = ClientManager.getClient(cookies.key);
+        let client = ClientManager.getClient(cookies.key);
 
-		return !(client && client.name);
-	},
-
+        return !(client && client.name);
+    },
 
 	'mainController/create_lobby' : 'create-lobby',
-	'mainController/main' : '.*',
+	'mainController/lobby' : 'lobby',
+	'mainController/main' : '[/.]*',
 };

@@ -1,11 +1,12 @@
 const WebSocket = require('ws');
 const event = require('events');
 
-class Lobby{
+class Lobby {
 
 	lobbyPath = new Object();
 
-	constructor( title, max_p, password, configuration_ )
+	constructor(title, max_p, password)
+
 	{
 		Object.assign( this, new event() ) // 1-st step of mix-in of events
 
@@ -13,20 +14,21 @@ class Lobby{
 		this.max_players = max_p ;
 		this.title = title ;
 		this.password = password ;
-
-		for ( let i in Lobby.defaultConfig )
-			this.configuration[i] = typeof configuration_[i] === 'undefined' ? Lobby.defaultConfig[i] : configuration_[i];
-
-		//  configuration is public field of Lobby wich contains parametrs such as password, rules, etc.
-		//  only paramets out of configuration field is lobby title
-		//  TODO after consensus remove max_players field, etc.
 	}
 
-	getClient( client ){
-		return this.clients.find( item => { return item.key == client.key } );
+	getClient(client)
+	{
+		for(let item in this.clients)
+		{
+			if (item == client.key)
+			{
+				return this.clients[item];
+			}
+		}
+		return undefined;
 	}
 
-	hasClient( client )
+	hasClient(client)
 	{
 		return !!this.getClient(client);
 	}
@@ -50,7 +52,7 @@ class Lobby{
 	{
 		let clientKey = client.key;
 
-		client.emit('die');
+		client.emit('lobby_client_leave');
 		this.clients[ clientKey ] = undefined;
 	}
 
@@ -70,10 +72,14 @@ class Lobby{
 	{
 		return 402;
 	}
+	static get INCORRECT_PASSWORD()
+	{
+		return 404;
+	}
 
 	static get defaultConfig(){
 		return {
-			maxPlayers : 2,
+			maxPlayers : 3,
 			rules : {},
 			password : '',
 		}

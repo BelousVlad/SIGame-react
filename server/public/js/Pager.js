@@ -16,12 +16,11 @@ class Pager{
 
 
 		return this.XMLRequest(page_path,null).
-		then((resolve,reject) => {
-			let ar = $(resolve);
+		then((data) => {
 
-			$(ar).each((i,item) => {
+			let ar = data;
 
-
+			$(data).each((i,item) => {
 				let el = $(item);
 
 				if(el.is("div.wrapper"))

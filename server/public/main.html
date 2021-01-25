@@ -20,7 +20,28 @@
   </div>
 </div>
 
+<div class="container">
+    <div class="lobbies-list-refresh-btn">
+        Refresh
+    </div>
+</div>
+<div class="container">
+    <div class="lobby-list">
+    <!--
+        <div class="lobby-list-item"></div>
+    -->
+    </div>
+</div>
+
+
+
 <script>
+
+    $('.lobbies-list-refresh-btn').click(function(e){
+        //console.log('refresh')
+        app.speakerctrl.getLobbyList()
+    })
+
 
 
 

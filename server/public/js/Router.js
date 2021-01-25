@@ -7,6 +7,8 @@ class Router{
 			"update_name" : "updateName",
 			"lobby_created" : "lobby_created",
 			"lobby_connected" : "lobby_connected",
+			"lobby_list" : "lobby_list",
+			"status" : "updateStatus",
 		};
 	}
 
