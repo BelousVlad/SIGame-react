@@ -26,6 +26,11 @@
     </div>
 </div>
 <div class="container">
+    <div class="client-log-out-btn">
+        log out
+    </div>
+</div>
+<div class="container">
     <div class="lobby-list">
     <!--
         <div class="lobby-list-item"></div>
@@ -43,7 +48,9 @@
     })
 
 
-
+    $('.client-log-out-btn').click(function(e){
+        app.speakerctrl.eraseName();
+    })
 
 // app.fileLoader.createLoadManager( "question-pack" ).bindToElement( document.querySelector("button") );
 //

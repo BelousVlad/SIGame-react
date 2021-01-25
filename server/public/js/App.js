@@ -73,7 +73,7 @@ class App{
 
 	}
 
-	
+
 //
 //  ---------------- ** ----
 //
@@ -97,7 +97,7 @@ class App{
 	}
 	updateName(msg)
 	{
-		console.log(msg);	
+		this.GOTOPage();
 	}
 	setKey (data) { // Установить уникальный ключь
 		Cookie.set("key", data.data);
@@ -125,7 +125,7 @@ class App{
 			if (msg.data.lobby) //403 - NO_SUCH_LOBBY
 			{
 				let lobby = msg.data.lobby;
-				this.lobby_connected({ data: 
+				this.lobby_connected({ data:
 						{ title: lobby.title, max_players: lobby.max_players }}
 				)
 			}

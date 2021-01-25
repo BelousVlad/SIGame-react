@@ -9,6 +9,11 @@ class ServerSpeakerController{
 		this.send("set_name", name);
 	}
 
+	eraseName()
+	{
+		this.send('erase_name');
+	}
+
 	sendClientKey(key)
 	{
 		this.send("key", this.key)

@@ -6,7 +6,7 @@ class Eventer{
 
 	addEvent(selector, event)
 	{
-		this.events.push({	
+		this.events.push({
 			selector : selector,
 			event : event
 		});
@@ -17,15 +17,15 @@ class Eventer{
 		for(let item of this.events)
 		{
 			if($(htmlObj).is(item.selector))
-			{			
-				let flag = item.event(args); 
+			{
+				let flag = item.event(args);
 
-				if (!flag || flag === undefined || flag === null)
+				if (!flag)
 				{
 					return false;
 				}
 			}
 		}
-		
+
 	}
 }
