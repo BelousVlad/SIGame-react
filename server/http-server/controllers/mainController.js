@@ -5,6 +5,7 @@ const helper = require(config.helperClassPath);
 const ClientManager = require('../../socket-server/ClientManager');
 const LobbyManager = require('../../socket-server/LobbyManager');
 const AdmZip = require('adm-zip');
+const formidable = require('formidable');
 
 
 class MainController{
@@ -124,27 +125,19 @@ class MainController{
 			multiple : false,
 		});
 
-		form.parse( req, ( err, fields, file ) => {
+		form.parse( req, async ( err, fields, file ) => {
 			if ( err )
 				return;
-			console.log(file);
 
-			var zip = new AdmZip(file);
-			zipEntries = zip.getEntries();
+			// console.log(file.userfile.path);
 
-			zipEntries.forEach( item => {
-				console.log(item);
-			})
+			var zip = new AdmZip(file.userfile.path);
 
-			// fs.mkdir( file, function() {
-			// 	fs.createReadStream( file )
-			// 	.pipe(unzip.Extract({
-			// 		path: config.packDirPath
-			// 	}));
-
-			// 	LobbyManager.getLobbyByClient( req.data.clientKey ).packFolder = file;
-			// } )
-
+			fs.mkdirSync( file.userfile.path + '_');
+			await zip.extractAllTo(/*target path*/file.userfile.path + '_' , /*overwrite*/true);
+			fs.rmSync( file.userfile.path );
+			fs.renameSync( file.userfile.path + '_', file.userfile.path );
+			LobbyManager.getLobbyByClient( req.key ).packFolder = file.userfile.path;
 
 		} );
 	}

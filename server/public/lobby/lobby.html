@@ -3,11 +3,12 @@
 	<div class="master-container"></div>
 	<div class="game-info-container"></div>
 	<div class="chat-container"></div>
+	<input type="file" class="select-pack">select pack</input>
 </div>
 <div class="container">player-container</div>
 <div class="container">
 	<div class="players-container">
-		
+
 	<!--
 	<div class="player-box">
 		<img class="player-box-img">
@@ -28,5 +29,15 @@
 		app.kick_player(name);
 
 	});
+
+	document.querySelector('.select-pack').onchange = function( file ) {
+		var formData = new FormData(),
+			request = new XMLHttpRequest();
+		formData.append('userfile', document.querySelector('.select-pack').files[0] );
+		formData.append('CustomField', 'test');
+		request.open('POST', 'api/upload/pack');
+		request.send(formData);
+
+	}
 
 </script>
