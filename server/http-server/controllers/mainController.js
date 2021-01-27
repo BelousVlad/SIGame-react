@@ -4,7 +4,7 @@ const config = require( '../../config.js' );
 const helper = require(config.helperClassPath);
 const ClientManager = require('../../socket-server/ClientManager');
 const LobbyManager = require('../../socket-server/LobbyManager');
-
+const unzip = require('unzip');
 
 
 class MainController{
@@ -120,15 +120,25 @@ class MainController{
 		const form = formidable({
 			uploadDir : config.packDirPath,
 			maxFileSize : 200e6, //  ~200mb
-			keepExtensions : true,
+			keepExtensions : false,
 			multiple : false,
 		});
 
-		form.parse( req, ( err, fields file ) => {
+		form.parse( req, ( err, fields, file ) => {
 			if ( err )
-				return
+				return;
+			console.log(file);
 
-			LobbyManager.getLobbyByClient( req.data.clientKey ).filePath = file;
+			fs.mkdir( file, function() {
+				fs.createReadStream( file )
+				.pipe(unzip.Extract({
+					path: config.packDirPath
+				}));
+
+				LobbyManager.getLobbyByClient( req.data.clientKey ).packFolder = file;
+			} )
+
+
 		} );
 	}
 

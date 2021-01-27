@@ -17,8 +17,8 @@ module.exports =
 		let url = (req.url).split('?')[0];
 		let extname = path.extname(url);
 		switch ( extname ) {
-			case '.css' : { return true;}
-			case '.js' : { return true;}
+			case '.css' :
+			case '.js' :
 			case '.ico' : { return true;}
 			default : { return false;}
 		}
