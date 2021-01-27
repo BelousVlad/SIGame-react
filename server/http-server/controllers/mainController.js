@@ -128,7 +128,7 @@ class MainController{
 			if ( err )
 				return
 
-			LobbyManager.isPlayerIntoLobby( req.data.clientKey ).filePath = file;
+			LobbyManager.getLobbyByClient( req.data.clientKey ).filePath = file;
 		} );
 	}
 
