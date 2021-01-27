@@ -1,5 +1,6 @@
 const WebSocket = require('ws');
 const event = require('events');
+const ClientManager = require('./ClientManager');
 
 class Lobby {
 
@@ -64,10 +65,12 @@ class Lobby {
 		{
 			if (this.clients[item].name == name)
 			{
-				this.clients[item].emit('lobby_client_kicked', this);
-				this.emit('lobby_client_kicked', this.clients[item]);
+				this.deleteClient(item);
 
-				this.clients[item] = undefined;
+				let client = ClientManager.getClient(item);
+
+				client.emit('lobby_client_kicked', this);
+				this.emit('lobby_client_kicked', client);
 
 				return true;
 			}
@@ -79,10 +82,25 @@ class Lobby {
 	{
 		let clientKey = client.key;
 
+		this.deleteClient(clientKey);
 		client.emit('lobby_client_leave');
 		this.emit('lobby_client_leave');
 
-		this.clients[ clientKey ] = undefined;
+	}
+
+	deleteClient(clientKey)
+	{
+		delete this.clients[clientKey];
+		console.log('---------')
+		console.log(this.host)
+		console.log(this.clients)
+		console.log(clientKey == this.host.key)
+		if (clientKey == this.host.key)
+		{
+			let keyNewHost = Object.keys(this.clients)[0]
+			console.log(keyNewHost)
+			this.host = this.clients[keyNewHost];
+		}
 	}
 
 	static get CLIENT_CONNECT_TO_LOBBY_OK()
