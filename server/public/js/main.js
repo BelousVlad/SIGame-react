@@ -1,3 +1,5 @@
-const app = new App();
+
+var app = new App();
+
 
 

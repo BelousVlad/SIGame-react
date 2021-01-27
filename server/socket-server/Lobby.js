@@ -14,13 +14,15 @@ class Lobby {
 		this.max_players = max_p ;
 		this.title = title ;
 		this.password = password ;
+		this.scores = {}
+		this.host = undefined;
 	}
 
 	getClient(client)
 	{
 		for(let item in this.clients)
 		{
-			if (item == client.key)
+			if (item == client)
 			{
 				return this.clients[item];
 			}
@@ -30,7 +32,7 @@ class Lobby {
 
 	hasClient(client)
 	{
-		return !!this.getClient(client);
+		return !!this.getClient(client.key);
 	}
 
 	addClient(client)
@@ -39,7 +41,18 @@ class Lobby {
 
 		if ( Object.keys( this.clients ).length < this.max_players)
 		{
-			this.clients[clientKey] = client ;
+			this.clients[clientKey] = client;
+			if (!this.scores[clientKey])
+			{
+				this.scores[clientKey] = 0;
+			}
+
+			if (!this.host)
+			{
+				this.host = client;
+			}
+
+			this.emit("player_connected", client);
 			return Lobby.CLIENT_CONNECT_TO_LOBBY_OK;
 		}
 		else
@@ -48,11 +61,30 @@ class Lobby {
 		}
 	}
 
+	kickClientByName(name)
+	{
+		for(let item in this.clients)
+		{
+			if (this.clients[item].name == name)
+			{
+				this.clients[item].emit('lobby_client_kicked', this);
+				this.emit('lobby_client_kicked', this.clients[item]);
+
+				this.clients[item] = undefined;
+
+				return true;
+			}
+		}
+		return false;
+	}
+
 	removeClient( client )
 	{
 		let clientKey = client.key;
 
 		client.emit('lobby_client_leave');
+		this.emit('lobby_client_leave');
+
 		this.clients[ clientKey ] = undefined;
 	}
 

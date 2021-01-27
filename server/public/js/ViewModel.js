@@ -35,11 +35,20 @@ class ViewModel {
 		$('.lobby-list-item').dblclick(dblclickhandler)
 	}
 
-	viewPlayers(players)
+	viewPlayers(players, is_host)
 	{
+
+		let host_menu = `
+			<div class="host-player-menu">
+				<div class="host-player-menu-change-score">Изменить очки</div>
+				<div class="host-player-menu-kick">Выгнать</div>
+			</div>
+		`
+
 		let html = players.reduce((t,item) =>
 			t + `
-			<div class="player-box">
+			<div class="player-box" name="${item.name}">
+				${ is_host ? host_menu : '' }
 				<img class="player-box-img">
 				<div class="player-box-name">${item.name}</div>
 				<div class="player-box-score">${item.score}</div>
@@ -47,7 +56,9 @@ class ViewModel {
 			`
 		,"");
 
+
 		$(".players-container").html(html);
+
 	}
 	viewPasswordPopup()
 	{

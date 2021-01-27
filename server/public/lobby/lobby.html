@@ -4,7 +4,10 @@
 	<div class="game-info-container"></div>
 	<div class="chat-container"></div>
 </div>
-<div class="container players-container">
+<div class="container">player-container</div>
+<div class="container">
+	<div class="players-container">
+		
 	<!--
 	<div class="player-box">
 		<img class="player-box-img">
@@ -12,4 +15,18 @@
 		<div class="player-box-score"></div>
 	</div>
 	-->
+	</div>
 </div>
+
+<script type="text/javascript">
+
+
+
+	$(document).on('click','.host-player-menu-kick',function(e){
+
+		let name = $(event.target).parent().parent().attr("name");
+		app.kick_player(name);
+
+	});
+
+</script>

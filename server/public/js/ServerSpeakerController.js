@@ -44,12 +44,15 @@ class ServerSpeakerController{
 
 	connectToLobby(title, password)
 	{
-		console.log(password)
 		this.sendWithKey('connect_lobby', { title, password })
 	}
 	createLobby(title , max_players, password)
 	{
 		this.sendWithKey("create_lobby", {title , max_players, password })
+	}
+	kick_player(name)
+	{
+		this.sendWithKey("lobby_kick_player", { name: name })
 	}
 
 	sendWithKey(action ,msg)
@@ -60,6 +63,7 @@ class ServerSpeakerController{
 	{
 		this.speaker.send({action, data: msg})
 	}
+
 
 	get key()
 	{

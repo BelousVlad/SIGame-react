@@ -97,7 +97,8 @@ class App{
 	}
 	updateName(msg)
 	{
-		this.GOTOPage();
+		console.log(msg)
+		//this.GOTOPage();
 	}
 	setKey (data) { // Установить уникальный ключь
 		Cookie.set("key", data.data);
@@ -109,10 +110,18 @@ class App{
 	lobby_connected(msg)
 	{
 		console.log(msg)
-		this.pager.changePage('/lobby');
 		let title = msg.data.title;
 		let max_players = msg.data.max_players;
-		this.lobby = new Lobby(title, max_players);
+		let is_host = msg.data.is_host;
+		this.lobby = new Lobby(title, max_players, is_host);
+		if (document.location.pathname != '/lobby')
+		{
+			this.pager.changePage('/lobby')
+			.then(() => {
+				//console.log('page_updated')
+				app.view_model.viewPlayers(this.lobby.players_, is_host)
+			});
+		}
 	}
 
 	updateStatus(msg)
@@ -122,11 +131,11 @@ class App{
 			console.log(msg)
 			if (msg.data.name)
 				this.updateName(msg)
-			if (msg.data.lobby) //403 - NO_SUCH_LOBBY
+			if (msg.data.lobby)
 			{
 				let lobby = msg.data.lobby;
 				this.lobby_connected({ data:
-						{ title: lobby.title, max_players: lobby.max_players }}
+						{ title: lobby.title, max_players: lobby.max_players, is_host: lobby.is_host } }
 				)
 			}
 		}
@@ -135,8 +144,6 @@ class App{
 	lobby_list(json)
 	{
 		let arr = json.data;
-
-		console.log(json)
 
 		this.view_model.viewLobbies(arr, function(e){
 			let is_password = $(this).attr('is_password')
@@ -161,10 +168,43 @@ class App{
 
 	}
 
+	updateLobbyPlayers(msg)
+	{
+		let players = msg.data.players;
+		if (players && this.lobby)
+		{
+			this.lobby.players = players
+		}
+	}
+
+	addLobbyPlayer(msg)
+	{
+		let player = msg.data.player;
+		if (player && this.lobby)
+		{
+			this.lobby.addPlayer(player);
+		}
+	}
+
+	kick_player(name)
+	{
+		if (this.lobby && this.lobby.is_host)
+		{
+            app.speakerctrl.kick_player(name);		
+		}
+	}
+
+	kicked_from_lobby(msg)
+	{
+		this.lobby = undefined;
+		this.pager.changePage('/')
+	}
+
 	handleTaskToLoadManager( msg ) {
 		//this.fileLoader.getLoadManagerById( msg.data.load_manager_id )
 		//[ this.fileLoader.routes [ msg.data.action_of_lm ] ] ( msg.data.answer ) ;
 	}
+
 
 	GOTOPage ( msg ) {
 		let path;
