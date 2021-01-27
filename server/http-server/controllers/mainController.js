@@ -4,7 +4,7 @@ const config = require( '../../config.js' );
 const helper = require(config.helperClassPath);
 const ClientManager = require('../../socket-server/ClientManager');
 const LobbyManager = require('../../socket-server/LobbyManager');
-const unzip = require('unzip');
+const AdmZip = require('adm-zip');
 
 
 class MainController{
@@ -129,14 +129,21 @@ class MainController{
 				return;
 			console.log(file);
 
-			fs.mkdir( file, function() {
-				fs.createReadStream( file )
-				.pipe(unzip.Extract({
-					path: config.packDirPath
-				}));
+			var zip = new AdmZip(file);
+			zipEntries = zip.getEntries();
 
-				LobbyManager.getLobbyByClient( req.data.clientKey ).packFolder = file;
-			} )
+			zipEntries.forEach( item => {
+				console.log(item);
+			})
+
+			// fs.mkdir( file, function() {
+			// 	fs.createReadStream( file )
+			// 	.pipe(unzip.Extract({
+			// 		path: config.packDirPath
+			// 	}));
+
+			// 	LobbyManager.getLobbyByClient( req.data.clientKey ).packFolder = file;
+			// } )
 
 
 		} );
