@@ -22,23 +22,43 @@ class Game{
 		for ( let i in defaultRules )
 			this.rules[i] = typeof this.rules[i] === 'undefined' ? defaultRules[i] : this.rules[i];
 
-		this.current = {
-			round : 0,
-			question : undefined
-		}
 		parseStringToXML(fs.readFileSync( this.filePath ), function( err, json ) {
 			this.package = json.package;
 			this.rounds = this.package.rounds;
 		}.bind(this));
+
+		this.current = {
+			round : this.rounds[0],
+			question : undefined
+		}
 	}
 
-	checkQuestion( question ) {
+	checkQuestion( question, client ) {
 		question = this.getQuestion( question );
 		if ( !question )
 			return;
 		this.current.question = question;
 		question.checked = true;
-		this.update();
+		let waitingForClients = Object.keys( this.lobby.clients ) . length;
+
+		function clientReady() {
+			waitingForClients--;
+			if ( waitingForClients <= 0 )
+				this.displayQuestion();
+		}
+		clientReady = clientReady.bind(this);
+
+		for ( let i in this.lobby.clients ) {
+			this.lobby.clients[i].once( 'question_received', clientReady );
+			this.lobby.clients[i].once( 'client_leave', clientReady );
+		}
+
+		setTimeout( this.rules.answerTimeAwait /* 5sec */, function() {
+			if ( waitingForClients ) {
+				this.displayQuestion();
+				// 'cant run coz players havnt files';
+			}
+		} )
 	}
 
 	selectRound( roundIndex ) {
@@ -67,6 +87,10 @@ class Game{
 
 	update() {
 		// update users view
+	}
+
+	displayQuestion() {
+		console.log( this.current.question );
 	}
 }
 
