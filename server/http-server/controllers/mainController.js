@@ -118,6 +118,11 @@ class MainController{
 	}
 
 	upload_pack ( req, res ) {
+		var lobby = LobbyManager.getLobbyByClient( req.key );
+
+		if ( ! lobby )
+			return;
+
 		const form = formidable({
 			uploadDir : config.packDirPath,
 			maxFileSize : 200e6, //  ~200mb
@@ -129,15 +134,14 @@ class MainController{
 			if ( err )
 				return;
 
-			// console.log(file.userfile.path);
-
 			var zip = new AdmZip(file.userfile.path);
 
 			fs.mkdirSync( file.userfile.path + '_');
 			await zip.extractAllTo(/*target path*/file.userfile.path + '_' , /*overwrite*/true);
 			fs.rmSync( file.userfile.path );
 			fs.renameSync( file.userfile.path + '_', file.userfile.path );
-			LobbyManager.getLobbyByClient( req.key ).packFolder = file.userfile.path;
+			lobby.packFolder = file.userfile.path;
+			lobby.emit('upload_pack');
 
 		} );
 	}
