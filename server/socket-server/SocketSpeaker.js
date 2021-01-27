@@ -171,6 +171,8 @@ module.exports = class SocketSpeaker{
 			*/
 			for(let client in lobby.clients)
 			{
+				console.log('--------');
+				console.log(lobby);
 				this.add_player(lobby.clients[client], new_player)
 			}
 
