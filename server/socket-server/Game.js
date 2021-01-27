@@ -13,7 +13,7 @@ class Question{
 class Game{
 	constructor(lobby){
 		this.lobby = lobby;
-		this.filePath = lobby.filePath;
+		this.packFolder = lobby.packFolder;
 		this.rules = lobby.rules;
 		var defaultRules = {
 			answerTimeAwait : 2e3 /* 2sec */,
@@ -22,7 +22,7 @@ class Game{
 		for ( let i in defaultRules )
 			this.rules[i] = typeof this.rules[i] === 'undefined' ? defaultRules[i] : this.rules[i];
 
-		parseStringToXML(fs.readFileSync( this.filePath ), function( err, json ) {
+		parseStringToXML(fs.readFileSync( this.packFolder ), function( err, json ) {
 			this.package = json.package;
 			this.rounds = this.package.rounds;
 		}.bind(this));

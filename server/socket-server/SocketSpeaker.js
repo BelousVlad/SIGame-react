@@ -1,6 +1,7 @@
 const ClientManager = require('./ClientManager');
 const LobbyManager = require('./LobbyManager');
 const Lobby = require('./Lobby');
+const Game = require('./Game');
 
 module.exports = class SocketSpeaker{
 
