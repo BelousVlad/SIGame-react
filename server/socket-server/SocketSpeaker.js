@@ -88,14 +88,20 @@ module.exports = class SocketSpeaker{
 
 		if (client)
 		{
-			let lobby = LobbyManager.getLobbyByClient(client);
+			let lobby_ = LobbyManager.getLobbyByClient(client);
+			let lobby;
 
-			if (lobby)
+			if (lobby_)
 			{
-				lobby = { title: lobby.title, max_players: lobby.max_players }
+				let is_host = lobby_.host.key == key;
+				lobby = { title: lobby_.title, max_players: lobby_.max_players, is_host }
 			}
 
 			client.send('status', { lobby, name: client.name } )
+			if (lobby_)
+			{
+				this.update_players(client, lobby_);
+			}
 		}
 		else
 		{
@@ -139,6 +145,8 @@ module.exports = class SocketSpeaker{
 				let lobby = LobbyManager.createLobby(title, password, max);
 				client.send('lobby_created', { title : lobby.title, code: LobbyManager.LOBBY_CREATED_OK });
 
+				this.set_lobby_events(lobby);
+
 				msg.data.title = title;
 				this.connect_lobby(ws, msg)
 			}
@@ -152,6 +160,27 @@ module.exports = class SocketSpeaker{
 
 		}
 	}
+	set_lobby_events(lobby)
+	{
+		lobby.on('player_connected', (new_player) => {
+			/*
+			for(let client in lobby.clients)
+			{
+				this.update_players(lobby.clients[client], lobby);
+			}
+			*/
+			for(let client in lobby.clients)
+			{
+				this.add_player(lobby.clients[client], new_player)
+			}
+
+		})
+		lobby.on('lobby_client_kicked', (client) => {
+
+			client.send('kicked_from_lobby')
+
+		});
+	}
 	connect_lobby(ws, msg)
 	{
 		let key = msg.key;
@@ -160,8 +189,6 @@ module.exports = class SocketSpeaker{
 		if (client)
 		{
 			let title = msg.data.title;
-
-			console.log(title)
 
 			let lobby = LobbyManager.getLobbyByTitle(title)
 
@@ -176,7 +203,9 @@ module.exports = class SocketSpeaker{
 				if (is_pass)
 				{
 					let code = LobbyManager.addClientToLobby(lobby, client);
-					client.send('lobby_connected', { title : lobby.title, max_players: lobby.max_players, code });
+					let is_host = lobby.host.key == key;
+					client.send('lobby_connected', { title : lobby.title, max_players: lobby.max_players, code, is_host });
+					this.update_players(client, lobby);
 				}
 				else
 					client.send('lobby_connected', { title : lobby.title, max_players: lobby.max_players, code: Lobby.INCORRECT_PASSWORD });
@@ -186,6 +215,64 @@ module.exports = class SocketSpeaker{
 				client.send('lobby_connected', {  code: LobbyManager.NO_SUCH_LOBBY });
 			}
 
+		}
+	}
+
+	update_players(client, lobby)
+	{
+		let players = lobby.clients;
+
+		let arr = [];
+
+		for(let p in players)
+		{
+			let player = players[p];
+			let is_host = lobby.host.key == player.key;
+			arr.push({
+				name: player.name,
+				score: lobby.scores[player.key],
+				is_host: is_host,
+				//etc...
+			})
+
+			client.send('lobby_players', { players: arr } );
+		}
+	}
+	add_player(client, new_client)
+	{
+
+		let lobby = LobbyManager.getLobbyByClient(client);
+
+		if (lobby)
+		{
+			let is_host = lobby.host.key == new_client.key;
+			client.send('lobby_add_player', { player: 
+				{
+					name: new_client.name,
+					score: lobby.scores[new_client.key], 
+					is_host
+				}
+			});
+		}
+	}
+	lobby_kick_player(ws, msg)
+	{
+		let key = msg.key;
+		let client = ClientManager.getClient(key);
+
+		if (client)
+		{
+			let lobby = LobbyManager.getLobbyByClient(client);
+			if (lobby)
+			{			
+				if (client.key == lobby.host.key)
+				{
+					let kick_name = msg.data.name;
+
+					lobby.kickClientByName(kick_name)
+
+				}
+			}
 		}
 	}
 
@@ -204,6 +291,7 @@ module.exports = class SocketSpeaker{
 			"create_lobby" : "create_lobby",
 			"connect_lobby" : "connect_lobby",
 			"lobby_list" : "lobby_list",
+			"lobby_kick_player" : "lobby_kick_player",
 			"erase_name" : "erase_name",
 		}
 	}
