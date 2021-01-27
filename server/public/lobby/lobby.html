@@ -4,6 +4,7 @@
 	<div class="game-info-container"></div>
 	<div class="chat-container"></div>
 	<input type="file" class="select-pack">select pack</input>
+	<button class="game-start-btn">start</button>
 </div>
 <div class="container">player-container</div>
 <div class="container">
@@ -38,6 +39,10 @@
 		request.open('POST', 'api/upload/pack');
 		request.send(formData);
 
+	}
+
+	document.querySelector('.game-start-btn').onclick = function ( ) {
+		app.speakerctrl.startGame();
 	}
 
 </script>

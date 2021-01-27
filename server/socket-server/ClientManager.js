@@ -21,7 +21,7 @@ class ClientManager{
 
 	getClient(key)
 	{
-		return this.clients.filter((client) => client.key == key)[0]
+		return this.clients.find((client) => client.key == key);
 	}
 
 	generateKey()

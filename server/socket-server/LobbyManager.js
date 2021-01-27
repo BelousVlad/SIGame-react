@@ -1,4 +1,5 @@
 const Lobby = require('./Lobby');
+const ClientManager = require('./ClientManager');
 
 
 class LobbyManager{
@@ -61,6 +62,11 @@ class LobbyManager{
 		 	}
 		}
 		return undefined;
+	}
+
+	getLobbyByClientKey( key )
+	{
+		return this.getLobbyByClient( ClientManager.getClient(key) );
 	}
 
 	getLobbyByTitle(title)

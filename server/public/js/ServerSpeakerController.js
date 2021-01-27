@@ -24,6 +24,11 @@ class ServerSpeakerController{
 		this.send("lobby_list")
 	}
 
+	startGame()
+	{
+		this.send('lobby_start_game');
+	}
+
 	start()
 	{
 	    this.speaker.openSocket();

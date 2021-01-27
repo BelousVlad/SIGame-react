@@ -182,6 +182,21 @@ module.exports = class SocketSpeaker{
 			client.send('kicked_from_lobby')
 
 		});
+		lobby.on('start_game', function() {
+			console.log( this, 123 );
+		}.bind(lobby) )
+
+		lobby.on('lobby_upload_pack_start', function() {
+			this.packState = 'uploading';
+			if (this.packFolder ) {
+				fs.rmSync( this.packFolder );
+			}
+		}.bind(lobby))
+
+		lobby.on('lobby_upload_pack_end', function() {
+			this.packState = 'ready';
+		}.bind(lobby))
+
 	}
 	connect_lobby(ws, msg)
 	{
@@ -248,10 +263,10 @@ module.exports = class SocketSpeaker{
 		if (lobby)
 		{
 			let is_host = lobby.host.key == new_client.key;
-			client.send('lobby_add_player', { player: 
+			client.send('lobby_add_player', { player:
 				{
 					name: new_client.name,
-					score: lobby.scores[new_client.key], 
+					score: lobby.scores[new_client.key],
 					is_host
 				}
 			});
@@ -266,7 +281,7 @@ module.exports = class SocketSpeaker{
 		{
 			let lobby = LobbyManager.getLobbyByClient(client);
 			if (lobby)
-			{			
+			{
 				if (client.key == lobby.host.key)
 				{
 					let kick_name = msg.data.name;
@@ -276,6 +291,15 @@ module.exports = class SocketSpeaker{
 				}
 			}
 		}
+	}
+
+	lobby_start_game( ws, msg ) {
+		const client = ClientManager.getClient( msg.key );
+		const lobby = LobbyManager.getLobbyByClient(client);
+		const is_host = lobby.host.key == client.key;
+		const pack_uploaded = lobby.packState === 'ready';
+		if ( is_host && pack_uploaded )
+			lobby.emit('start_game');
 	}
 
 	send(ws, action ,data)
@@ -295,6 +319,7 @@ module.exports = class SocketSpeaker{
 			"lobby_list" : "lobby_list",
 			"lobby_kick_player" : "lobby_kick_player",
 			"erase_name" : "erase_name",
+			"lobby_start_game" : "lobby_start_game",
 		}
 	}
 }

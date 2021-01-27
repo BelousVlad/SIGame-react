@@ -118,10 +118,16 @@ class MainController{
 	}
 
 	upload_pack ( req, res ) {
-		var lobby = LobbyManager.getLobbyByClient( req.key );
+		let cookies = helper.parseCookies(req);
+
+		var lobby = LobbyManager.getLobbyByClientKey( cookies.key );
+		// console.log(lobby, 'tttttttttttttt');
 
 		if ( ! lobby )
 			return;
+
+		lobby.emit('lobby_upload_pack_start');
+		lobby.emit('lobby_pack_state_change');
 
 		const form = formidable({
 			uploadDir : config.packDirPath,
@@ -141,7 +147,7 @@ class MainController{
 			fs.rmSync( file.userfile.path );
 			fs.renameSync( file.userfile.path + '_', file.userfile.path );
 			lobby.packFolder = file.userfile.path;
-			lobby.emit('upload_pack');
+			lobby.emit('lobby_upload_pack_end');
 
 		} );
 	}

@@ -4,7 +4,8 @@ const ClientManager = require('./ClientManager');
 
 class Lobby {
 
-	lobbyPath = new Object();
+	packFolder = new Object();
+	packState = 'none'; // состояния в котором может находиться пак. предполагается 3 варианта : none, uploading, ready;
 
 	constructor(title, max_p, password)
 
