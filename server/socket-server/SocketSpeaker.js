@@ -184,8 +184,9 @@ module.exports = class SocketSpeaker{
 			client.send('kicked_from_lobby')
 
 		});
-		lobby.on('start_game', function() {
+		lobby.on('lobby_start_game', function() {
 			lobby.game = new Game( lobby );
+			console.log('game has started', lobby.game);
 		}.bind(lobby) )
 
 		lobby.on('lobby_upload_pack_start', function() {
@@ -200,6 +201,7 @@ module.exports = class SocketSpeaker{
 		}.bind(lobby))
 
 	}
+
 	connect_lobby(ws, msg)
 	{
 		let key = msg.key;
@@ -300,13 +302,35 @@ module.exports = class SocketSpeaker{
 		const lobby = LobbyManager.getLobbyByClient(client);
 		const is_host = lobby.host.key == client.key;
 		const pack_uploaded = lobby.packState === 'ready';
+		// console.log(msg, lobby);
 		if ( is_host && pack_uploaded )
-			lobby.emit('start_game');
+			lobby.emit('lobby_start_game');
 	}
 
 	send(ws, action ,data)
 	{
 		ws.send(JSON.stringify({action, data}))
+	}
+
+	get_pack_question( ws, msg ) {
+
+        let client = ClientManager.getClient(msg.key),
+        	lobby = LobbyManager.getLobbyByClient(client)
+
+		if ( !lobby )
+			return;
+
+		this.send( ws, 'download_question', lobby.Game.current.question )
+	}
+
+	get_pack_round( ws, msg ) {
+		let client = ClientManager.getClient(msg.key),
+        	lobby = LobbyManager.getLobbyByClientKey(msg.key)
+
+		if ( ! (lobby && lobby.game && lobby.packState === 'ready' ) )
+			return;
+
+		this.send( ws, 'show_round', lobby.game.current.round);
 	}
 
 
@@ -322,6 +346,8 @@ module.exports = class SocketSpeaker{
 			"lobby_kick_player" : "lobby_kick_player",
 			"erase_name" : "erase_name",
 			"lobby_start_game" : "lobby_start_game",
+			"get_pack_question" : "get_pack_question",
+			"get_pack_round" : "get_pack_round",
 		}
 	}
 }

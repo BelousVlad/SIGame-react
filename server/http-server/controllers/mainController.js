@@ -152,7 +152,7 @@ class MainController{
 		} );
 	}
 
-	upload_avatar ( req, res ) {
+		upload_avatar ( req, res ) {
 		//
 	}
 }

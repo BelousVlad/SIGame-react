@@ -1,7 +1,7 @@
 class ViewModel {
 	constructor()
 	{
-		
+
 	}
 
 	viewLoader()
@@ -21,7 +21,7 @@ class ViewModel {
 	viewLobbies(arr, dblclickhandler)
 	{
 		let lob_html = arr.reduce((t,item) =>
-			t + 
+			t +
 			`<div class="lobby-list-item" title='${item.title}' is_password="${item.is_password}">
 				<div class="lobby-list-item-title">${item.title}</div>
 				<div class="lobby-list-item-players-count">
@@ -31,7 +31,7 @@ class ViewModel {
 		,"");
 
 		$(".lobby-list").html(lob_html);
-		
+
 		$('.lobby-list-item').dblclick(dblclickhandler)
 	}
 
@@ -87,6 +87,35 @@ class ViewModel {
 
 			$('.wrapper').append(element)
 		})
+	}
+
+	showRound( round ) {
+
+		let html = round.themes[0].theme.reduce( (acc, item) =>
+			acc +=
+			`
+			<div class="question-table-line">
+				<div class="theme">
+					${ item.$.name }
+				</div>
+				<div class="question-line">
+					${ item.questions[0].question.reduce( (acc, item) =>
+						acc +=
+						`
+						<div class="singe-question">
+							${ item.$.price }
+						</div>
+						`,
+						""
+					) }
+				</div>
+			</div>
+			`,
+			""
+		)
+
+		$('.main-canvas').html( html );
+		console.loh( round, html, 123);
 	}
 
 }

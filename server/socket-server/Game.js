@@ -14,7 +14,7 @@ class Game{
 	constructor(lobby){
 		this.lobby = lobby;
 		this.packFolder = lobby.packFolder;
-		this.rules = lobby.rules;
+		this.rules = lobby.rules || new Object();
 		var defaultRules = {
 			answerTimeAwait : 2e3 /* 2sec */,
 			//
@@ -22,13 +22,13 @@ class Game{
 		for ( let i in defaultRules )
 			this.rules[i] = typeof this.rules[i] === 'undefined' ? defaultRules[i] : this.rules[i];
 
-		parseStringToXML(fs.readFileSync( this.packFolder ), function( err, json ) {
+		parseStringToXML(fs.readFileSync( this.packFolder + '/content.xml' ), function( err, json ) {
 			this.package = json.package;
-			this.rounds = this.package.rounds;
+			this.rounds = this.package.rounds[0];
 		}.bind(this));
 
 		this.current = {
-			round : this.rounds[0],
+			round : this.rounds.round[0],
 			question : undefined
 		}
 	}

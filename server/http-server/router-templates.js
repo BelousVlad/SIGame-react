@@ -2,6 +2,7 @@ const path = require('path')
 const config = require('../config');
 const helper = require( config.helperClassPath );
 const ClientManager = require('../socket-server/ClientManager');
+const LobbyManager = require('../socket-server/LobbyManager');
 
 module.exports =
 {
@@ -10,7 +11,7 @@ module.exports =
 	},
 
 	'mainController/upload_avatar' : ( req ) => {
-		return req.url === '^/api/upload/avatar$' && req.method.toLowerCase() === 'post';
+		return req.url === '/api/upload/avatar' && req.method.toLowerCase() === 'post';
 	},
 
 	'mainController/send' : ( req ) => {

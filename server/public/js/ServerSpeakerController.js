@@ -29,10 +29,15 @@ class ServerSpeakerController{
 		this.send('lobby_start_game');
 	}
 
+	getRound() {
+		this.send('get_pack_round')
+	}
+
 	start()
 	{
 	    this.speaker.openSocket();
 	}
+
 
 	send(action, data)
 	{
@@ -68,6 +73,8 @@ class ServerSpeakerController{
 	{
 		this.speaker.send({action, data: msg})
 	}
+
+
 
 
 	get key()

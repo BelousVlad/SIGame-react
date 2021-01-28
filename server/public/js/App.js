@@ -95,6 +95,9 @@ class App{
 	{
 		console.log(json);
 	}
+	showRound( msg ) {
+		this.view_model.showRound( msg.data );
+	}
 	updateName(msg)
 	{
 		console.log(msg)
@@ -190,7 +193,7 @@ class App{
 	{
 		if (this.lobby && this.lobby.is_host)
 		{
-            app.speakerctrl.kick_player(name);		
+            app.speakerctrl.kick_player(name);
 		}
 	}
 

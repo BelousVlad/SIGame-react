@@ -13,6 +13,7 @@ class Router{
 			"lobby_add_player" : "addLobbyPlayer",
 			"lobby_kick_player" : "lobby_kick_player",
 			"kicked_from_lobby" : "kicked_from_lobby",
+			"show_round" : "showRound",
 		};
 	}
 
