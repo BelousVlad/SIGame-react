@@ -158,7 +158,7 @@ module.exports = class SocketSpeaker{
 			}
 
 
-			console.log(LobbyManager.lobbies);
+			// console.log(LobbyManager.lobbies);
 
 		}
 	}
@@ -184,7 +184,7 @@ module.exports = class SocketSpeaker{
 		});
 		lobby.on('lobby_start_game', function() {
 			lobby.game = new Game( lobby );
-			console.log('game has started', lobby.game);
+			// console.log('game has started', lobby.game);
 		}.bind(lobby) )
 
 		lobby.on('lobby_upload_pack_start', function() {
@@ -301,7 +301,7 @@ module.exports = class SocketSpeaker{
 		const is_host = lobby.host.key == client.key;
 		const pack_uploaded = lobby.packState === 'ready';
 		// console.log(msg, lobby);
-		if ( is_host && pack_uploaded )
+		if ( is_host && pack_uploaded && !lobby.game )
 			lobby.emit('lobby_start_game');
 	}
 
@@ -331,6 +331,30 @@ module.exports = class SocketSpeaker{
 		this.send( ws, 'show_round', lobby.game.current.round);
 	}
 
+	lobby_game_next_round( ws, msg ) {
+		let client = ClientManager.getClient(msg.key),
+        	lobby = LobbyManager.getLobbyByClientKey(msg.key),
+        	has_permission = lobby.host.key == client.key;
+
+		if ( ! (lobby && lobby.game && lobby.packState === 'ready' ) && !has_permission )
+			return;
+
+		lobby.game.nextRound();
+		this.get_pack_round( ws, msg );
+	}
+
+	lobby_game_previous_round( ws, msg ) {
+		let client = ClientManager.getClient(msg.key),
+        	lobby = LobbyManager.getLobbyByClientKey(msg.key),
+        	has_permission = lobby.host.key == client.key;
+
+		if ( ! (lobby && lobby.game && lobby.packState === 'ready' ) && !has_permission )
+			return;
+
+		lobby.game.previousRound();
+		this.get_pack_round( ws, msg );
+	}
+
 
 	static get routes()
 	{
@@ -346,6 +370,8 @@ module.exports = class SocketSpeaker{
 			"lobby_start_game" : "lobby_start_game",
 			"get_pack_question" : "get_pack_question",
 			"get_pack_round" : "get_pack_round",
+			"lobby_game_next_round" : "lobby_game_next_round",
+			"lobby_game_previous_round" : "lobby_game_previous_round",
 		}
 	}
 }

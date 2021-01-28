@@ -6,8 +6,10 @@
 	<input type="file" class="select-pack">select pack</input>
 	<button class="game-start-btn">start</button>
 	<button class="get-round">get round</button>
+	<button class="next-round-btn">next round</button>
+	<button class="previous-round-btn">previous round</button>
 </div>
-<div class="question-table">question table</div>
+<div class="main-canvas">question table</div>
 <div class="container">player-container</div>
 <div class="container">
 	<div class="players-container">
@@ -49,6 +51,14 @@
 
 	document.querySelector('.get-round').onclick = function ( ) {
 		app.speakerctrl.getRound();
+	}
+
+	document.querySelector('.next-round-btn').onclick = function ( ) {
+		app.speakerctrl.nextRound();
+	}
+
+	document.querySelector('.previous-round-btn').onclick = function ( ) {
+		app.speakerctrl.previousRound();
 	}
 
 </script>

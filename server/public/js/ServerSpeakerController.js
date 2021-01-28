@@ -33,6 +33,14 @@ class ServerSpeakerController{
 		this.send('get_pack_round')
 	}
 
+	nextRound() {
+		this.send('lobby_game_next_round')
+	}
+
+	previousRound() {
+		this.send('lobby_game_previous_round')
+	}
+
 	start()
 	{
 	    this.speaker.openSocket();

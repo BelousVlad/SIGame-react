@@ -89,6 +89,25 @@ class Game{
 		// update users view
 	}
 
+	nextRound() {
+		console.log('next!-----------');
+		let index = this.rounds.round.indexOf( this.current.round );
+
+		if ( index + 1 >= this.rounds.round.length )
+			return
+
+		this.current.round = this.rounds.round[index + 1];
+	}
+
+	previousRound() {
+		let index = this.rounds.round.indexOf( this.current.round );
+
+		if ( index <= 0 )
+			return
+
+		this.current.round = this.rounds.round[index - 1];
+	}
+
 	displayQuestion() {
 		console.log( this.current.question );
 	}
