@@ -2,7 +2,7 @@ const ClientManager = require('./ClientManager');
 const LobbyManager = require('./LobbyManager');
 const Lobby = require('./Lobby');
 const Game = require('./Game');
-const fs = require('fs');
+const fs = require('fs')
 
 module.exports = class SocketSpeaker{
 
@@ -173,8 +173,6 @@ module.exports = class SocketSpeaker{
 			*/
 			for(let client in lobby.clients)
 			{
-				console.log('--------');
-				console.log(lobby);
 				this.add_player(lobby.clients[client], new_player)
 			}
 
