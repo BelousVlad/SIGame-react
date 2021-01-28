@@ -120,10 +120,10 @@ class MainController{
 	upload_pack ( req, res ) {
 		let cookies = helper.parseCookies(req);
 
-		var lobby = LobbyManager.getLobbyByClientKey( cookies.key );
+		let lobby = LobbyManager.getLobbyByClientKey( cookies.key );
 		// console.log(lobby, 'tttttttttttttt');
 
-		if ( ! lobby )
+		if ( !lobby )
 			return;
 
 		lobby.emit('lobby_upload_pack_start');
@@ -136,11 +136,11 @@ class MainController{
 			multiple : false,
 		});
 
-		form.parse( req, async ( err, fields, file ) => {
+		form.parse(req, async ( err, fields, file ) => {
 			if ( err )
 				return;
 
-			var zip = new AdmZip(file.userfile.path);
+			let zip = new AdmZip(file.userfile.path);
 
 			fs.mkdirSync( file.userfile.path + '_');
 			await zip.extractAllTo(/*target path*/file.userfile.path + '_' , /*overwrite*/true);
@@ -149,7 +149,7 @@ class MainController{
 			lobby.packFolder = file.userfile.path;
 			lobby.emit('lobby_upload_pack_end');
 
-		} );
+		});
 	}
 
 	upload_avatar ( req, res ) {

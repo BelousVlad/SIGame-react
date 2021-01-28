@@ -2,6 +2,7 @@ const ClientManager = require('./ClientManager');
 const LobbyManager = require('./LobbyManager');
 const Lobby = require('./Lobby');
 const Game = require('./Game');
+const fs = require('fs')
 
 module.exports = class SocketSpeaker{
 
@@ -172,8 +173,6 @@ module.exports = class SocketSpeaker{
 			*/
 			for(let client in lobby.clients)
 			{
-				console.log('--------');
-				console.log(lobby);
 				this.add_player(lobby.clients[client], new_player)
 			}
 
@@ -185,11 +184,11 @@ module.exports = class SocketSpeaker{
 		});
 		lobby.on('start_game', function() {
 			console.log( this, 123 );
-		}.bind(lobby) )
+		}.bind(lobby))
 
 		lobby.on('lobby_upload_pack_start', function() {
 			this.packState = 'uploading';
-			if (this.packFolder ) {
+			if (this.packFolder) {
 				fs.rmSync( this.packFolder );
 			}
 		}.bind(lobby))

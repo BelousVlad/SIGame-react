@@ -8,7 +8,6 @@ class Lobby {
 	packState = 'none'; // состояния в котором может находиться пак. предполагается 3 варианта : none, uploading, ready;
 
 	constructor(title, max_p, password)
-
 	{
 		Object.assign( this, new event() ) // 1-st step of mix-in of events
 
