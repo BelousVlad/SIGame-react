@@ -2,6 +2,7 @@ const ClientManager = require('./ClientManager');
 const LobbyManager = require('./LobbyManager');
 const Lobby = require('./Lobby');
 const Game = require('./Game');
+const fs = require('fs');
 
 module.exports = class SocketSpeaker{
 
@@ -184,13 +185,13 @@ module.exports = class SocketSpeaker{
 
 		});
 		lobby.on('start_game', function() {
-			console.log( this, 123 );
+			lobby.game = new Game( lobby );
 		}.bind(lobby) )
 
 		lobby.on('lobby_upload_pack_start', function() {
 			this.packState = 'uploading';
-			if (this.packFolder ) {
-				fs.rmSync( this.packFolder );
+			if ( typeof this.packFolder === 'string') {
+				fs.rmdirSync( this.packFolder, { recursive: true } );
 			}
 		}.bind(lobby))
 
