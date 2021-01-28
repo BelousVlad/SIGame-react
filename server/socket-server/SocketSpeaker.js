@@ -183,13 +183,13 @@ module.exports = class SocketSpeaker{
 
 		});
 		lobby.on('start_game', function() {
-			console.log( this, 123 );
-		}.bind(lobby))
+			lobby.game = new Game( lobby );
+		}.bind(lobby) )
 
 		lobby.on('lobby_upload_pack_start', function() {
 			this.packState = 'uploading';
-			if (this.packFolder) {
-				fs.rmSync( this.packFolder );
+			if ( typeof this.packFolder === 'string') {
+				fs.rmdirSync( this.packFolder, { recursive: true } );
 			}
 		}.bind(lobby))
 
