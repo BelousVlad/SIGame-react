@@ -1,6 +1,8 @@
 const WebSocket = require('ws');
 const event = require('events');
-const ClientManager = require('./ClientManager');
+const ClientManager = require('../ClientManager');
+const Game = require('../Game');
+const Chat = require('./Chat/Chat');
 
 class Lobby {
 
@@ -17,6 +19,10 @@ class Lobby {
 		this.password = password ;
 		this.scores = {}
 		this.host = undefined;
+		this.game = undefined;
+
+		this.chat = new Chat(this);
+
 	}
 
 	getClient(client)
@@ -94,16 +100,32 @@ class Lobby {
 	deleteClient(clientKey)
 	{
 		delete this.clients[clientKey];
-		console.log('---------')
-		console.log(this.host)
-		console.log(this.clients)
-		console.log(clientKey == this.host.key)
 		if (clientKey == this.host.key)
 		{
 			let keyNewHost = Object.keys(this.clients)[0]
-			console.log(keyNewHost)
 			this.host = this.clients[keyNewHost];
 		}
+	}
+
+	startGame()
+	{
+		this.game = new Game(this);
+
+		this.emit('lobby_start_game');
+	}
+
+	uploadPackStart()
+	{
+		this.emit('lobby_upload_pack_start');
+		this.packState = 'uploading';
+		if ( typeof this.packFolder === 'string') {
+			fs.rmdirSync( this.packFolder, { recursive: true } );
+		}
+	}
+
+	uploadPackEnd()
+	{
+		this.packState = 'ready';	
 	}
 
 	static get CLIENT_CONNECT_TO_LOBBY_OK()

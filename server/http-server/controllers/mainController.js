@@ -3,7 +3,7 @@ const fs = require('fs');
 const config = require( '../../config.js' );
 const helper = require(config.helperClassPath);
 const ClientManager = require('../../socket-server/ClientManager');
-const LobbyManager = require('../../socket-server/LobbyManager');
+const LobbyManager = require('../../socket-server/Lobby/LobbyManager');
 const AdmZip = require('adm-zip');
 const formidable = require('formidable');
 
@@ -126,7 +126,7 @@ class MainController{
 		if ( !lobby )
 			return;
 
-		lobby.emit('lobby_upload_pack_start');
+		lobby.uploadPackStart();
 		lobby.emit('lobby_pack_state_change');
 
 		const form = formidable({
@@ -147,7 +147,7 @@ class MainController{
 			fs.rmSync( file.userfile.path );
 			fs.renameSync( file.userfile.path + '_', file.userfile.path );
 			lobby.packFolder = file.userfile.path;
-			lobby.emit('lobby_upload_pack_end');
+			lobby.uploadPackEnd();
 
 		});
 	}

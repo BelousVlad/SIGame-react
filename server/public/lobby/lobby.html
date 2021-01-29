@@ -24,9 +24,35 @@
 	</div>
 </div>
 
+<div class="container">
+	<textarea id="chat_send_text">
+		
+	</textarea>
+	<input type="button" name="chat_send_btn" value="Chat">	
+</div>
+
+<div class="container">
+	<div class="chat">
+	<!--
+		<div class="chat-message">
+			<span class="chat-message-from"></span>
+			<span>: </span>
+			<span class="chat-message-text"></span>
+		</div>
+	-->
+	</div>
+</div>
+
 <script type="text/javascript">
 
+	$("input[name=chat_send_btn]").click(function(e){
+		let text = $('#chat_send_text').val().trim();
 
+		if (text)
+		{
+			app.speakerctrl.sendChatMessage(text);
+		}
+	})
 
 	$(document).on('click','.host-player-menu-kick',function(e){
 

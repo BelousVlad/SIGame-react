@@ -14,6 +14,7 @@ class Router{
 			"lobby_kick_player" : "lobby_kick_player",
 			"kicked_from_lobby" : "kicked_from_lobby",
 			"show_round" : "showRound",
+			"lobby_chat_get_message" : "lobbyChatGetMessage",
 		};
 	}
 

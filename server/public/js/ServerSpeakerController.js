@@ -41,6 +41,11 @@ class ServerSpeakerController{
 		this.send('lobby_game_previous_round')
 	}
 
+	sendChatMessage(text)
+	{
+		this.sendWithKey('lobby_chat_send_msg', { text: text })
+	}
+
 	start()
 	{
 	    this.speaker.openSocket();

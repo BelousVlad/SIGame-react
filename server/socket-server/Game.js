@@ -1,5 +1,3 @@
-'use strict';
-
 const fs = require('fs'),
 	  parseStringToXML = require('xml2js').parseString
 
@@ -10,8 +8,8 @@ class Question{
 	}
 }
 
-class Game{
-	constructor(lobby){
+class Game {
+	constructor(lobby) {
 		this.lobby = lobby;
 		this.packFolder = lobby.packFolder;
 		this.rules = lobby.rules || new Object();
@@ -23,6 +21,7 @@ class Game{
 			this.rules[i] = typeof this.rules[i] === 'undefined' ? defaultRules[i] : this.rules[i];
 
 		parseStringToXML(fs.readFileSync( this.packFolder + '/content.xml' ), function( err, json ) {
+			this.lobby.host.send('ping', json )
 			this.package = json.package;
 			this.rounds = this.package.rounds[0];
 		}.bind(this));
@@ -34,12 +33,13 @@ class Game{
 	}
 
 	checkQuestion( question, client ) {
+
 		question = this.getQuestion( question );
 		if ( !question )
 			return;
 		this.current.question = question;
 		question.checked = true;
-		let waitingForClients = Object.keys( this.lobby.clients ) . length;
+		let waitingForClients = Object.keys( this.lobby.clients ).length;
 
 		function clientReady() {
 			waitingForClients--;
@@ -58,7 +58,7 @@ class Game{
 				this.displayQuestion();
 				// 'cant run coz players havnt files';
 			}
-		} )
+		})
 	}
 
 	selectRound( roundIndex ) {
@@ -70,27 +70,22 @@ class Game{
 		this.current.round.themes.forEach( item => {
 			item.questions.forEach( item_ => {
 				item_.checked = false;
-			} )
+			})
 		})
 	}
 
-	hasQuestion( question ) {
+	hasQuestion(question) {
 		return !!this.getQuestion( question );
 	}
 
-	getQuestion( question ){
+	getQuestion(question) {
 		let theme = this.current.round.themes.find( item => {
 			return item.$.name === question.theme;
-		} )
+		})
 		return theme.questions[ question.index ];
 	}
 
-	update() {
-		// update users view
-	}
-
 	nextRound() {
-		console.log('next!-----------');
 		let index = this.rounds.round.indexOf( this.current.round );
 
 		if ( index + 1 >= this.rounds.round.length )
@@ -114,3 +109,4 @@ class Game{
 }
 
 module.exports = Game;
+

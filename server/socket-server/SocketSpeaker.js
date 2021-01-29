@@ -1,7 +1,6 @@
 const ClientManager = require('./ClientManager');
-const LobbyManager = require('./LobbyManager');
-const Lobby = require('./Lobby');
-const Game = require('./Game');
+const LobbyManager = require('./Lobby/LobbyManager');
+const Lobby = require('./Lobby/Lobby');
 const fs = require('fs')
 
 module.exports = class SocketSpeaker{
@@ -182,22 +181,10 @@ module.exports = class SocketSpeaker{
 			client.send('kicked_from_lobby')
 
 		});
-		lobby.on('lobby_start_game', function() {
-			lobby.game = new Game( lobby );
-			// console.log('game has started', lobby.game);
-		}.bind(lobby) )
 
-		lobby.on('lobby_upload_pack_start', function() {
-			this.packState = 'uploading';
-			if ( typeof this.packFolder === 'string') {
-				fs.rmdirSync( this.packFolder, { recursive: true } );
-			}
-		}.bind(lobby))
-
-		lobby.on('lobby_upload_pack_end', function() {
-			this.packState = 'ready';
-		}.bind(lobby))
-
+		lobby.chat.on('lobby_chat_message_added', (message) => {
+			this.lobby_chat_send_msg_to_clients(lobby, message)
+		})
 	}
 
 	connect_lobby(ws, msg)
@@ -296,13 +283,14 @@ module.exports = class SocketSpeaker{
 	}
 
 	lobby_start_game( ws, msg ) {
+
 		const client = ClientManager.getClient( msg.key );
 		const lobby = LobbyManager.getLobbyByClient(client);
 		const is_host = lobby.host.key == client.key;
 		const pack_uploaded = lobby.packState === 'ready';
 		// console.log(msg, lobby);
 		if ( is_host && pack_uploaded && !lobby.game )
-			lobby.emit('lobby_start_game');
+			lobby.startGame()
 	}
 
 	send(ws, action ,data)
@@ -325,7 +313,7 @@ module.exports = class SocketSpeaker{
 		let client = ClientManager.getClient(msg.key),
         	lobby = LobbyManager.getLobbyByClientKey(msg.key)
 
-		if ( ! (lobby && lobby.game && lobby.packState === 'ready' ) )
+		if ( !(lobby && lobby.game && lobby.packState === 'ready' ) )
 			return;
 
 		this.send( ws, 'show_round', lobby.game.current.round);
@@ -355,6 +343,32 @@ module.exports = class SocketSpeaker{
 		this.get_pack_round( ws, msg );
 	}
 
+	lobby_chat_send_msg(ws, msg)
+	{
+		let key = msg.key;
+		let client = ClientManager.getClient(key);
+
+		if (client)
+		{
+			let lobby = LobbyManager.getLobbyByClient(client);
+			if (lobby)
+			{
+				let text = msg.data.text
+				lobby.chat.addMessage(client, text);
+			}
+		}
+	}
+
+	lobby_chat_send_msg_to_clients(lobby, message)
+	{
+		for(let c in lobby.clients)
+		{
+			lobby.clients[c].send('lobby_chat_get_message', { 
+				from: message.client.name,
+				text: message.text
+			})
+		}
+	}
 
 	static get routes()
 	{
@@ -372,6 +386,7 @@ module.exports = class SocketSpeaker{
 			"get_pack_round" : "get_pack_round",
 			"lobby_game_next_round" : "lobby_game_next_round",
 			"lobby_game_previous_round" : "lobby_game_previous_round",
+			"lobby_chat_send_msg" : "lobby_chat_send_msg",
 		}
 	}
 }

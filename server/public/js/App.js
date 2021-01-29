@@ -203,6 +203,16 @@ class App{
 		this.pager.changePage('/')
 	}
 
+	lobbyChatGetMessage(msg)
+	{
+		let message = msg.data;
+
+		console.log(msg)
+
+		this.view_model.addChatMessage(message)
+	}
+
+
 	handleTaskToLoadManager( msg ) {
 		//this.fileLoader.getLoadManagerById( msg.data.load_manager_id )
 		//[ this.fileLoader.routes [ msg.data.action_of_lm ] ] ( msg.data.answer ) ;

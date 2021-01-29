@@ -114,8 +114,19 @@ class ViewModel {
 			""
 		)
 
+
 		$('.main-canvas').html( html );
-		console.loh( round, html, 123);
+		console.log( round, html, 123);
+	}
+	addChatMessage(message)
+	{
+		$('.chat').append(`
+			<div class="chat-message">
+				<span class="chat-message-from">${message.from}</span>
+				<span>: </span>
+				<span class="chat-message-text">${message.text}</span>
+			</div>
+		`)
 	}
 
 }

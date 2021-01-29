@@ -4,7 +4,7 @@ const config = require('./../config');
 const helper = require(config.helperClassPath);
 const SocketSpeaker = require('./SocketSpeaker.js');
 const ClientManager = require('./ClientManager');
-const LobbyManager = require('./LobbyManager');
+const LobbyManager = require('./Lobby/LobbyManager');
 
 
 

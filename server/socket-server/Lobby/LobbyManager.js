@@ -1,6 +1,5 @@
 const Lobby = require('./Lobby');
-const ClientManager = require('./ClientManager');
-
+const ClientManager = require('../ClientManager');
 
 class LobbyManager{
 

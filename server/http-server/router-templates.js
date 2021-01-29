@@ -2,7 +2,7 @@ const path = require('path')
 const config = require('../config');
 const helper = require( config.helperClassPath );
 const ClientManager = require('../socket-server/ClientManager');
-const LobbyManager = require('../socket-server/LobbyManager');
+const LobbyManager = require('../socket-server/Lobby/LobbyManager');
 
 module.exports =
 {
