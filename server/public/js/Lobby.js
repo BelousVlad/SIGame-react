@@ -21,7 +21,36 @@ class Lobby{
 		app.view_model.viewPlayers(this.players_, this.is_host)
 	}
 
-	removePlayer(p_name)
+	getPlayerByName(name)
+	{
+		for(let player of this.players_)
+		{
+			if (player.name == name)
+			{
+				return player;
+			}
+		}
+	}
+	changeScore(player, score)
+	{
+		if (this.players_.includes(player))
+		{
+			player.score = score;
+		}
+
+		// TODO change one to draw one player
+		app.view_model.viewPlayers(this.players_, this.is_host)
+	}
+
+	removePlayer(player)
+	{
+		let index = this.players_.indexOf(player)
+		if (index != -1)
+			this.players_.splice(index, 1);
+		app.view_model.viewPlayers(this.players_, this.is_host)
+	}
+
+	removePlayerByName(p_name)
 	{
 		for(let player of this.players_)
 		{

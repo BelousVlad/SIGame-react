@@ -25,6 +25,31 @@ class Lobby {
 
 	}
 
+	getClientByName(clientName)
+	{
+		for(let item in this.clients)
+		{
+			if (this.clients[item].name == clientName)
+			{
+				return this.clients[item];
+			}
+		}
+		return undefined;
+	}
+
+	changeClientScore(client, score)
+	{
+		if (this.clients[client.key])
+		{
+			this.scores[client.key] = score;
+
+			this.emit('lobby_client_score_changed', client, score)
+
+			return true;
+		}
+		return false;
+	}
+
 	getClient(client)
 	{
 		for(let item in this.clients)

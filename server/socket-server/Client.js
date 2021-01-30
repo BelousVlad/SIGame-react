@@ -29,7 +29,7 @@ class Client {
 	}
 	clearClosedSockets()
 	{
-		this.sockets.forEach( (item, index) => {
+		this.sockets.forEach((item, index) => {
 			if (item.readyState == WebSocket.CLOSED || item.readyState == WebSocket.CLOSING)
 			{
 				this.sockets.splice(index,1);

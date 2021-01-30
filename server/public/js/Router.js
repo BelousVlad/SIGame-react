@@ -16,6 +16,7 @@ class Router{
 			"kicked_from_lobby" : "kicked_from_lobby",
 			"show_round" : "showRound",
 			"lobby_chat_get_message" : "lobbyChatGetMessage",
+			"lobby_changed_player_score" : "lobbyChangedPlayerScore",
 		};
 	}
 
