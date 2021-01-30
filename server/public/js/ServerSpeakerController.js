@@ -87,9 +87,6 @@ class ServerSpeakerController{
 		this.speaker.send({action, data: msg})
 	}
 
-
-
-
 	get key()
 	{
 		return Cookie.get('key') ?? "0";

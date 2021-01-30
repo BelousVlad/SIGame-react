@@ -11,6 +11,7 @@ class Router{
 			"lobby_list" : "lobby_list",
 			"lobby_players" : "updateLobbyPlayers",
 			"lobby_add_player" : "addLobbyPlayer",
+			"lobby_remove_player" : "lobbyRemovePlayer",
 			"lobby_kick_player" : "lobby_kick_player",
 			"kicked_from_lobby" : "kicked_from_lobby",
 			"show_round" : "showRound",

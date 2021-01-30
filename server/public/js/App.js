@@ -206,10 +206,14 @@ class App{
 	lobbyChatGetMessage(msg)
 	{
 		let message = msg.data;
-
-		console.log(msg)
-
 		this.view_model.addChatMessage(message)
+	}
+
+	lobbyRemovePlayer(msg)
+	{
+		let player_name = msg.data.player.name;
+
+		this.lobby.removePlayer(player_name);
 	}
 
 

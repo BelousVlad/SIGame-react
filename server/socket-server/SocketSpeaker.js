@@ -185,6 +185,13 @@ module.exports = class SocketSpeaker{
 		lobby.chat.on('lobby_chat_message_added', (message) => {
 			this.lobby_chat_send_msg_to_clients(lobby, message)
 		})
+
+		lobby.on('lobby_client_removed', (deleted_client) => {
+			for(let client in lobby.clients)
+			{
+				this.remove_player(lobby.clients[client], deleted_client)
+			}
+		})
 	}
 
 	connect_lobby(ws, msg)
@@ -261,6 +268,20 @@ module.exports = class SocketSpeaker{
 			});
 		}
 	}
+	remove_player(client, deleted_client)
+	{
+		let lobby = LobbyManager.getLobbyByClient(client);
+
+		if (lobby)
+		{
+			client.send('lobby_remove_player', { player:
+				{
+					name: deleted_client.name
+				}
+			});
+		}
+	}
+
 	lobby_kick_player(ws, msg)
 	{
 		let key = msg.key;

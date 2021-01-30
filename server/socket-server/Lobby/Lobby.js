@@ -99,12 +99,15 @@ class Lobby {
 
 	deleteClient(clientKey)
 	{
+		let client = this.clients[clientKey];
 		delete this.clients[clientKey];
 		if (clientKey == this.host.key)
 		{
 			let keyNewHost = Object.keys(this.clients)[0]
 			this.host = this.clients[keyNewHost];
 		}
+		console.log(client);
+		this.emit('lobby_client_removed', client)
 	}
 
 	startGame()
