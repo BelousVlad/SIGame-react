@@ -4,8 +4,6 @@ const event = require('events');
 class Client {
 	constructor(key)
 	{
-		Object.assign( this, new event() ) // 1-st step of mix-in by events
-
 		this.key = key;
 		this.sockets = [];
 		this.name = null;

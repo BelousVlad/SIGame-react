@@ -11,7 +11,6 @@ class Lobby {
 
 	constructor(title, max_p, password)
 	{
-		Object.assign( this, new event() ) // 1-st step of mix-in of events
 
 		this.clients = new Object();
 		this.max_players = max_p ;
