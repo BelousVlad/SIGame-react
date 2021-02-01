@@ -33,7 +33,7 @@ module.exports = class SocketSpeaker{
 		if (client)
 		{
 			client.name = name;
-			client.send('update_name', name);
+			client.send('name_set_succed', name);
 		}
 	}
 
@@ -357,7 +357,7 @@ module.exports = class SocketSpeaker{
         	lobby = LobbyManager.getLobbyByClientKey(msg.key),
         	has_permission = lobby.host.key == client.key;
 
-		if ( ! (lobby && lobby.game && lobby.packState === 'ready' ) && !has_permission )
+		if ( ! (lobby && lobby.game && lobby.packState === 'ready' ) || !has_permission )
 			return;
 
 		lobby.game.nextRound();
@@ -369,7 +369,7 @@ module.exports = class SocketSpeaker{
         	lobby = LobbyManager.getLobbyByClientKey(msg.key),
         	has_permission = lobby.host.key == client.key;
 
-		if ( ! (lobby && lobby.game && lobby.packState === 'ready' ) && !has_permission )
+		if ( ! (lobby && lobby.game && lobby.packState === 'ready' ) || !has_permission )
 			return;
 
 		lobby.game.previousRound();
@@ -396,7 +396,7 @@ module.exports = class SocketSpeaker{
 	{
 		for(let c in lobby.clients)
 		{
-			lobby.clients[c].send('lobby_chat_get_message', { 
+			lobby.clients[c].send('lobby_chat_get_message', {
 				from: message.client.name,
 				text: message.text
 			})

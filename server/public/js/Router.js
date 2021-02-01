@@ -17,6 +17,7 @@ class Router{
 			"show_round" : "showRound",
 			"lobby_chat_get_message" : "lobbyChatGetMessage",
 			"lobby_changed_player_score" : "lobbyChangedPlayerScore",
+			"name_set_succed" : "nameSetSucced",
 		};
 	}
 

@@ -103,6 +103,16 @@ class App{
 		console.log(msg)
 		//this.GOTOPage();
 	}
+
+	nameSetSucced(msg) { // calls when
+		this.GOTOPage();
+		let name = msg.data.name;
+		updateName( msg );
+	}
+
+	nameSetFailed(msg) {
+		//
+	}
 	setKey (data) { // Установить уникальный ключь
 		Cookie.set("key", data.data);
 	}
