@@ -2,7 +2,7 @@ class App{
 
 	constructor()
 	{
-
+		this.initEventModel(); // adds event model
 		this.view_model = new ViewModel();
 		this.view_model.hideLoader();
 		this.initSpeker();
@@ -71,6 +71,35 @@ class App{
 	    }
 	    this.speakerctrl.start();
 
+	}
+
+// -------------------------------
+
+	initEventModel () {
+		var __Event = /* class */ ( function ( e_name, func ) {
+			this.name = e_name;
+			this.method = func;
+			this.dispatch = function () {
+				this.method();
+			}
+		} );
+
+		this.__events = new Array();
+
+		this.subscribe = function ( e_name, func ) {
+			this.__events.push( new __Event( e_name, func ) )
+		}
+
+		this.dispatch = function ( e_name ) {
+			this.__events.forEach( item => {
+				if ( item.name === e_name )
+					item.dispatch();
+			} )
+		}
+
+		this.clear = function ( e_name ) {
+			this.__events = this__events.filter( item => item.name !== e_name );
+		}
 	}
 
 
@@ -270,6 +299,16 @@ class App{
 	displayError( msg ) {
 		if ( !( msg && msg.data && msg.data.text ) )
 		this.view.displayError( msg.data.text );
+	}
+
+	awaitClientKey(  ) {
+		return new Promise( ( response, reject ) => {
+			//
+		} )
+	}
+
+	clientKeySucceed( key ) {
+
 	}
 
 //  -------------------
