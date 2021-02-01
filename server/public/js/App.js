@@ -76,30 +76,58 @@ class App{
 // -------------------------------
 
 	initEventModel () {
-		var __Event = /* class */ ( function ( e_name, func ) {
+		var __Event = /* class */ ( function ( e_name, func, options ) {
+			const default_options = {
+				once : false,
+			};
+
+			options = typeof options === 'object' ? options : new Object();
+			for ( let i in default_options )
+				options[i] = typeof options[i] !== 'undefined' ? options[i] : default_options;
+
 			this.name = e_name;
 			this.method = func;
 			this.dispatch = function () {
 				this.method();
+				if ( options.once === true )
+					this.die();
 			}
+
+			this.die = function() {}; // behavor implements from source . example of source is subscribe method.
 		} );
 
 		this.__events = new Array();
-
-		this.subscribe = function ( e_name, func ) {
-			this.__events.push( new __Event( e_name, func ) )
+		this.__events.forEachRight = function( func ) {
+			this.reduceRight( ( _, item ) => { func( item ); }, undefined );
 		}
 
-		this.dispatch = function ( e_name ) {
-			this.__events.forEach( item => {
+		this.subscribe = ( function ( e_name, func, options ) {
+			var event = new __Event( e_name, func, options );
+			var __die = ( function () {
+				this.__events.splice( this.__events.indexOf( event ), 1 );
+			} ).bind(this)
+			event.die = __die;
+			this.__events.push( event );
+		} ).bind(this);
+
+		this.subscribe_once = ( function ( e_name, func, options ) {
+			options = typeof options === 'object' ? options : new Object();
+			this.subscribe( e_name, func, Object.assign( options, {once : true} ) );
+		} ).bind(this)
+
+		this.dispatch = ( function ( e_name, ...__args ) {
+			this.__events.forEachRight( item => {
 				if ( item.name === e_name )
-					item.dispatch();
+					item.dispatch( ...__args );
 			} )
-		}
+		} ).bind(this)
 
-		this.clear = function ( e_name ) {
-			this.__events = this__events.filter( item => item.name !== e_name );
-		}
+		this.clear = ( function ( e_name ) {
+			this__events.forEachRight( item => {
+				if ( item.name === e_name )
+					item.die();
+			});
+		} ).bind(this)
 	}
 
 
@@ -302,9 +330,9 @@ class App{
 	}
 
 	awaitClientKey(  ) {
-		return new Promise( ( response, reject ) => {
-			//
-		} )
+		return new Promise( ( ( response, reject ) => {
+			this.subscribe(  )
+		} ).bind(this) )
 	}
 
 	clientKeySucceed( key ) {
