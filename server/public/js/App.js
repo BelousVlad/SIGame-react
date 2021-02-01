@@ -213,13 +213,32 @@ class App{
 	{
 		let player_name = msg.data.player.name;
 
-		this.lobby.removePlayer(player_name);
+		if (this.lobby)
+			this.lobby.removePlayerByName(player_name);
+
 	}
 
+	lobbyChangedPlayerScore(msg)
+	{
+		let player_name = msg.data.player_name;
+		let score = msg.data.score;
 
-	handleTaskToLoadManager( msg ) {
-		//this.fileLoader.getLoadManagerById( msg.data.load_manager_id )
-		//[ this.fileLoader.routes [ msg.data.action_of_lm ] ] ( msg.data.answer ) ;
+		if (this.lobby)
+		{
+			let player = this.lobby.getPlayerByName(player_name)
+
+			this.lobby.changeScore(player, score);
+		}
+	}
+
+	lobbyChangePlayerScore(player_name, score)
+	{
+		console.log(player_name)
+		console.log(score)
+		if(player_name)
+		{
+			this.speakerctrl.setScorePlayer(player_name, score)
+		}
 	}
 
 

@@ -78,6 +78,14 @@ class ServerSpeakerController{
 		this.sendWithKey("lobby_kick_player", { name: name })
 	}
 
+	setScorePlayer(player_name, score)
+	{
+		this.sendWithKey('lobby_score_change', {
+			player_name: player_name,
+			score: score
+		})
+	}
+
 	sendWithKey(action ,msg)
 	{
 		this.speaker.send({action, key: this.key ,data: msg})

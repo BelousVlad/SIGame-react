@@ -89,6 +89,35 @@ class ViewModel {
 		})
 	}
 
+	viewChangeScorePopup()
+	{
+		return new Promise((resolve, reject) => {
+			let element = $(`
+				<div class="popup-bg">
+				    <div class="container popup-container">
+				        <input type="number" name="score">
+				        <input type="button" name="score-btn" value="Зміyнити">
+				    </div>
+				</div>
+			`)
+			$(element).find('.popup-container').click(function(e){
+				return false;
+			});
+			$(element).find('input[name=score-btn]').click(function(e){
+				let score = $(element).find('input[name=score]').val().trim();
+
+				resolve({score, element})
+			})
+
+			$(element).click(function(e){
+				$(this).remove();
+				reject(element)
+			})
+
+			$('.wrapper').append(element)
+		})
+	}
+
 	showRound( round ) {
 
 		let html = round.themes[0].theme.reduce( (acc, item) =>

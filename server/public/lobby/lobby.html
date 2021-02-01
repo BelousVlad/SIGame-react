@@ -61,6 +61,19 @@
 
 	});
 
+	$(document).on('click','.host-player-menu-change-score',function(e){
+
+		let name = $(event.target).parent().parent().attr("name");
+
+		app.view_model.viewChangeScorePopup().
+			then(function(obj) {
+				let score = obj.score;
+
+				app.lobbyChangePlayerScore(name, score);
+			})
+
+	});
+
 	document.querySelector('.select-pack').onchange = function( file ) {
 		var formData = new FormData(),
 			request = new XMLHttpRequest();

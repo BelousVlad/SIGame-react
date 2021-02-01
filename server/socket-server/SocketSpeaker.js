@@ -182,6 +182,18 @@ module.exports = class SocketSpeaker{
 
 		});
 
+		lobby.on('lobby_client_score_changed', (client, score) => {
+			for(let key in lobby.clients)
+			{
+				let cl = lobby.clients[key];
+
+				cl.send('lobby_changed_player_score', {
+					player_name: client.name,
+					score: score
+				});
+			}
+		});
+
 		lobby.chat.on('lobby_chat_message_added', (message) => {
 			this.lobby_chat_send_msg_to_clients(lobby, message)
 		})
@@ -189,7 +201,7 @@ module.exports = class SocketSpeaker{
 		lobby.on('lobby_client_removed', (deleted_client) => {
 			for(let client in lobby.clients)
 			{
-				this.remove_player(lobby.clients[client], deleted_client)
+				this.lobby_remove_player(lobby.clients[client], deleted_client)
 			}
 		})
 	}
@@ -268,7 +280,7 @@ module.exports = class SocketSpeaker{
 			});
 		}
 	}
-	remove_player(client, deleted_client)
+	lobby_remove_player(client, deleted_client)
 	{
 		let lobby = LobbyManager.getLobbyByClient(client);
 
@@ -391,6 +403,34 @@ module.exports = class SocketSpeaker{
 		}
 	}
 
+	lobby_score_change(ws, msg)
+	{
+		let key = msg.key;
+		let client = ClientManager.getClient(key);
+
+		if (client)
+		{
+			let lobby = LobbyManager.getLobbyByClient(client);
+			if (lobby)
+			{
+				if (client.key == lobby.host.key)
+				{
+					let change_client_name = msg.data.player_name;
+
+					let change_client = lobby.getClientByName(change_client_name);
+
+					if (change_client)
+					{
+						let score = Number(msg.data.score);
+
+						if (!Number.isNaN(score))
+							lobby.changeClientScore(change_client, score);
+					}
+				}
+			}
+		}
+	}
+
 	static get routes()
 	{
 		return {
@@ -408,6 +448,7 @@ module.exports = class SocketSpeaker{
 			"lobby_game_next_round" : "lobby_game_next_round",
 			"lobby_game_previous_round" : "lobby_game_previous_round",
 			"lobby_chat_send_msg" : "lobby_chat_send_msg",
+			"lobby_score_change" : "lobby_score_change",
 		}
 	}
 }
