@@ -76,25 +76,32 @@ class App{
 // -------------------------------
 
 	initEventModel () {
-		var __Event = /* class */ ( function ( e_name, func, options ) {
-			const default_options = {
-				once : false,
-			};
+		var __Event = /* class */ ( function ( ) {
+			var __index = 0;
+			function __Event ( e_name, func, options ) {
+				const default_options = {
+					once : false,
+				};
 
-			options = typeof options === 'object' ? options : new Object();
-			for ( let i in default_options )
-				options[i] = typeof options[i] !== 'undefined' ? options[i] : default_options;
+				options = typeof options === 'object' ? options : new Object();
+				for ( let i in default_options )
+					options[i] = typeof options[i] !== 'undefined' ? options[i] : default_options;
 
-			this.name = e_name;
-			this.method = func;
-			this.dispatch = function () {
-				this.method();
-				if ( options.once === true )
-					this.die();
+				this.name = e_name;
+				this.method = func;
+				this.id = __index;
+				__index++;
+				this.dispatch = function ( ...args ) {
+					this.method( ...args );
+					if ( options.once === true )
+						this.die();
+				}
+
+				this.die = function() {}; // behavior implements from source . example of source is subscribe method.
 			}
 
-			this.die = function() {}; // behavor implements from source . example of source is subscribe method.
-		} );
+			return __Event;
+		} () );
 
 		this.__events = new Array();
 		this.__events.forEachRight = function( func ) {
@@ -103,16 +110,23 @@ class App{
 
 		this.subscribe = ( function ( e_name, func, options ) {
 			var event = new __Event( e_name, func, options );
+
 			var __die = ( function () {
 				this.__events.splice( this.__events.indexOf( event ), 1 );
 			} ).bind(this)
+
 			event.die = __die;
 			this.__events.push( event );
+
+			return event.id;
+
 		} ).bind(this);
 
 		this.subscribe_once = ( function ( e_name, func, options ) {
 			options = typeof options === 'object' ? options : new Object();
-			this.subscribe( e_name, func, Object.assign( options, {once : true} ) );
+
+			return this.subscribe( e_name, func, Object.assign( options, {once : true} ) );
+
 		} ).bind(this)
 
 		this.dispatch = ( function ( e_name, ...__args ) {
@@ -127,6 +141,26 @@ class App{
 				if ( item.name === e_name )
 					item.die();
 			});
+		} ).bind(this)
+
+		this.delete = ( function ( e_name, func, __toString = false ) {
+			var events = this.__events.filter( item => item.name === e_name );
+
+			if ( !__toString ) {
+				events.forEachRight( item => {
+					if ( item.method === func )
+						item.die()
+				} )
+			} else if ( __toString ) {
+				events.forEachRight( item => {
+					if ( item.method.toString() === func.toString() )
+						item.die()
+				} )
+			}
+		} ).bind(this)
+
+		this.deleteById = ( function ( id ) {
+			this.__events.find( item => item.id == id ).die();
 		} ).bind(this)
 	}
 
@@ -329,14 +363,17 @@ class App{
 		this.view.displayError( msg.data.text );
 	}
 
-	awaitClientKey(  ) {
-		return new Promise( ( ( response, reject ) => {
-			this.subscribe(  )
+	awaitClientKey(  ) { // возможно не потребуется
+		return new Promise( ( ( resolve, reject ) => {
+			this.subscribe_once( 'client_key_succeed', ( key ) => {
+				resolve( key );
+			} )
 		} ).bind(this) )
 	}
 
-	clientKeySucceed( key ) {
-
+	clientKeySucceed( msg ) {
+		let key = msg.data.key;
+		this.dispatch( 'client_key_succeed', key);
 	}
 
 //  -------------------
