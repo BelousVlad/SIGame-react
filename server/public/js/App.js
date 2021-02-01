@@ -267,6 +267,11 @@ class App{
 		this.pager.changePage.call( this.pager,  path );
 	}
 
+	displayError( msg ) {
+		if ( !( msg && msg.data && msg.data.text ) )
+		this.view.displayError( msg.data.text );
+	}
+
 //  -------------------
 	//  END of Actions block
 //  -------------------

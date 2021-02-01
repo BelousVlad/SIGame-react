@@ -431,6 +431,10 @@ module.exports = class SocketSpeaker{
 		}
 	}
 
+	displayError( text ) {
+		this.send( ws, "display_error", text );
+	}
+
 	static get routes()
 	{
 		return {
