@@ -230,6 +230,12 @@ class App{
 		}
 	}
 
+	lobbyCreateFailed( msg ) {
+		let reason = msg.data.reason;
+
+		this.view_model.displayError( reason );
+	}
+
 	updateStatus(msg)
 	{
 		if (msg.data != 0)

@@ -146,6 +146,12 @@ module.exports = class SocketSpeaker{
 			let title = msg.data.title;
 			let max = msg.data.max_players;
 			let password = msg.data.password;
+			let isTitleFree = ! LobbyManager.lobbies.find( item => item.title === title );
+
+			if ( !isTitleFree ) {
+				client.send( 'lobby_create_failed' ,{ reason : `lobby name already exist ${title}` });
+				return;
+			}
 
 			if (!LobbyManager.isPlayerIntoLobby(client))
 			{
@@ -154,7 +160,6 @@ module.exports = class SocketSpeaker{
 
 				this.set_lobby_events(lobby);
 
-				msg.data.title = title;
 				this.connect_lobby(ws, msg)
 			}
 			else
