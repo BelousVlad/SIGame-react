@@ -137,7 +137,7 @@ class MainController{
 		});
 
 		form.parse(req, async ( err, fields, file ) => {
-			if ( err )
+			if ( err || !file.userfile )
 				return;
 
 			let zip = new AdmZip(file.userfile.path);
@@ -167,12 +167,10 @@ class MainController{
 		let cookies = helper.parseCookies(req)
 		,	client = ClientManager.getClient( cookies.key )
 
-		if( !client )
+		if( !client)
 			return;
 
-		if ( client.avatarPath ) {
-			fs.rmSync( client.avatarPath );
-		}
+
 
 		const form = formidable({
 			uploadDir : config.avatarDirPath,
@@ -182,8 +180,12 @@ class MainController{
 		});
 
 		form.parse( req, ( err, fields, file ) => {
-			if ( err )
+			if ( err || !file.userfile )
 				return;
+
+			if ( client.avatarPath ) {
+				fs.rmSync( client.avatarPath );
+			}
 
 			client.avatarPath = file.userfile.path;
 			// client.uploadAvatarEnd();
