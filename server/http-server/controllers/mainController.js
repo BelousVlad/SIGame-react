@@ -151,9 +151,46 @@ class MainController{
 
 		});
 	}
+	avatar_set_page( req, res ) {
+		let path_ = 'public/avatar/set_avatar.html';
 
-		upload_avatar ( req, res ) {
-		//
+		helper.getContent(path_)
+		.then((data) => {
+			res.end(data)
+		})
+		.catch( () => {
+			res.end( 'no way.' );
+		} )
+	}
+
+	upload_avatar ( req, res ) {
+		let cookies = helper.parseCookies(req)
+		,	client = ClientManager.getClient( cookies.key )
+
+		if( !client )
+			return;
+
+		if ( client.avatarPath ) {
+			fs.rmSync( client.avatarPath );
+		}
+
+		const form = formidable({
+			uploadDir : config.avatarDirPath,
+			maxFileSize : 200e6, //  ~200mb
+			keepExtensions : true,
+			multiple : false,
+		});
+
+		form.parse( req, ( err, fields, file ) => {
+			if ( err )
+				return;
+
+			client.avatarPath = file.userfile.path;
+			// client.uploadAvatarEnd();
+			// ----------------TODO
+			// change
+			client.send( 'avatar_set_succeed', client.avatarPath );
+		} )
 	}
 }
 

@@ -26,9 +26,9 @@
 
 <div class="container">
 	<textarea id="chat_send_text">
-		
+
 	</textarea>
-	<input type="button" name="chat_send_btn" value="Chat">	
+	<input type="button" name="chat_send_btn" value="Chat">
 </div>
 
 <div class="container">
@@ -81,7 +81,6 @@
 		formData.append('CustomField', 'test');
 		request.open('POST', 'api/upload/pack');
 		request.send(formData);
-
 	}
 
 	document.querySelector('.game-start-btn').onclick = function ( ) {

@@ -384,6 +384,10 @@ class App{
 		this.dispatch( 'client_key_succeed', key);
 	}
 
+	avatarSetSucceed ( msg ) {
+		console.log( 'avatar succeed!!!!'.repeat(5) );
+	}
+
 //  -------------------
 	//  END of Actions block
 //  -------------------

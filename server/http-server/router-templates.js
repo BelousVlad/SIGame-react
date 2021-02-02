@@ -36,5 +36,6 @@ module.exports =
 
 	'mainController/create_lobby' : '^/create-lobby$',
 	'mainController/lobby' : '^/lobby$',
+	'mainController/avatar_set_page' : '^/avatar_set$',
 	'mainController/main' : '.*',
 };
