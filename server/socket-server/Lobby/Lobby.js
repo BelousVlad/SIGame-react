@@ -11,7 +11,6 @@ class Lobby {
 
 	constructor(title, max_p, password)
 	{
-		Object.assign( this, new event() ) // 1-st step of mix-in of events
 
 		this.clients = new Object();
 		this.max_players = max_p ;
@@ -139,7 +138,7 @@ class Lobby {
 	{
 		this.game = new Game(this);
 
-		this.emit('lobby_start_game');
+		this.emit('lobby_game_start');
 	}
 
 	uploadPackStart()
@@ -153,7 +152,7 @@ class Lobby {
 
 	uploadPackEnd()
 	{
-		this.packState = 'ready';	
+		this.packState = 'ready';
 	}
 
 	static get CLIENT_CONNECT_TO_LOBBY_OK()

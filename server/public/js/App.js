@@ -2,7 +2,7 @@ class App{
 
 	constructor()
 	{
-
+		this.initEventModel(); // adds event model
 		this.view_model = new ViewModel();
 		this.view_model.hideLoader();
 		this.initSpeker();
@@ -73,6 +73,99 @@ class App{
 
 	}
 
+// -------------------------------
+
+	initEventModel () {
+		var __Event = /* class */ ( function ( ) {
+			var __index = 0;
+			function __Event ( e_name, func, options ) {
+				const default_options = {
+					once : false,
+				};
+
+				options = new Object(options); // приведени к объекту, если options не объект
+				for ( let i in default_options )
+					options[i] = typeof options[i] !== 'undefined' ? options[i] : default_options;
+
+				this.name = e_name;
+				this.method = func;
+				Object.defineProperty( this, 'id', { value : __index, writeble : false });
+				__index++;
+				this.dispatch = function ( ...args ) {
+					this.method( ...args );
+					if ( options.once === true )
+						this.die();
+				}
+
+				this.die = function() {}; // behavior implements from source . example of source is subscribe method.
+			}
+
+			return __Event;
+		} () );
+
+		this.__events = new Array();
+		this.__events.forEachRight = function( func ) {
+			this.reduceRight( ( _, item ) => { func( item ); }, undefined );
+		}
+
+		this.subscribe = ( function ( e_name, func, options ) {
+			var event = new __Event( e_name, func, options );
+
+			var __die = ( function () {
+				this.__events.splice( this.__events.indexOf( event ), 1 );
+			} ).bind(this)
+
+			event.die = __die;
+			this.__events.push( event );
+
+			return event.id;
+
+		} ).bind(this);
+
+		this.subscribe_once = ( function ( e_name, func, options ) {
+			options = {
+				...options,
+				once : true,
+			}
+			return this.subscribe( e_name, func, options ) ;
+
+		} ).bind(this)
+
+		this.dispatch = ( function ( e_name, ...__args ) {
+			this.__events.forEachRight( item => {
+				if ( item.name === e_name )
+					item.dispatch( ...__args );
+			} )
+		} ).bind(this)
+
+		this.clear = ( function ( e_name ) {
+			this__events.forEachRight( item => {
+				if ( item.name === e_name )
+					item.die();
+			});
+		} ).bind(this)
+
+		this.delete = ( function ( e_name, func, __toString = false ) {
+			var events = this.__events.filter( item => item.name === e_name );
+
+			if ( !__toString ) {
+				events.forEachRight( item => {
+					if ( item.method === func )
+						item.die()
+				} )
+			} else if ( __toString ) {
+				events.forEachRight( item => {
+					if ( item.method.toString() === func.toString() )
+						item.die()
+				} )
+			}
+		} ).bind(this)
+
+		this.deleteById = ( function ( id ) {
+			this.__events.find( item => item.id == id ).die();
+		} ).bind(this)
+	}
+
 
 //
 //  ---------------- ** ----
@@ -102,6 +195,16 @@ class App{
 	{
 		console.log(msg)
 		//this.GOTOPage();
+	}
+
+	nameSetSucced(msg) { // calls when server reply name_set_succeed
+		this.GOTOPage();
+		let name = msg.data.name;
+		this.updateName( msg );
+	}
+
+	nameSetFailed(msg) {
+		//
 	}
 	setKey (data) { // Установить уникальный ключь
 		Cookie.set("key", data.data);
@@ -255,6 +358,24 @@ class App{
 			// console.log(path);
 		}
 		this.pager.changePage.call( this.pager,  path );
+	}
+
+	displayError( msg ) {
+		if ( !( msg && msg.data && msg.data.text ) )
+		this.view.displayError( msg.data.text );
+	}
+
+	awaitClientKey(  ) { // возможно не потребуется
+		return new Promise( ( ( resolve, reject ) => {
+			this.subscribe_once( 'client_key_succeed', ( key ) => {
+				resolve( key );
+			} )
+		} ).bind(this) )
+	}
+
+	clientKeySucceed( msg ) {
+		let key = msg.data.key;
+		this.dispatch( 'client_key_succeed', key);
 	}
 
 //  -------------------

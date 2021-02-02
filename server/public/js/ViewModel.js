@@ -160,4 +160,8 @@ class ViewModel {
 		`)
 	}
 
+	displayError( err ) {
+		console.log('-----\n'.repeat(3), err );
+	}
+
 }

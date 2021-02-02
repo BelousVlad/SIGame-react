@@ -2,10 +2,9 @@ const Message = require('./Message');
 const event = require('events');
 
 class Chat {
-	
+
 	constructor(lobby)
 	{
-		Object.assign( this, new event() )
 		this.lobby = lobby;
 		this.messages = [];
 	}
