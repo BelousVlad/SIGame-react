@@ -83,13 +83,13 @@ class App{
 					once : false,
 				};
 
-				options = typeof options === 'object' ? options : new Object();
+				options = new Object(options); // приведени к объекту, если options не объект
 				for ( let i in default_options )
 					options[i] = typeof options[i] !== 'undefined' ? options[i] : default_options;
 
 				this.name = e_name;
 				this.method = func;
-				this.id = __index;
+				Object.defineProperty( this, 'id', { value : __index, writeble : false });
 				__index++;
 				this.dispatch = function ( ...args ) {
 					this.method( ...args );
@@ -123,9 +123,11 @@ class App{
 		} ).bind(this);
 
 		this.subscribe_once = ( function ( e_name, func, options ) {
-			options = typeof options === 'object' ? options : new Object();
-
-			return this.subscribe( e_name, func, Object.assign( options, {once : true} ) );
+			options = {
+				...options,
+				once : true,
+			}
+			return this.subscribe( e_name, func, options ) ;
 
 		} ).bind(this)
 
@@ -195,10 +197,10 @@ class App{
 		//this.GOTOPage();
 	}
 
-	nameSetSucced(msg) { // calls when
+	nameSetSucced(msg) { // calls when server reply name_set_succeed
 		this.GOTOPage();
 		let name = msg.data.name;
-		updateName( msg );
+		this.updateName( msg );
 	}
 
 	nameSetFailed(msg) {
