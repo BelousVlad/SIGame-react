@@ -16,7 +16,9 @@
 <section class="lobby-section">
 	
 	<div class="container">
-		<div class="lobby-master-box"></div>
+		<div class="lobby-master-box">
+			
+		</div>
 		<div class="lobby-main-canvas"></div>
 		<div class="lobby-chat-box">
 			<div class="lobby-chat"></div>
@@ -61,14 +63,20 @@
 	    }
 	});
 
-	$(document).on('click','.host-player-menu-kick',function(e){
+	$(document).on('click','.service-player-menu-kick',function(e){
 
 		let name = $(event.target).parent().parent().attr("name");
 		app.kick_player(name);
 
 	});
 
-	$(document).on('click','.host-player-menu-change-score',function(e){
+	$(document).on('click','.become-master-btn',function(e){
+
+		app.becomeMaster();
+
+	});
+
+	$(document).on('click','.service-player-menu-change-score',function(e){
 
 		let name = $(event.target).parent().parent().attr("name");
 

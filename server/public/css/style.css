@@ -166,11 +166,11 @@
   position: relative;
   border: 1px solid #000;
 }
-.player-box:hover .host-player-menu{
+.player-box:hover .service-player-menu{
   opacity: 1;
 }
 
-.host-player-menu{
+.service-player-menu{
   position: absolute;
   top: 0;
   left: 0;
@@ -178,12 +178,12 @@
   bottom: 0;
   opacity: 0;
 }
-.host-player-menu-change-score{
+.service-player-menu-change-score{
   height: 50%;
   background: green;
   color: #fff;
 }
-.host-player-menu-kick{
+.service-player-menu-kick{
   height: 50%;
   background: red;
   color: #fff;

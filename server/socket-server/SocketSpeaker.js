@@ -95,7 +95,8 @@ module.exports = class SocketSpeaker{
 			if (lobby_)
 			{
 				let is_host = lobby_.host.key == key;
-				lobby = { title: lobby_.title, max_players: lobby_.max_players, is_host }
+				let is_master = lobby_.master ? lobby_.master.key == key : false;
+				lobby = { title: lobby_.title, max_players: lobby_.max_players, is_host, is_master }
 			}
 
 			client.send('status', { lobby, name: client.name } )
@@ -204,6 +205,12 @@ module.exports = class SocketSpeaker{
 				this.lobby_remove_player(lobby.clients[client], deleted_client)
 			}
 		})
+		lobby.on('lobby_master_set', (master) => {
+			for(let client in lobby.clients)
+			{
+				this.lobby_master_set(lobby.clients[client], master, lobby)
+			}
+		})
 	}
 
 	connect_lobby(ws, msg)
@@ -253,10 +260,12 @@ module.exports = class SocketSpeaker{
 		{
 			let player = players[p];
 			let is_host = lobby.host.key == player.key;
+			let is_master = lobby.master ? lobby.master.key == player.key : false;
 			arr.push({
 				name: player.name,
 				score: lobby.scores[player.key],
 				is_host: is_host,
+				is_master: is_master,
 				//etc...
 			})
 
@@ -319,10 +328,10 @@ module.exports = class SocketSpeaker{
 
 		const client = ClientManager.getClient( msg.key );
 		const lobby = LobbyManager.getLobbyByClient(client);
-		const is_host = lobby.host.key == client.key;
+    	let has_permission = lobby.master ? lobby.master.key == client.key : false;
 		const pack_uploaded = lobby.packState === 'ready';
 		// console.log(msg, lobby);
-		if ( is_host && pack_uploaded && !lobby.game )
+		if ( has_permission && pack_uploaded && !lobby.game )
 			lobby.startGame()
 	}
 
@@ -352,12 +361,14 @@ module.exports = class SocketSpeaker{
 		this.send( ws, 'show_round', lobby.game.current.round);
 	}
 
+
+
 	lobby_game_next_round( ws, msg ) {
 		let client = ClientManager.getClient(msg.key),
         	lobby = LobbyManager.getLobbyByClientKey(msg.key),
-        	has_permission = lobby.host.key == client.key;
+        	has_permission = lobby.master ? lobby.master.key == client.key : false;
 
-		if ( ! (lobby && lobby.game && lobby.packState === 'ready' ) || !has_permission )
+		if ( !(lobby && lobby.game && lobby.packState === 'ready' ) || !has_permission )
 			return;
 
 		lobby.game.nextRound();
@@ -367,7 +378,7 @@ module.exports = class SocketSpeaker{
 	lobby_game_previous_round( ws, msg ) {
 		let client = ClientManager.getClient(msg.key),
         	lobby = LobbyManager.getLobbyByClientKey(msg.key),
-        	has_permission = lobby.host.key == client.key;
+        	has_permission = lobby.master ? lobby.master.key == client.key : false;
 
 		if ( ! (lobby && lobby.game && lobby.packState === 'ready' ) || !has_permission )
 			return;
@@ -413,7 +424,7 @@ module.exports = class SocketSpeaker{
 			let lobby = LobbyManager.getLobbyByClient(client);
 			if (lobby)
 			{
-				if (client.key == lobby.host.key)
+				if (lobby.master && client.key == lobby.master.key)
 				{
 					let change_client_name = msg.data.player_name;
 
@@ -429,6 +440,32 @@ module.exports = class SocketSpeaker{
 				}
 			}
 		}
+	}
+
+	lobby_become_master(ws, msg)
+	{
+		let key = msg.key;
+		let client = ClientManager.getClient(key);
+
+		if (client)
+		{
+			let lobby = LobbyManager.getLobbyByClient(client);
+			if (lobby)
+			{
+				lobby.setMaster(client)
+			}
+		}
+	}
+
+	lobby_master_set(client, master, lobby)
+	{
+		let is_host = lobby.host.key == master.key;
+		//console.log(client)
+		client.send('lobby_master_set', { 
+			master_name: master.name,
+			is_host: is_host,
+			//etc...
+		})		
 	}
 
 	displayError( text ) {
@@ -453,6 +490,7 @@ module.exports = class SocketSpeaker{
 			"lobby_game_previous_round" : "lobby_game_previous_round",
 			"lobby_chat_send_msg" : "lobby_chat_send_msg",
 			"lobby_score_change" : "lobby_score_change",
+			"lobby_become_master" : "lobby_become_master",
 		}
 	}
 }
