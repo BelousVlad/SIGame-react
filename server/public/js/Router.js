@@ -19,6 +19,7 @@ class Router{
 			"lobby_changed_player_score" : "lobbyChangedPlayerScore",
 			"name_set_succed" : "nameSetSucced",
 			"display_error" : "displayError",
+			"name_set_failed" : "nameSetFailed",
 		};
 	}
 

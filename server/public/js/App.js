@@ -204,7 +204,7 @@ class App{
 	}
 
 	nameSetFailed(msg) {
-		//
+		this.view_model.displayError( msg.data.reason );
 	}
 	setKey (data) { // Установить уникальный ключь
 		Cookie.set("key", data.data);

@@ -32,8 +32,14 @@ module.exports = class SocketSpeaker{
 		let client = ClientManager.getClient(key);
 		if (client)
 		{
-			client.name = name;
-			client.send('name_set_succed', name);
+			let isNameFree = ! ClientManager.clients.find( item => item.name === name )
+			if ( isNameFree ) {
+				client.name = name;
+				client.send('name_set_succed', name);
+			} else {
+				let reason = `name ${ name } alredy taken.`
+				client.send('name_set_failed', {reason : reason} );
+			}
 		}
 	}
 
