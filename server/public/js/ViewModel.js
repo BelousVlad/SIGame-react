@@ -1,7 +1,7 @@
 class ViewModel {
 	constructor()
 	{
-
+		
 	}
 
 	viewLoader()
@@ -49,7 +49,9 @@ class ViewModel {
 			t + `
 			<div class="player-box" name="${item.name}">
 				${ is_host ? host_menu : '' }
-				<img class="player-box-img">
+				<div class="players-box-img-box">
+					<img class="player-box-img">
+				</div>
 				<div class="player-box-name">${item.name}</div>
 				<div class="player-box-score">${item.score}</div>
 			</div>
@@ -149,7 +151,7 @@ class ViewModel {
 	}
 	addChatMessage(message)
 	{
-		$('.chat').append(`
+		$('.lobby-chat').append(`
 			<div class="chat-message">
 				<span class="chat-message-from">${message.from}</span>
 				<span>: </span>

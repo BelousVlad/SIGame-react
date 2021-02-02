@@ -11,12 +11,30 @@
 </div>
 <div class="main-canvas">question table</div>
 <div class="container">player-container</div>
-<div class="container">
+
+
+<section class="lobby-section">
+	
+	<div class="container">
+		<div class="lobby-master-box"></div>
+		<div class="lobby-main-canvas"></div>
+		<div class="lobby-chat-box">
+			<div class="lobby-chat"></div>
+			<div class="lobby-chat-input-container">
+				<input type="text" id="chat_send_text"></input>
+				<input type="button" name="chat_send_btn" value="Chat">	
+			</div>
+		</div>
+	</div>
+
+	<div class="container">
 	<div class="players-container">
 
 	<!--
 	<div class="player-box">
-		<img class="player-box-img">
+		<div class="players-box-img-box">
+			<img class="player-box-img">
+		</div>
 		<div class="player-box-name"></div>
 		<div class="player-box-score"></div>
 	</div>
@@ -24,24 +42,7 @@
 	</div>
 </div>
 
-<div class="container">
-	<textarea id="chat_send_text">
-		
-	</textarea>
-	<input type="button" name="chat_send_btn" value="Chat">	
-</div>
-
-<div class="container">
-	<div class="chat">
-	<!--
-		<div class="chat-message">
-			<span class="chat-message-from"></span>
-			<span>: </span>
-			<span class="chat-message-text"></span>
-		</div>
-	-->
-	</div>
-</div>
+</section>
 
 <script type="text/javascript">
 
@@ -53,6 +54,12 @@
 			app.speakerctrl.sendChatMessage(text);
 		}
 	})
+
+	$('#chat_send_text').on('keypress',function(e) {
+	    if(e.which == 13) {
+	        $("input[name=chat_send_btn]").trigger('click')
+	    }
+	});
 
 	$(document).on('click','.host-player-menu-kick',function(e){
 
