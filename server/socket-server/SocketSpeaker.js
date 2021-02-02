@@ -32,7 +32,7 @@ module.exports = class SocketSpeaker{
 		let client = ClientManager.getClient(key);
 		if (client)
 		{
-			let isNameFree = ! ClientManager.clients.find( item => item.name === name )
+			let isNameFree = ! ClientManager.clients.find( item => item.name === name ) // в случае если имя занято на стороне клиента вызовется метод соотвуствующий руту name_set_failed
 			if ( isNameFree ) {
 				client.name = name;
 				client.send('name_set_succed', name);
@@ -217,7 +217,7 @@ module.exports = class SocketSpeaker{
 		let key = msg.key;
 		let client = ClientManager.getClient(key);
 
-		if (client)
+		if (client && client.name )
 		{
 			let title = msg.data.title;
 
