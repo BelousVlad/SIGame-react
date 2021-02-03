@@ -86,6 +86,11 @@ class ServerSpeakerController{
 		})
 	}
 
+	becomeMaster()
+	{
+		this.sendWithKey('lobby_become_master')
+	}
+
 	sendWithKey(action ,msg)
 	{
 		this.speaker.send({action, key: this.key ,data: msg})

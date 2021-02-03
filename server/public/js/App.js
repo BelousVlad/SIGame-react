@@ -7,6 +7,7 @@ class App{
 		this.view_model.hideLoader();
 		this.initSpeker();
 		this.router = new Router();
+		this.client_name = undefined;
 
 		this.lobby = undefined;
 
@@ -193,6 +194,7 @@ class App{
 	}
 	updateName(msg)
 	{
+		this.client_name = msg.data.name
 		console.log(msg)
 		//this.GOTOPage();
 	}
@@ -219,13 +221,14 @@ class App{
 		let title = msg.data.title;
 		let max_players = msg.data.max_players;
 		let is_host = msg.data.is_host;
-		this.lobby = new Lobby(title, max_players, is_host);
+		let is_master = msg.data.is_master;
+		this.lobby = new Lobby(title, max_players, is_host, is_master);
 		if (document.location.pathname != '/lobby')
 		{
 			this.pager.changePage('/lobby')
 			.then(() => {
-				//console.log('page_updated')
-				app.view_model.viewPlayers(this.lobby.players_, is_host)
+				console.log('page_updated')
+				app.view_model.viewPlayers(this.lobby.players_, is_host, is_master)
 			});
 		}
 	}
@@ -247,7 +250,12 @@ class App{
 			{
 				let lobby = msg.data.lobby;
 				this.lobby_connected({ data:
-						{ title: lobby.title, max_players: lobby.max_players, is_host: lobby.is_host } }
+						{ 
+						title: lobby.title, 
+						max_players: lobby.max_players, 
+						is_host: lobby.is_host, 
+						is_master: lobby.is_master 
+					} }
 				)
 			}
 		}
@@ -347,6 +355,21 @@ class App{
 		if(player_name)
 		{
 			this.speakerctrl.setScorePlayer(player_name, score)
+		}
+	}
+
+	becomeMaster()
+	{
+		this.speakerctrl.becomeMaster()
+	}
+
+	lobbyMasterSet(msg)
+	{
+		console.log(msg)
+		let name = msg.data.master_name
+		if (name && this.lobby)
+		{
+			this.lobby.setMasterByName(name)
 		}
 	}
 

@@ -18,6 +18,7 @@ class Lobby {
 		this.password = password ;
 		this.scores = {}
 		this.host = undefined;
+		this.master = undefined;
 		this.game = undefined;
 
 		this.chat = new Chat(this);
@@ -59,6 +60,17 @@ class Lobby {
 			}
 		}
 		return undefined;
+	}
+
+	setMaster(client)
+	{
+		if (!this.master && this.hasClient(client))
+		{
+			this.master = client;
+			this.emit('lobby_master_set', client)
+			return true;
+		}
+		return false;
 	}
 
 	hasClient(client)
@@ -130,7 +142,10 @@ class Lobby {
 			let keyNewHost = Object.keys(this.clients)[0]
 			this.host = this.clients[keyNewHost];
 		}
-		console.log(client);
+		if (this.master && clientKey == this.master.key)
+		{
+			this.master = undefined;
+		}
 		this.emit('lobby_client_removed', client)
 	}
 

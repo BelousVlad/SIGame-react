@@ -1,7 +1,7 @@
 class ViewModel {
 	constructor()
 	{
-
+		
 	}
 
 	viewLoader()
@@ -35,21 +35,25 @@ class ViewModel {
 		$('.lobby-list-item').dblclick(dblclickhandler)
 	}
 
-	viewPlayers(players, is_host)
+	viewPlayers(players, is_host, is_master)
 	{
-
 		let host_menu = `
-			<div class="host-player-menu">
-				<div class="host-player-menu-change-score">Изменить очки</div>
-				<div class="host-player-menu-kick">Выгнать</div>
-			</div>
+				<div class="service-player-menu-kick">Выгнать</div>
+			`
+		let master_menu = `
+			<div class="service-player-menu-change-score">Изменить очки</div>
 		`
 
 		let html = players.reduce((t,item) =>
 			t + `
 			<div class="player-box" name="${item.name}">
-				${ is_host ? host_menu : '' }
-				<img class="player-box-img">
+				<div class="service-player-menu">
+					${ is_host ? host_menu : '' }
+					${ is_master ? master_menu : '' }
+				</div>
+				<div class="players-box-img-box">
+					<img class="player-box-img">
+				</div>
 				<div class="player-box-name">${item.name}</div>
 				<div class="player-box-score">${item.score}</div>
 			</div>
@@ -149,13 +153,56 @@ class ViewModel {
 	}
 	addChatMessage(message)
 	{
-		$('.chat').append(`
+		$('.lobby-chat').append(`
 			<div class="chat-message">
 				<span class="chat-message-from">${message.from}</span>
 				<span>: </span>
 				<span class="chat-message-text">${message.text}</span>
 			</div>
 		`)
+	}
+
+	showMaster(master, is_host)
+	{
+		if (master)
+		{
+			let host_menu = `
+				<div class="service-player-menu-kick">Выгнать</div>
+			`
+			let master_menu = `
+				<div class="service-player-menu-change-score">Изменить очки</div>
+			`
+
+			let html = `
+				<div class="player-box" name="${itemasterm.name}">
+					<div class="service-player-menu">
+						${ is_host ? host_menu : '' }
+						${ is_master ? master_menu : '' }
+					</div>
+
+					<div class="players-box-img-box">
+						<img class="player-box-img">
+					</div>
+					<div class="player-box-name">${master.name}</div>
+					<div class="player-box-score">${master.score}</div>
+				</div>
+				`;
+
+
+			$(".lobby-master-box").html(html);
+
+		}
+		else
+		{
+
+			let html = `
+				<div class="become-master-btn">
+					Стать ведущим
+				</div>
+			`
+
+			$(".lobby-master-box").html(html);
+		}
 	}
 
 	displayError( err ) {

@@ -1,24 +1,25 @@
 class Lobby{
-	constructor(title, max_players, is_host)
+	constructor(title, max_players, is_host, is_master)
 	{
 		this.title = title;
 		this.max_players = max_players;
 		this.players_ = [];
 		this.is_host = is_host;
+		this.is_master = is_master;
 	}
 
 	set players(players)
 	{
 		this.players_ = players
 
-		app.view_model.viewPlayers(players, this.is_host)
+		app.view_model.viewPlayers(players, this.is_host, this.is_master)
 	}
 
 	addPlayer(pl)
 	{
 		this.players_.push(pl);
 
-		app.view_model.viewPlayers(this.players_, this.is_host)
+		app.view_model.viewPlayers(this.players_, this.is_host, this.is_master)
 	}
 
 	getPlayerByName(name)
@@ -31,6 +32,32 @@ class Lobby{
 			}
 		}
 	}
+
+	setMasterByName(name)
+	{
+		for(let player of this.players_)
+		{
+			if (player.name == name)
+			{
+				player.is_master = true;;
+			}
+			else if (player.is_master)
+			{
+				player.is_master = false;
+			}
+		}
+		if (name == app.client_name)
+		{
+			this.is_master = true;
+		}
+		else
+		{
+			this.is_master = false;
+		}
+
+		app.view_model.viewPlayers(this.players_, this.is_host, this.is_master)
+	}
+
 	changeScore(player, score)
 	{
 		if (this.players_.includes(player))
@@ -39,7 +66,7 @@ class Lobby{
 		}
 
 		// TODO change one to draw one player
-		app.view_model.viewPlayers(this.players_, this.is_host)
+		app.view_model.viewPlayers(this.players_, this.is_host, this.is_master)
 	}
 
 	removePlayer(player)
@@ -60,12 +87,12 @@ class Lobby{
 				this.players_.splice(index, 1);
 			}
 		}
-		app.view_model.viewPlayers(this.players_, this.is_host)
+		app.view_model.viewPlayers(this.players_, this.is_host, this.is_master)
 	}
 
 	renderFullInterface()
 	{
-		app.view_model.viewPlayers(this.players_, is_host)
+		app.view_model.viewPlayers(this.players_, this.is_host, this.is_master)
 	}
 
 
