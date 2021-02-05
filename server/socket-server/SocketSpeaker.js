@@ -147,7 +147,7 @@ module.exports = class SocketSpeaker{
 			let title = msg.data.title;
 			let max = msg.data.max_players;
 			let password = msg.data.password;
-			let isTitleFree = ! LobbyManager.lobbies.find( item => item.title === title );
+			let isTitleFree = ! LobbyManager.lobbies[title];
 
 			if ( !isTitleFree ) {
 				client.send( 'lobby_create_failed' ,{ reason : `lobby name already exist ${title}` });
@@ -472,11 +472,11 @@ module.exports = class SocketSpeaker{
 	{
 		let is_host = lobby.host.key == master.key;
 		//console.log(client)
-		client.send('lobby_master_set', { 
+		client.send('lobby_master_set', {
 			master_name: master.name,
 			is_host: is_host,
 			//etc...
-		})		
+		})
 	}
 
 	displayError( text ) {
