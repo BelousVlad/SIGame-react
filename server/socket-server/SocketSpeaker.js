@@ -468,6 +468,24 @@ module.exports = class SocketSpeaker{
 		})		
 	}
 
+	leave_from_lobby(ws, msg)
+	{
+		let key = msg.key;
+		let client = ClientManager.getClient(key);
+
+		if (client)
+		{
+			let lobby = LobbyManager.getLobbyByClient(client);
+			if (lobby)
+			{
+				lobby.removeClient(client)
+
+				client.send('refresh_page');
+
+			}
+		}
+	}
+
 	displayError( text ) {
 		this.send( ws, "display_error", text );
 	}
@@ -491,6 +509,7 @@ module.exports = class SocketSpeaker{
 			"lobby_chat_send_msg" : "lobby_chat_send_msg",
 			"lobby_score_change" : "lobby_score_change",
 			"lobby_become_master" : "lobby_become_master",
+			"lobby_leave" : "leave_from_lobby",
 		}
 	}
 }

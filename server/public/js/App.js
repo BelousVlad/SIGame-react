@@ -314,6 +314,11 @@ class App{
 		this.pager.changePage('/')
 	}
 
+	lobby_leave()
+	{
+		this.speakerctrl.leave_from_lobby();
+	}
+
 	lobbyChatGetMessage(msg)
 	{
 		let message = msg.data;
@@ -365,6 +370,11 @@ class App{
 		{
 			this.lobby.setMasterByName(name)
 		}
+	}
+
+	refresh_page()
+	{
+		document.location.reload()
 	}
 
 
