@@ -188,7 +188,7 @@ class MainController{
 			}
 
 			client.avatarPath = file.userfile.path;
-			client.avatarCode = ( client.avatarPath ).slice(-43); /* just filename */
+			client.avatarCode = path.parse( ( client.avatarPath ) ).base; /* just filename */
 			// client.uploadAvatarEnd();
 			// ----------------TODO
 			// change
