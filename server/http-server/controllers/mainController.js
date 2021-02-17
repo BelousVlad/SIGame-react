@@ -188,10 +188,11 @@ class MainController{
 			}
 
 			client.avatarPath = file.userfile.path;
+			client.avatarCode = ( client.avatarPath ).slice(-43); /* just filename */
 			// client.uploadAvatarEnd();
 			// ----------------TODO
 			// change
-			client.send( 'avatar_set_succeed', client.avatarPath );
+			client.send( 'avatar_set_succeed', {} );
 		} )
 	}
 }

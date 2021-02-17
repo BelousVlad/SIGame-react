@@ -100,6 +100,11 @@ class ServerSpeakerController{
 		this.speaker.send({action, data: msg})
 	}
 
+	getStatus()
+	{
+		this.speaker.send( { action: 'status', data : {}, key : this.key } );
+	}
+
 	get key()
 	{
 		return Cookie.get('key') ?? "0";

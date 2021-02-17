@@ -15,4 +15,5 @@ module.exports = ( {
 	rootPath : __dirname,
 	packDirPath : path.join( __dirname, 'si-packs'),
 	avatarDirPath : path.join ( __dirname, 'avatars' ),
+	baseAvatarCode : ('0'.repeat(39) + '.png'),
 } );

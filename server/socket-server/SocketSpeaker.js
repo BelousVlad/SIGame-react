@@ -2,6 +2,7 @@ const ClientManager = require('./ClientManager');
 const LobbyManager = require('./Lobby/LobbyManager');
 const Lobby = require('./Lobby/Lobby');
 const fs = require('fs')
+const config = require('../config.js');
 
 module.exports = class SocketSpeaker{
 
@@ -86,7 +87,8 @@ module.exports = class SocketSpeaker{
 	}
 
 	// Отправка сведений о состоянии пользователя
-	// Имя, параметры лобби
+	// метаинформация о клиенте, параметры лобби
+	// в случае если у поля отсутствует значение(к примеру у пользователя нет лобби) само поле должно отсутствовать в объекте посылаемом status
 	status(ws, msg)
 	{
 		let key = msg.key;
@@ -105,7 +107,9 @@ module.exports = class SocketSpeaker{
 				lobby = { title: lobby_.title, max_players: lobby_.max_players, is_host, is_master }
 			}
 
-			client.send('status', { lobby, name: client.name } )
+			let avatarCode = client.avatarCode || config.baseAvatarCode;
+
+			client.send('status', { lobby, name: client.name, avatarCode } );
 			if (lobby_)
 			{
 				this.update_players(client, lobby_);
@@ -113,7 +117,7 @@ module.exports = class SocketSpeaker{
 		}
 		else
 		{
-			client.send('status', 0 )
+			ws.send('status', { errors : [{ code : 404, message : `cant find such user` }]} );
 		}
 	}
 
@@ -502,6 +506,7 @@ module.exports = class SocketSpeaker{
 			"lobby_chat_send_msg" : "lobby_chat_send_msg",
 			"lobby_score_change" : "lobby_score_change",
 			"lobby_become_master" : "lobby_become_master",
+			"status" : "status",
 		}
 	}
 }

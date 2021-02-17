@@ -250,15 +250,19 @@ class App{
 			{
 				let lobby = msg.data.lobby;
 				this.lobby_connected({ data:
-						{ 
-						title: lobby.title, 
-						max_players: lobby.max_players, 
-						is_host: lobby.is_host, 
-						is_master: lobby.is_master 
+						{
+						title: lobby.title,
+						max_players: lobby.max_players,
+						is_host: lobby.is_host,
+						is_master: lobby.is_master
 					} }
 				)
 			}
 		}
+	}
+
+	getStatus( msg ) {
+		this.speakerctrl.getStatus();
 	}
 
 	lobby_list(json)
