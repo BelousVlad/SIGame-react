@@ -1,3 +1,4 @@
 server/node_modules/*
 server/si-packs/*
 server/avatars/*
+!server/avatars/000000000000000000000000000000000000000.jpg
