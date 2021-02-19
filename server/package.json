@@ -21,7 +21,7 @@
   },
   "scripts": {
     "dev": "nodemon server-app.js",
-    "start": "node server.js"
+    "start": "node server-app.js"
   },
   "keywords": [
     "si",
