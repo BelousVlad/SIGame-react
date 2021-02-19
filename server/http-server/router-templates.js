@@ -15,7 +15,8 @@ module.exports =
 	},
 
 	'mainController/get_avatar' : ( req ) => {
-		return req.url === '/api/upload/avatar' && req.method.toLowerCase() === 'get';
+		var bool =  req.url === '/api/get/avatar' && req.method.toLowerCase() === 'get';
+		return bool;
 	},
 
 	'mainController/send' : ( req ) => {
