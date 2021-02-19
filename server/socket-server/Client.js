@@ -36,6 +36,12 @@ class Client {
 			}
 		})
 	}
+	getDisplayParams() {
+		return {
+			name : this.name,
+			avatarCode : this.avatarCode,
+		}
+	}
 }
 
 Object.assign( Client.prototype, event.prototype ) // 2-nd step of mix-in by event
