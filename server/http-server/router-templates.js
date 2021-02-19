@@ -14,6 +14,10 @@ module.exports =
 		return req.url === '/api/upload/avatar' && req.method.toLowerCase() === 'post';
 	},
 
+	'mainController/get_avatar' : ( req ) => {
+		return req.url === '/api/upload/avatar' && req.method.toLowerCase() === 'get';
+	},
+
 	'mainController/send' : ( req ) => {
 		let url = (req.url).split('?')[0];
 		let extname = path.extname(url);

@@ -13,7 +13,7 @@ module.exports = class httpRouter{
 		this.server = server;
 	}
 
-	invoke(req, res){
+	async invoke(req, res){
 
 		for ( let i in this.templates ) {
 

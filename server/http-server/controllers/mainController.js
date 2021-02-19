@@ -195,6 +195,29 @@ class MainController{
 			client.send( 'avatar_set_succeed', {} );
 		} )
 	}
+
+	get_avatar( req, res ) {
+		let cookies = helper.parseCookies(req)
+		,	client = ClientManager.getClient( cookies.key )
+
+		if( !client)
+			return;
+
+		res.setHeader('Content-Type', 'image/jpeg');
+		(async function() {
+			try{
+				const file = fs.readFileSync( client.avatarPath );
+				res.end(file);
+			} catch ( e ) {
+				try {
+					const file = fs.readFileSync( config.baseAvatarPath );
+					res.end( file );
+				} catch ( e ) {
+					console.log( e );
+				}
+			}
+		})();
+	}
 }
 
 module.exports = new MainController();
