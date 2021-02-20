@@ -226,6 +226,7 @@ module.exports = class SocketSpeaker{
 				this.lobby_master_set(lobby.clients[client], master, lobby)
 			}
 		})
+
 	}
 
 	connect_lobby(ws, msg)

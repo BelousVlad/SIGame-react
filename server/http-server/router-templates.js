@@ -15,7 +15,7 @@ module.exports =
 	},
 
 	'mainController/get_avatar' : ( req ) => {
-		var bool =  req.url === '/api/get/avatar' && req.method.toLowerCase() === 'get';
+		var bool =  req.url.split('?')[0] === '/api/get/avatar' && req.method.toLowerCase() === 'get';
 		return bool;
 	},
 

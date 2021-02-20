@@ -412,7 +412,8 @@ class App{
 	}
 
 	avatarSetSucceed ( msg ) {
-		console.log( 'avatar succeed!!!!'.repeat(5) );
+		this.dispatch('avatar_update_succeed');
+		// console.log( 'avatar succeed!!!!'.repeat(5) );
 	}
 
 //  -------------------

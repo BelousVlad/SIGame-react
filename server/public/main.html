@@ -1,4 +1,4 @@
-<img alt="error" src="/api/get/avatar"></img>
+<img alt="error" id="avatar" src="/api/get/avatar"></img>
 <div class="container">
   <div class="main-menu-container">
     <button> click </button>
@@ -44,6 +44,19 @@
 
 
 <script>
+    app.subscribe('avatar_update_succeed', function() {
+        $(document).ready( () => {
+            // setTimeout( () => {$('#avatar').attr('src', ''); console.log('timeout1'); console.log($('#avatar'))}, 1000);
+            [...document.body.children[12].children].forEach(item=>console.log(item));
+            awaitElement( '#avatar' ).then( avatar => {
+
+                avatar = $(avatar);
+                console.log('avatar updated');
+                // avatar.attr('src', '');
+                avatar.attr('src', 'api/get/avatar?rnd=' + String(Math.ceil(Math.random()*1e8) ) );
+            })
+        });
+    })
 
     $('.lobbies-list-refresh-btn').click(function(e){
         //console.log('refresh')
@@ -54,6 +67,57 @@
     $('.client-log-out-btn').click(function(e){
         app.speakerctrl.eraseName();
     })
+
+    function awaitElement( selector, custom_configuration = {} ) {
+        return new Promise( (resolve, reject) => {
+            if ( typeof custom_configuration !== 'object' ) {
+                reject( 'invalid configuration value (not an object)' );
+                return;
+            }
+            var config = {
+                /* default config value initialize */
+                parentNode : document.body,
+                dispatchIfElementAlreadyExist : true,
+            }
+            Object.assign( config, custom_configuration ); /* use custom_configuration */
+
+            var element = document.querySelector( selector ); /*get object if exist*/
+
+            if ( config.dispatchIfElementAlreadyExist ) {
+                if ( element ) {
+                    resolve(element);
+                    return;
+
+                } else {
+                    setObserver();
+
+                }
+            } else {
+                if ( element ) {
+                    return;
+
+                } else {
+                    setObserver();
+
+                }
+            }
+
+            function setObserver() {
+                var observer = new MutationObserver( mutations => {
+                    for (let i = 0; i < mutations.length; i++) {
+                        for (let j = 0; j < mutations[i].addedNodes.length; j++) {
+                            let node = mutations[i].addedNodes[j];
+                            if (node.matches(selector)) {
+                                observer.disconnect();
+                                resolve( node );
+                            }
+                        }
+                    }
+                } )
+                observer.observe( config.parentNode, { childList : true } );
+            }
+        } )
+    }
 
 // app.fileLoader.createLoadManager( "question-pack" ).bindToElement( document.querySelector("button") );
 //
