@@ -20,7 +20,12 @@ class Router{
 			"lobby_master_set" : "lobbyMasterSet",
 			"name_set_succed" : "nameSetSucced",
 			"display_error" : "displayError",
+
 			"refresh_page" : "refresh_page",
+			
+			"name_set_failed" : "nameSetFailed",
+			"lobby_create_failed" : "lobbyCreateFailed",
+			"avatar_set_succeed" : "avatarSetSucceed",
 		};
 	}
 

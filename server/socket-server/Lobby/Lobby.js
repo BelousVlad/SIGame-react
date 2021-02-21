@@ -3,6 +3,7 @@ const event = require('events');
 const ClientManager = require('../ClientManager');
 const Game = require('../Game');
 const Chat = require('./Chat/Chat');
+const fs = require('fs');
 
 class Lobby {
 

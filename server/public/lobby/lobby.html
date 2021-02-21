@@ -14,17 +14,17 @@
 
 
 <section class="lobby-section">
-	
+
 	<div class="container">
 		<div class="lobby-master-box">
-			
+
 		</div>
 		<div class="lobby-main-canvas"></div>
 		<div class="lobby-chat-box">
 			<div class="lobby-chat"></div>
 			<div class="lobby-chat-input-container">
 				<input type="text" id="chat_send_text"></input>
-				<input type="button" name="chat_send_btn" value="Chat">	
+				<input type="button" name="chat_send_btn" value="Chat">
 			</div>
 		</div>
 	</div>
@@ -43,6 +43,7 @@
 	-->
 	</div>
 </div>
+
 
 </section>
 
@@ -96,7 +97,6 @@
 		formData.append('CustomField', 'test');
 		request.open('POST', 'api/upload/pack');
 		request.send(formData);
-
 	}
 
 	document.querySelector('.game-start-btn').onclick = function ( ) {

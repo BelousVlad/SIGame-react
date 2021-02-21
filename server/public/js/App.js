@@ -206,7 +206,7 @@ class App{
 	}
 
 	nameSetFailed(msg) {
-		//
+		this.view_model.displayError( msg.data.reason );
 	}
 	setKey (data) { // Установить уникальный ключь
 		Cookie.set("key", data.data);
@@ -233,6 +233,12 @@ class App{
 		}
 	}
 
+	lobbyCreateFailed( msg ) {
+		let reason = msg.data.reason;
+
+		this.view_model.displayError( reason );
+	}
+
 	updateStatus(msg)
 	{
 		if (msg.data != 0)
@@ -244,15 +250,19 @@ class App{
 			{
 				let lobby = msg.data.lobby;
 				this.lobby_connected({ data:
-						{ 
-						title: lobby.title, 
-						max_players: lobby.max_players, 
-						is_host: lobby.is_host, 
-						is_master: lobby.is_master 
+						{
+						title: lobby.title,
+						max_players: lobby.max_players,
+						is_host: lobby.is_host,
+						is_master: lobby.is_master
 					} }
 				)
 			}
 		}
+	}
+
+	getStatus( msg ) {
+		this.speakerctrl.getStatus();
 	}
 
 	lobby_list(json)
@@ -409,6 +419,11 @@ class App{
 	clientKeySucceed( msg ) {
 		let key = msg.data.key;
 		this.dispatch( 'client_key_succeed', key);
+	}
+
+	avatarSetSucceed ( msg ) {
+		this.dispatch('avatar_update_succeed');
+		// console.log( 'avatar succeed!!!!'.repeat(5) );
 	}
 
 //  -------------------

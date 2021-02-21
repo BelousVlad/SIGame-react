@@ -2,6 +2,7 @@ const ClientManager = require('./ClientManager');
 const LobbyManager = require('./Lobby/LobbyManager');
 const Lobby = require('./Lobby/Lobby');
 const fs = require('fs')
+const config = require('../config.js');
 
 module.exports = class SocketSpeaker{
 
@@ -32,8 +33,14 @@ module.exports = class SocketSpeaker{
 		let client = ClientManager.getClient(key);
 		if (client)
 		{
-			client.name = name;
-			client.send('name_set_succed', name);
+			let isNameFree = ! ClientManager.clients.find( item => item.name === name ) // в случае если имя занято на стороне клиента вызовется метод соотвуствующий руту name_set_failed
+			if ( isNameFree ) {
+				client.name = name;
+				client.send('name_set_succed', name);
+			} else {
+				let reason = `name ${ name } alredy taken.`
+				client.send('name_set_failed', {reason : reason} );
+			}
 		}
 	}
 
@@ -80,7 +87,8 @@ module.exports = class SocketSpeaker{
 	}
 
 	// Отправка сведений о состоянии пользователя
-	// Имя, параметры лобби
+	// метаинформация о клиенте, параметры лобби
+	// в случае если у поля отсутствует значение(к примеру у пользователя нет лобби) само поле должно отсутствовать в объекте посылаемом status
 	status(ws, msg)
 	{
 		let key = msg.key;
@@ -99,7 +107,9 @@ module.exports = class SocketSpeaker{
 				lobby = { title: lobby_.title, max_players: lobby_.max_players, is_host, is_master }
 			}
 
-			client.send('status', { lobby, name: client.name } )
+			let avatarCode = client.avatarCode || config.baseAvatarCode;
+
+			client.send('status', { lobby, name: client.name, avatarCode } );
 			if (lobby_)
 			{
 				this.update_players(client, lobby_);
@@ -107,7 +117,7 @@ module.exports = class SocketSpeaker{
 		}
 		else
 		{
-			client.send('status', 0 )
+			ws.send('status', { errors : [{ code : 404, message : `cant find such user` }]} );
 		}
 	}
 
@@ -141,6 +151,12 @@ module.exports = class SocketSpeaker{
 			let title = msg.data.title;
 			let max = msg.data.max_players;
 			let password = msg.data.password;
+			let isTitleFree = ! LobbyManager.lobbies[title];
+
+			if ( !isTitleFree ) {
+				client.send( 'lobby_create_failed' ,{ reason : `lobby name already exist ${title}` });
+				return;
+			}
 
 			if (!LobbyManager.isPlayerIntoLobby(client))
 			{
@@ -149,7 +165,6 @@ module.exports = class SocketSpeaker{
 
 				this.set_lobby_events(lobby);
 
-				msg.data.title = title;
 				this.connect_lobby(ws, msg)
 			}
 			else
@@ -211,6 +226,7 @@ module.exports = class SocketSpeaker{
 				this.lobby_master_set(lobby.clients[client], master, lobby)
 			}
 		})
+
 	}
 
 	connect_lobby(ws, msg)
@@ -218,7 +234,7 @@ module.exports = class SocketSpeaker{
 		let key = msg.key;
 		let client = ClientManager.getClient(key);
 
-		if (client)
+		if (client && client.name )
 		{
 			let title = msg.data.title;
 
@@ -461,11 +477,11 @@ module.exports = class SocketSpeaker{
 	{
 		let is_host = lobby.host.key == master.key;
 		//console.log(client)
-		client.send('lobby_master_set', { 
+		client.send('lobby_master_set', {
 			master_name: master.name,
 			is_host: is_host,
 			//etc...
-		})		
+		})
 	}
 
 	leave_from_lobby(ws, msg)
@@ -509,7 +525,9 @@ module.exports = class SocketSpeaker{
 			"lobby_chat_send_msg" : "lobby_chat_send_msg",
 			"lobby_score_change" : "lobby_score_change",
 			"lobby_become_master" : "lobby_become_master",
+			
 			"lobby_leave" : "leave_from_lobby",
+			"status" : "status",
 		}
 	}
 }

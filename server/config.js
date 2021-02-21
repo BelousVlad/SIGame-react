@@ -14,4 +14,7 @@ module.exports = ( {
 	mainPagePath : path.join(__dirname, 'public', 'main.html'),
 	rootPath : __dirname,
 	packDirPath : path.join( __dirname, 'si-packs'),
+	avatarDirPath : path.join ( __dirname, 'avatars' ),
+	baseAvatarCode : 'baseAvatar.jpg',
+	baseAvatarPath : path.join(__dirname, 'avatars', 'baseAvatar.jpg' ),
 } );

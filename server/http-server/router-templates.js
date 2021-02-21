@@ -14,6 +14,11 @@ module.exports =
 		return req.url === '/api/upload/avatar' && req.method.toLowerCase() === 'post';
 	},
 
+	'mainController/get_avatar' : ( req ) => {
+		var bool =  req.url.split('?')[0] === '/api/get/avatar' && req.method.toLowerCase() === 'get';
+		return bool;
+	},
+
 	'mainController/send' : ( req ) => {
 		let url = (req.url).split('?')[0];
 		let extname = path.extname(url);
@@ -36,5 +41,6 @@ module.exports =
 
 	'mainController/create_lobby' : '^/create-lobby$',
 	'mainController/lobby' : '^/lobby$',
+	'mainController/avatar_set_page' : '^/avatar_set$',
 	'mainController/main' : '.*',
 };

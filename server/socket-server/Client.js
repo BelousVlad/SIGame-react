@@ -1,5 +1,6 @@
 const WebSocket = require('ws');
 const event = require('events');
+const config = require('../config.js');
 
 class Client {
 	constructor(key)
@@ -7,6 +8,7 @@ class Client {
 		this.key = key;
 		this.sockets = [];
 		this.name = null;
+		this.avatarCode = config.baseAvatarCode;
 	}
 
 	addSocket(ws)
@@ -33,6 +35,12 @@ class Client {
 				this.sockets.splice(index,1);
 			}
 		})
+	}
+	getDisplayParams() {
+		return {
+			name : this.name,
+			avatarCode : this.avatarCode,
+		}
 	}
 }
 
