@@ -1,5 +1,5 @@
 <img alt="error" id="avatar" src="/api/get/avatar"></img>
-<div class="container">
+<div class="container">`1
   <div class="main-menu-container">
     <button> click </button>
     <a href="create-lobby" class="main-menu-btn main-menu-play-btn">
@@ -44,19 +44,26 @@
 
 
 <script>
-    app.subscribe('avatar_update_succeed', function() {
-        $(document).ready( () => {
+    app.subscribe_once('avatar_update_succeed', function() {
             // setTimeout( () => {$('#avatar').attr('src', ''); console.log('timeout1'); console.log($('#avatar'))}, 1000);
-            [...document.body.children[12].children].forEach(item=>console.log(item));
-            awaitElement( '#avatar' ).then( avatar => {
+        // app.pager.awaitChangeEnd(`http://localhost:3000/`).then( () => {
+            // console.log('avatar updated');
+            awaitElement( '#avatar', {parentNode : document.body } ).then( avatar => {
 
-                avatar = $(avatar);
+            //     avatar = $(avatar);
                 console.log('avatar updated');
-                // avatar.attr('src', '');
-                avatar.attr('src', 'api/get/avatar?rnd=' + String(Math.ceil(Math.random()*1e8) ) );
+                console.log(document.querySelector('#avatar'));
+                (async function () {$(avatar).attr('src', await getAvatarURL( avatar )/*'api/get/avatar?rnd=' + String(Math.ceil(Math.random()*1e8) )*/ ); } ) ();
             })
-        });
+        // });
     })
+
+    function getAvatarURL( element ) {
+        return fetch('api/get/avatar')
+        .then( async (data) => {
+            return URL.createObjectURL( await data.blob());
+        })
+    }
 
     $('.lobbies-list-refresh-btn').click(function(e){
         //console.log('refresh')
@@ -107,6 +114,8 @@
                     for (let i = 0; i < mutations.length; i++) {
                         for (let j = 0; j < mutations[i].addedNodes.length; j++) {
                             let node = mutations[i].addedNodes[j];
+                            // console.log(mutations, i, j, node);
+                            if ( node.nodeName === "#text" ) continue;
                             if (node.matches(selector)) {
                                 observer.disconnect();
                                 resolve( node );
@@ -114,7 +123,7 @@
                         }
                     }
                 } )
-                observer.observe( config.parentNode, { childList : true } );
+                observer.observe( config.parentNode, { childList : true, subtree: true } );
             }
         } )
     }
