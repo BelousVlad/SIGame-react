@@ -5,6 +5,7 @@ const Game = require('../Game');
 const Chat = require('./Chat/Chat');
 const fs = require('fs');
 
+
 class Lobby {
 
 	packFolder = new Object();
@@ -21,6 +22,19 @@ class Lobby {
 		this.host = undefined;
 		this.master = undefined;
 		this.game = undefined;
+
+		const conf_sym = Symbol('configuration');
+
+		this[conf_sym] = Lobby.defaultConfig; /*default value initilize*/
+
+		Object.defineProperty(this, 'configuration', { /*get, set initilize */
+			get : () => { return this[conf_sym] },
+			set : ( newValue ) => {
+				/*TODO validation*/
+				let conf = {...this.defaultConfig, ...newValue};
+				this[conf_sym] = conf;
+			},
+		})
 
 		this.chat = new Chat(this);
 
@@ -199,6 +213,7 @@ class Lobby {
 			password : '',
 		}
 	}
+
 }
 
 Object.assign( Lobby.prototype, event.prototype ) // 2-nd step of mix-in of event

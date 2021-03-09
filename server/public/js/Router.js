@@ -23,6 +23,7 @@ class Router{
 			"name_set_failed" : "nameSetFailed",
 			"lobby_create_failed" : "lobbyCreateFailed",
 			"avatar_set_succeed" : "avatarSetSucceed",
+			"receive_lobby_configuration" : "receiveLobbyConfiguration",
 		};
 	}
 
