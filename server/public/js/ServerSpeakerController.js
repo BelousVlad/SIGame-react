@@ -115,6 +115,14 @@ class ServerSpeakerController{
 		this.speaker.send( { action: 'status', data : {}, key : this.key } );
 	}
 
+	setLobbyConfiguration(conf) {
+		this.send( 'setLobbyConfiguration', conf);
+	}
+
+	getLobbyConfiguration() {
+		this.send( 'getLobbyConfiguration', {});
+	}
+
 	get key()
 	{
 		return Cookie.get('key') ?? "0";

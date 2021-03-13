@@ -497,7 +497,6 @@ module.exports = class SocketSpeaker{
 			//etc...
 		})
 	}
-
 	leave_from_lobby(ws, msg)
 	{
 		let key = msg.key;
@@ -514,6 +513,38 @@ module.exports = class SocketSpeaker{
 
 			}
 		}
+	}
+	setLobbyConfiguration(ws, msg) {
+		const conf = msg.data;
+		const key = msg.key;
+		if ( !(key && conf) )
+			return;
+
+		const client = ClientManager.getClient(key);
+		if(	!client )
+			return;
+
+		const lobby = LobbyManager.getLobbyByClient(client);
+		if( !lobby )
+			return;
+
+		lobby.configuration = conf; /* validation proceed in lobby.configuration setter */
+
+	}
+
+	getLobbyConfiguration(ws, msg) {
+		const key = msg.key
+		if(!key)
+			return;
+		const client = ClientManager.getClient(key);
+		if(!client)
+			return;
+		const lobby = LobbyManager.getLobbyByClient(client);
+		if(!lobby)
+			return;
+		console.log(key, msg, lobby.configuration, lobby);
+
+		client.send('receive_lobby_configuration', lobby.configuration);
 	}
 
 	displayError( text ) {
@@ -543,6 +574,8 @@ module.exports = class SocketSpeaker{
 
 			"lobby_leave" : "leave_from_lobby",
 			"status" : "status",
+			"setLobbyConfiguration" : "setLobbyConfiguration",
+			"getLobbyConfiguration" : "getLobbyConfiguration",
 		}
 	}
 }

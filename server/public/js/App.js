@@ -189,9 +189,12 @@ class App{
 	{
 		console.log(json);
 	}
+
+
 	showRound( msg ) {
 		this.view_model.showRound( msg.data );
 	}
+
 	updateName(msg)
 	{
 		this.client_name = msg.data.name
@@ -300,6 +303,19 @@ class App{
 	        }
 		});
 
+	}
+
+	setLobbyConfiguration() {
+		const conf = this.view_model.getLobbyConfiguration();
+		this.speakerctrl.setLobbyConfiguration( conf );
+	}
+
+	getLobbyConfiguration() {
+	this.speakerctrl.getLobbyConfiguration();
+	}
+
+	receiveLobbyConfiguration(msg) {
+		console.log(msg.data);
 	}
 
 	updateLobbyPlayers(msg)
