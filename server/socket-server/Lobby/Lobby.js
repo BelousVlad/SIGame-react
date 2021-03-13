@@ -74,6 +74,18 @@ class Lobby {
 		return false;
 	}
 
+	removeMaster()
+	{
+
+		if (this.master)
+		{
+			this.master = null;
+			this.emit('lobby_master_set', null)
+			return true;
+		}
+		return false;
+	}
+
 	hasClient(client)
 	{
 		return !!this.getClient(client.key);

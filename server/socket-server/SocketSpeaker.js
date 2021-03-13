@@ -154,14 +154,14 @@ module.exports = class SocketSpeaker{
 			let isTitleFree = ! LobbyManager.lobbies[title];
 
 			if ( !isTitleFree ) {
-				client.send( 'lobby_create_failed' ,{ reason : `lobby name already exist ${title}` });
+				client.send( 'lobby_create' , { code : LobbyManager.LOBBY_NAME_ALREADY_EXIST });
 				return;
 			}
 
 			if (!LobbyManager.isPlayerIntoLobby(client))
 			{
 				let lobby = LobbyManager.createLobby(title, password, max);
-				client.send('lobby_created', { title : lobby.title, code: LobbyManager.LOBBY_CREATED_OK });
+				client.send('lobby_create', { title : lobby.title, code: LobbyManager.LOBBY_CREATED_OK });
 
 				this.set_lobby_events(lobby);
 
@@ -169,7 +169,7 @@ module.exports = class SocketSpeaker{
 			}
 			else
 			{
-				client.send('lobby_created', { code: LobbyManager.CLIENT_ALLREADY_INTO_LOBBY_ERROR });
+				client.send('lobby_create', { code: LobbyManager.CLIENT_ALLREADY_INTO_LOBBY_ERROR });
 			}
 
 
@@ -472,13 +472,27 @@ module.exports = class SocketSpeaker{
 			}
 		}
 	}
+	stop_be_master(ws, msg)
+	{
+		let key = msg.key;
+		let client = ClientManager.getClient(key);
+		if (client)
+		{		
+			let lobby = LobbyManager.getLobbyByClient(client);
+			if (lobby)
+			{
+				if (lobby.master.key == key)
+					lobby.removeMaster()
+			}
+		}
+	}
 
 	lobby_master_set(client, master, lobby)
 	{
-		let is_host = lobby.host.key == master.key;
+		let is_host = master ? lobby.host.key == master.key : false;
 		//console.log(client)
 		client.send('lobby_master_set', {
-			master_name: master.name,
+			master_name: master ? master.name : false,
 			is_host: is_host,
 			//etc...
 		})
@@ -525,7 +539,8 @@ module.exports = class SocketSpeaker{
 			"lobby_chat_send_msg" : "lobby_chat_send_msg",
 			"lobby_score_change" : "lobby_score_change",
 			"lobby_become_master" : "lobby_become_master",
-			
+			"stop_be_master" : "stop_be_master",
+
 			"lobby_leave" : "leave_from_lobby",
 			"status" : "status",
 		}

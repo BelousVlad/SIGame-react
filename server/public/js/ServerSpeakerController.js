@@ -96,6 +96,11 @@ class ServerSpeakerController{
 		this.sendWithKey('lobby_leave')
 	}
 
+	stopMaster()
+	{
+		this.sendWithKey('stop_be_master');
+	}
+
 	sendWithKey(action ,msg)
 	{
 		this.speaker.send({action, key: this.key ,data: msg})

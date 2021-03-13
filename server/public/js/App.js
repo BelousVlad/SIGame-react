@@ -211,8 +211,17 @@ class App{
 	setKey (data) { // Установить уникальный ключь
 		Cookie.set("key", data.data);
 	}
-	lobby_created(msg)
+	lobby_create(msg)
 	{
+		//TODO errors list
+		if (msg.data.code == 201)
+		{
+			console.log('good')
+		}
+		else
+		{
+			console.log('not good')
+		}
 		console.log(msg)
 	}
 	lobby_connected(msg)
@@ -223,6 +232,7 @@ class App{
 		let is_host = msg.data.is_host;
 		let is_master = msg.data.is_master;
 		this.lobby = new Lobby(title, max_players, is_host, is_master);
+	
 		if (document.location.pathname != '/lobby')
 		{
 			this.pager.changePage('/lobby')
@@ -255,7 +265,7 @@ class App{
 						max_players: lobby.max_players,
 						is_host: lobby.is_host,
 						is_master: lobby.is_master
-					} }
+					}}
 				)
 			}
 		}
@@ -380,6 +390,15 @@ class App{
 		{
 			this.lobby.setMasterByName(name)
 		}
+		else if (!name)
+		{
+			this.lobby.removeMaster();
+		}
+	}
+
+	stopBeMaster()
+	{
+		this.speakerctrl.stopMaster()
 	}
 
 	refresh_page()

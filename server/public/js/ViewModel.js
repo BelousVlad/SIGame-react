@@ -44,9 +44,44 @@ class ViewModel {
 			<div class="service-player-menu-change-score">Изменить очки</div>
 		`
 
-		let html = players.reduce((t,item) =>
-			t + `
-			<div class="player-box" name="${item.name}">
+		let players__ = []
+
+		for(let item of players)
+		{
+			players__.push(item)
+		}
+		//массив чтобы не изменить изначальный
+
+		let master = undefined;
+		let master_index = players.findIndex( (p) => p.is_master )
+
+		if (master_index != -1)
+		{
+			master = players__.splice(master_index, 1)[0]
+		}
+
+		this.showMaster(master, is_host, is_master)
+
+		let html = players__.reduce((t,item) =>
+			t + this.getPlayerBanner(item, is_host, is_master)
+		,"");
+
+
+		$(".players-container").html(html);
+
+	}
+
+	getPlayerBanner(player, is_host, is_master)
+	{
+		let host_menu = `
+				<div class="service-player-menu-kick">Выгнать</div>
+			`
+		let master_menu = `
+			<div class="service-player-menu-change-score">Изменить очки</div>
+		`
+
+		let html = `
+			<div class="player-box" name="${player.name}">
 				<div class="service-player-menu">
 					${ is_host ? host_menu : '' }
 					${ is_master ? master_menu : '' }
@@ -54,16 +89,35 @@ class ViewModel {
 				<div class="players-box-img-box">
 					<img class="player-box-img">
 				</div>
-				<div class="player-box-name">${item.name}</div>
-				<div class="player-box-score">${item.score}</div>
+				<div class="player-box-name">${player.name}</div>
+				<div class="player-box-score">${player.score}</div>
+			</div>`;
+		return html;
+	}
+
+	getMasterBanner(player, is_host)
+	{
+		let host_menu = `
+			<div class="service-player-menu-kick">Выгнать</div>
+		`
+
+		let html = `
+			<div class="player-box" name="${player.name}">
+				<div class="service-player-menu">
+					${ is_host ? host_menu : '' }
+				</div>
+
+				<div class="players-box-img-box">
+					<img class="player-box-img">
+				</div>
+				<div class="player-box-name">${player.name}</div>
 			</div>
-			`
-		,"");
+		`;
 
-
-		$(".players-container").html(html);
+		return html
 
 	}
+
 	viewPasswordPopup()
 	{
 		return new Promise((resolve, reject) => {
@@ -149,7 +203,6 @@ class ViewModel {
 
 
 		$('.main-canvas').html( html );
-		console.log( round, html, 123);
 	}
 	addChatMessage(message)
 	{
@@ -162,35 +215,22 @@ class ViewModel {
 		`)
 	}
 
-	showMaster(master, is_host)
+	getStopMasterButton()
+	{
+		return `<div class="stop-master-btn">Перестать быть ведущим</div>`;
+	}
+
+	showMaster(master, is_host, is_master)
 	{
 		if (master)
 		{
-			let host_menu = `
-				<div class="service-player-menu-kick">Выгнать</div>
-			`
-			let master_menu = `
-				<div class="service-player-menu-change-score">Изменить очки</div>
-			`
-
-			let html = `
-				<div class="player-box" name="${itemasterm.name}">
-					<div class="service-player-menu">
-						${ is_host ? host_menu : '' }
-						${ is_master ? master_menu : '' }
-					</div>
-
-					<div class="players-box-img-box">
-						<img class="player-box-img">
-					</div>
-					<div class="player-box-name">${master.name}</div>
-					<div class="player-box-score">${master.score}</div>
-				</div>
-				`;
-
+			let html = this.getMasterBanner(master, is_host)
+			if (is_master)
+			{
+				html+= this.getStopMasterButton();
+			}
 
 			$(".lobby-master-box").html(html);
-
 		}
 		else
 		{

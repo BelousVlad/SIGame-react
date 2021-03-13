@@ -120,6 +120,10 @@ class LobbyManager{
 	{
 		return 403
 	}
+	get LOBBY_NAME_ALREADY_EXIST()
+	{
+		return 405
+	}
 }
 
 const manager = new LobbyManager();

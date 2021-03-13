@@ -6,7 +6,7 @@ class Router{
 			"set_key" : "setKey",
 			"update_name" : "updateName",
 			"status" : "updateStatus",
-			"lobby_created" : "lobby_created",
+			"lobby_create" : "lobby_create",
 			"lobby_connected" : "lobby_connected",
 			"lobby_list" : "lobby_list",
 			"lobby_players" : "updateLobbyPlayers",
@@ -22,7 +22,7 @@ class Router{
 			"display_error" : "displayError",
 
 			"refresh_page" : "refresh_page",
-			
+
 			"name_set_failed" : "nameSetFailed",
 			"lobby_create_failed" : "lobbyCreateFailed",
 			"avatar_set_succeed" : "avatarSetSucceed",

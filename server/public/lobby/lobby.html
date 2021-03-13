@@ -77,6 +77,12 @@
 
 	});
 
+	$(document).on('click','.stop-master-btn',function(e){
+
+		app.stopBeMaster();
+
+	});
+
 	$(document).on('click','.service-player-menu-change-score',function(e){
 
 		let name = $(event.target).parent().parent().attr("name");

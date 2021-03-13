@@ -45,6 +45,7 @@ class Lobby{
 			{
 				player.is_master = false;
 			}
+			
 		}
 		if (name == app.client_name)
 		{
@@ -56,6 +57,15 @@ class Lobby{
 		}
 
 		app.view_model.viewPlayers(this.players_, this.is_host, this.is_master)
+	}
+
+	removeMaster()
+	{
+		for(let player of this.players_)
+		{
+			player.is_master = false;
+		}
+		app.view_model.viewPlayers(this.players_, this.is_host, this.is_master)	
 	}
 
 	changeScore(player, score)

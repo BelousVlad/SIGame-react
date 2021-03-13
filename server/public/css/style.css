@@ -232,9 +232,9 @@ input[name=chat_send_btn] {
 .players-container{
   width: 100%;
   height: 200px;
+  border: 1px solid #000;
 }
 .player-box{
-  height: 100%;
   width: 150px;
 }
 .players-box-img-box{
@@ -250,4 +250,19 @@ input[name=chat_send_btn] {
   text-align: center;
   font-size: 15px;
   width: 100%;
+}
+.become-master-btn{
+  border: 1px solid #000;
+  padding: 5px 10px;
+}
+.become-master-btn:hover{
+  background: #000;
+}
+.stop-master-btn{
+  border: 1px solid #000;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+.stop-master-btn:hover{
+  background: #000;
 }
