@@ -190,7 +190,7 @@
 }
 .lobby-master-box{
   width: 240px;
-  height: 400px;
+  height: 100%;
   border: 1px solid blue;
 }
 .lobby-chat-box{
@@ -204,7 +204,7 @@
 
 }
 .lobby-chat{
-  height: 350px;
+  height: calc(100% - 50px);
   overflow-y: auto;
 }
 .lobby-chat-input-container{
@@ -265,4 +265,31 @@ input[name=chat_send_btn] {
 }
 .stop-master-btn:hover{
   background: #000;
+}
+.paragraph{
+  height: 100%;
+  border: 1px solid green;
+  flex-grow: 1;
+  margin: 0px 0px;
+  text-align: center; 
+}
+.main-canvas-paragraph-container{
+  width: 100%;
+  height: 30px;
+  display: flex;justify-content: space-around;
+}
+.lobby-main-canvas-box{
+  width: 100%;
+  height: 100%;
+}
+.main-canvas{
+  height: calc(100% - 30px);
+  width: 100%;
+  border: 1px solid red; 
+}
+.game-container{
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  height: 50vh;
 }

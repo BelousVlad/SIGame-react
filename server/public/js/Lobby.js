@@ -6,6 +6,10 @@ class Lobby{
 		this.players_ = [];
 		this.is_host = is_host;
 		this.is_master = is_master;
+
+		app.view_model.addLobbyInfoField('title', { title: 'Назва', value: title } );
+		app.view_model.addLobbyInfoField('max_players', { title: 'Кількість гравців', value: max_players } );
+		app.view_model.showMainParagraph();
 	}
 
 	set players(players)

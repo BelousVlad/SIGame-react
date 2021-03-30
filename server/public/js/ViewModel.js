@@ -1,7 +1,7 @@
 class ViewModel {
 	constructor()
 	{
-		
+		this.lobby_info = {};
 	}
 
 	viewLoader()
@@ -249,4 +249,44 @@ class ViewModel {
 		console.log('-----\n'.repeat(3), err );
 	}
 
+	showMainParagraph(is_game_started)
+	{
+		if (is_game_started)
+		{
+			//TODO: hz
+		}
+		else
+		{
+			let html = this.getLobbyInfoView();
+			//console.log(html)
+			$('.main-canvas').html(html);
+		}
+	}
+
+	getLobbyInfoView()
+	{
+		if (!this.lobby_info)
+			return null;
+
+		let items = '';
+		for(let item in this.lobby_info)
+		{
+			items += `
+			<div class="lobby-info-field">
+				<span class="lobby-info-field-title">${this.lobby_info[item].title}</span>
+				<span class="lobby-info-field-value">${this.lobby_info[item].value}</span>
+			</div>`
+		}
+
+		return `<div class="lobby-info-fields-container">${items}</div>`;
+	}
+
+	addLobbyInfoField(field, value)
+	{
+		this.lobby_info[field] = value;
+	}
+	removeLobbyField(field)
+	{
+		delete this.lobby_info[field];
+	}
 }
