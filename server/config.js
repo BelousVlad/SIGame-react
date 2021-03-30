@@ -1,6 +1,5 @@
 const path = require('path');
 
-
 module.exports = ( {
 	// PATHS
 	helperClassPath : path.join( __dirname, 'helper.js'),
@@ -17,4 +16,4 @@ module.exports = ( {
 	avatarDirPath : path.join ( __dirname, 'avatars' ),
 	baseAvatarCode : 'baseAvatar.jpg',
 	baseAvatarPath : path.join(__dirname, 'avatars', 'baseAvatar.jpg' ),
-} );
+});

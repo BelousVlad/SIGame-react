@@ -21,23 +21,23 @@ class Lobby {
 		this.scores = {}
 		this.host = undefined;
 		this.master = undefined;
+
+		this.config = Lobby.defaultConfig;
 		this.game = undefined;
 
-		const conf_sym = Symbol('configuration');
-
-		this[conf_sym] = Lobby.defaultConfig; /*default value initilize*/
-
-		Object.defineProperty(this, 'configuration', { /*get, set initilize */
-			get : () => { return this[conf_sym] },
-			set : ( newValue ) => {
-				/*TODO validation*/
-				let conf = {...this.defaultConfig, ...newValue};
-				this[conf_sym] = conf;
-			},
-		})
-
 		this.chat = new Chat(this);
+	}
 
+	get configuration()
+	{
+		return this.config;
+	}
+
+	set configuration(val)
+	{
+		/*TODO validation*/
+		let conf = {...this.defaultConfig, ...newValue};
+		this[conf_sym] = conf;
 	}
 
 	getClientByName(clientName)
