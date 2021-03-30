@@ -1,5 +1,6 @@
 const fs = require('fs'),
-	  parseStringToXML = require('xml2js').parseString
+	  parseStringToXML = require('xml2js').parseString,
+	  Timer = require('../experimental_code.js')
 
 class Question{
 	constructor( theme, index ){
@@ -106,6 +107,63 @@ class Game {
 	displayQuestion() {
 		console.log( this.current.question );
 	}
+}
+
+
+
+
+class Game1 {
+
+	static defaultState = {
+		//
+	}
+
+	constructor() {
+		this.initalize();
+
+	}
+
+	initilize() {
+		this.initState();
+		this.initEvents();
+		this.timer = new Timer(this);
+		this.state = Game1.defaultState;
+		this.waitForRoundLoad();
+	}
+
+	initActions() {
+		this['round_load_end'] = function(from_who, data, /*optional*/, to_who /*receiver*/) {
+			//
+		}
+		this['player_select_question'] = function(from_who, data, /*optional*/, to_who /*receiver*/) {
+			//
+		}
+		//...
+	}
+
+	initEvents() {
+		this.waitForRoundLoad = function() {
+			// MODIFY
+			this.state;
+			this.timer.addTimer( function(){/* do if each players doesn't unser doNextStage()*/}, this.configuration.timeToWaitRoundLoad )
+			funciton collectUserInputs() {
+				players = this.lobby.playersCount;
+				this.onUserPackLoadEnd = function() {
+					players--;
+					if (players === 0) {
+						this.timer.removeTimer(/*certain id*/);
+						this.waitForPlayerQuestion()
+					}
+				}
+			}
+		}
+		this.waitForPlayerQuestion = function() {
+			//MODIFY
+			this.state;
+			this.t
+		}
+	}
+
 }
 
 module.exports = Game;
