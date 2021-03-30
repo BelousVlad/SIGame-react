@@ -196,3 +196,5 @@ class Timer {
 // 	timer.setLeftTime(2000);
 // 	console.log(timer.getLeftTime());
 // }, 1000)
+
+module.exports = Timer;
