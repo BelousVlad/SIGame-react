@@ -163,7 +163,6 @@ class Game1 {
 			this.t
 		}
 	}
-
 }
 
 module.exports = Game;

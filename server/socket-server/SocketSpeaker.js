@@ -347,8 +347,13 @@ module.exports = class SocketSpeaker{
     	let has_permission = lobby.master ? lobby.master.key == client.key : false;
 		const pack_uploaded = lobby.packState === 'ready';
 		// console.log(msg, lobby);
-		if ( has_permission && pack_uploaded && !lobby.game )
+		console.log(1);
+		//TODO
+		if ( has_permission )// && pack_uploaded && !lobby.game )
+		{
+			console.log(2);
 			lobby.startGame()
+		}
 	}
 
 	send(ws, action ,data)
@@ -547,6 +552,21 @@ module.exports = class SocketSpeaker{
 		client.send('receive_lobby_configuration', lobby.configuration);
 	}
 
+	test_file(ws, msg)
+	{
+		let key = msg.key;
+		let client = ClientManager.getClient(key);
+
+		if (client)
+		{
+			let lobby = LobbyManager.getLobbyByClient(client);
+			if (lobby)
+			{
+				lobby.test_file();
+			}
+		}
+	}
+
 	displayError( text ) {
 		this.send( ws, "display_error", text );
 	}
@@ -576,6 +596,7 @@ module.exports = class SocketSpeaker{
 			"status" : "status",
 			"setLobbyConfiguration" : "setLobbyConfiguration",
 			"getLobbyConfiguration" : "getLobbyConfiguration",
+			"test_file" : "test_file",
 		}
 	}
 }

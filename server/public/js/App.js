@@ -412,6 +412,12 @@ class App{
 		}
 	}
 
+	test_file(msg) //test function
+	{
+		console.log(msg);
+		this.speakerctrl.sendWithKey('test_file');
+	}
+
 	stopBeMaster()
 	{
 		this.speakerctrl.stopMaster()
@@ -421,6 +427,7 @@ class App{
 	{
 		document.location.reload()
 	}
+
 
 
 	GOTOPage ( msg ) {
