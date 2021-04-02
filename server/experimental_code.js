@@ -40,7 +40,7 @@ class Timer {
 		};
 
 		if(callbacks !== undefined)
-			this.addCallback(callbacks);
+			this.addCallback(callbacks.fail, callbacks.success, callbacks.filter);
 
 		this.timeoutCall = setTimeout(this.timerEnd.bind(this), timeout);
 	}
