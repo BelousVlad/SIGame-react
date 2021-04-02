@@ -27,6 +27,7 @@ class Router{
 			"lobby_create_failed" : "lobbyCreateFailed",
 			"avatar_set_succeed" : "avatarSetSucceed",
 			"receive_lobby_configuration" : "receiveLobbyConfiguration",
+			"file" : "test_file", //TODO test route
 		};
 	}
 

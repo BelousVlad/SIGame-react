@@ -1,7 +1,8 @@
 const WebSocket = require('ws');
 const event = require('events');
 const ClientManager = require('../ClientManager');
-const Game = require('../Game');
+const Game = require('./Game/Game');
+const GameFactory = require('./Game/GameFactory');
 const Chat = require('./Chat/Chat');
 const fs = require('fs');
 
@@ -13,7 +14,6 @@ class Lobby {
 
 	constructor(title, max_p, password)
 	{
-
 		this.clients = new Object();
 		this.max_players = max_p ;
 		this.title = title ;
@@ -63,6 +63,14 @@ class Lobby {
 			return true;
 		}
 		return false;
+	}
+
+	sendForClients(action, data)
+	{
+		for(let item in this.clients)
+		{
+			this.clients[item].send(action, data) //TODO
+		}
 	}
 
 	getClient(client)
@@ -178,9 +186,19 @@ class Lobby {
 
 	startGame()
 	{
-		this.game = new Game(this);
+		console.log(3);
+		let factory = GameFactory.createInstance();		
+
+		this.game = factory.createGame(this.config, this);
+		console.log(4);
+		this.game.start();
 
 		this.emit('lobby_game_start');
+	}
+
+	test_file(args)//test function
+	{
+		this.game.file_sended(args);
 	}
 
 	uploadPackStart()
