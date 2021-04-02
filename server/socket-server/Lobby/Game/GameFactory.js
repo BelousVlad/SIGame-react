@@ -1,7 +1,7 @@
 const BasicFileLoader = require('./GameModules/FileLoader/BasicFileLoader');
 const Game = require('./Game');
 
-class GameFactory{
+class GameFactory {
 
 	static createInstance()
 	{
@@ -16,7 +16,7 @@ class GameFactory{
 		game.setFileLoaderModule(file_module);
 
 		return game;
-	} 
+	}
 
 }
 
