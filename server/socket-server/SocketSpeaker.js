@@ -567,6 +567,21 @@ module.exports = class SocketSpeaker{
 		}
 	}
 
+	question_choosed(ws, msg)
+	{
+		let key = msg.key;
+		let client = ClientManager.getClient(key);
+
+		if (client)
+		{
+			let lobby = LobbyManager.getLobbyByClient(client);
+			if (lobby)
+			{
+				lobby.game.questionChoosed(client)
+			}
+		}
+	}
+
 	displayError( text ) {
 		this.send( ws, "display_error", text );
 	}
@@ -597,6 +612,7 @@ module.exports = class SocketSpeaker{
 			"setLobbyConfiguration" : "setLobbyConfiguration",
 			"getLobbyConfiguration" : "getLobbyConfiguration",
 			"test_file" : "test_file",
+			"choose_question" : "question_choosed"
 		}
 	}
 }

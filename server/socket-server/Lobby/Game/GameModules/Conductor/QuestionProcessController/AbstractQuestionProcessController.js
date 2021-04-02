@@ -12,3 +12,5 @@ class AbstractQuestionProcessController extends GameModule {
 	}
 
 }
+
+module.exports = AbstractQuestionProcessController;

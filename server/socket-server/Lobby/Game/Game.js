@@ -27,9 +27,7 @@ class Game {
 
 	start()
 	{
-		console.log(5);
-
-		this.loadFile('test_file');
+		this.conductor.turn();
 	}
 
 	file_sended(args)
@@ -39,7 +37,7 @@ class Game {
 
 	questionChoosed(client, question)
 	{
-		this.emit('question-choosed', cleint, question);
+		this.emit('question-choosed', client, question);
 	}
 
 }

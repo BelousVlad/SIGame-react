@@ -18,3 +18,5 @@ class BasicQuestionPutter extends AbstractQuestionPutter {
 	}
 
 }
+
+module.exports = AbstractQuestionPutter;

@@ -6,3 +6,5 @@ class QuestionPutter extends GameModule {
 		super(lobby, game);
 	}
 }
+
+module.exports = QuestionPutter;

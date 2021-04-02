@@ -12,3 +12,5 @@ class AbstractConductor extends GameModule {
 	}
 
 }
+
+module.exports = AbstractConductor;
