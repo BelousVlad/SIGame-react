@@ -16,4 +16,5 @@ module.exports = ( {
 	avatarDirPath : path.join ( __dirname, 'avatars' ),
 	baseAvatarCode : 'baseAvatar.jpg',
 	baseAvatarPath : path.join(__dirname, 'avatars', 'baseAvatar.jpg' ),
+	timerPath : path.join(__dirname, 'experimental_code.js'),
 });
