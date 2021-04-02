@@ -1,4 +1,4 @@
-const asyncFunctionConstructor = ( (async ()=>{}).constructor ); // get async construcotr to check if function is async or not
+const asyncFunctionConstructor = ( (Object.getPrototypeOf(async ()=>{})).constructor ); // get async construcotr to check if function is async or not
 
 class CallbackObject {
 	constructor(fail, success, filter) {
@@ -124,7 +124,7 @@ class Timer {
 				condition ? item.success(...args_) : item.fail(...args_); // if-else short checking
 			})
 		}
-		else if (typeof condition === 'function')
+		else if (typeof condition === 'function' && condition.constructor !== asyncFunctionConstructor)
 		{
 			this.lastInvokeResult = this.callbackList.map(item => {
 				condition(item) ? item.success(...args_) : item.fail(...args_); // if-else short checking
@@ -146,14 +146,14 @@ class Timer {
 			return;
 		}
 
-		const callback = {
+		const callback = [
 			fail,
 			success,
-		};
+		];
 		if (filter !== undefined)
-			callback.filter = filter;
+			callback[2] = filter;
 
-		const callbackObj = new CallbackObject(...Object.values(callback));
+		const callbackObj = new CallbackObject(...callback);
 
 		this.callbackList.push(callbackObj);
 
