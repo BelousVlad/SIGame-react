@@ -3,7 +3,7 @@ const BasicConductor = require('./GameModules/Conductor/BasicConductor');
 const BasicQuestionPutter = require('./GameModules/QuestionPutter/BasicQuestionPutter');
 const Game = require('./Game');
 
-class GameFactory {
+class GameINTIALIZER {
 
 	static createInstance()
 	{
