@@ -12,6 +12,14 @@ class BasicConductor extends AbstractConductor {
 		this.game.addListener('question-choosed',this.questionChoosed.bind(this))
 		this.timer = {};
 		this.status = 0;
+
+		this.game.registerModuleMessage('test_module_msg', this, this.test_module_msg);
+
+	}
+
+	test_module_msg(ws, msg)
+	{
+		console.log(msg);
 	}
 
 	//override

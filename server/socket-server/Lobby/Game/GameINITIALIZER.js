@@ -3,11 +3,11 @@ const BasicConductor = require('./GameModules/Conductor/BasicConductor');
 const BasicQuestionPutter = require('./GameModules/QuestionPutter/BasicQuestionPutter');
 const Game = require('./Game');
 
-class GameINTIALIZER {
+class GameInitializer {
 
 	static createInstance()
 	{
-		return new GameFactory();
+		return new GameInitializer();
 	}
 
 	createGame(config, lobby)
@@ -24,4 +24,4 @@ class GameINTIALIZER {
 
 }
 
-module.exports = GameFactory;
+module.exports = GameInitializer;

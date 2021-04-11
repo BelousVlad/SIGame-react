@@ -172,7 +172,7 @@ class App{
 //  ---------------- ** ----
 //
 
-	getClients(){
+	getClients() {
 		this.speakerctrl.getClients();
 	}
 
@@ -311,7 +311,7 @@ class App{
 	}
 
 	getLobbyConfiguration() {
-	this.speakerctrl.getLobbyConfiguration();
+		this.speakerctrl.getLobbyConfiguration();
 	}
 
 	receiveLobbyConfiguration(msg) {

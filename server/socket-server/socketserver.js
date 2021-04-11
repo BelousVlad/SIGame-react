@@ -15,7 +15,6 @@ module.exports = class SocketServerW{
 		this.server = new WebSocket.Server({ port : 3001 });
 		this.initServer();
 		this.app = app;
-		this.lobbies = [];
 		this.speaker = new SocketSpeaker();
 		console.log(chalk.yellow('socket-server started.'));
 	}

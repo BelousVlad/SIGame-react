@@ -2,7 +2,7 @@ const WebSocket = require('ws');
 const event = require('events');
 const ClientManager = require('../ClientManager');
 const Game = require('./Game/Game');
-const GameFactory = require('./Game/GameFactory');
+const GameInitializer = require('./Game/GameInitializer');
 const Chat = require('./Chat/Chat');
 const fs = require('fs');
 
@@ -187,7 +187,7 @@ class Lobby {
 	startGame()
 	{
 		console.log(3);
-		let factory = GameFactory.createInstance();		
+		let factory = GameInitializer.createInstance();		
 
 		this.game = factory.createGame(this.config, this);
 		console.log(4);

@@ -7,6 +7,8 @@ class Game {
 		this.files_loader = files_loader //TODO
 		this.question_putter = question_putter //TODO
 		this.conductor = conductor //TODO
+
+		this.regsitered_messages = [];
 	}
 
 	setFileLoaderModule(value)
@@ -16,7 +18,7 @@ class Game {
 
 	loadFile(file) //TODO
 	{
-		console.log(6);
+		console.log(6);	
 
 		return this.files_loader.loadToClientsFile(file)
 		.then(() => {
@@ -39,6 +41,24 @@ class Game {
 	{
 		this.emit('question-choosed', client, question);
 	}
+
+	registerModuleMessage(action_message, module, func)
+	{
+		this.regsitered_messages.push({ message: action_message, module, function: func });
+	}
+
+	moduleMessage(ws, msg)
+	{
+		let action = msg.data.action_module;
+
+		for(let message of this.regsitered_messages)
+		{
+			if (message.message === action)
+				message.function.bind(message.module)(ws, msg);
+		}
+	}
+
+
 
 }
 
