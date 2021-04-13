@@ -1,9 +1,13 @@
-class IFileLoader{
+const requireFromUrl = require('require-from-url/sync');
+const Interface = requireFromUrl(config.interfaceClassPath);
 
-	loadToClientsFile()
-	{
-		throw 'need to implements loadToClientsFile';
+class IFileLoader extends Interface {
+
+	constructor(...args) {
+		super(...args);
 	}
+
+	loadToClientsFile;
 
 }
 
