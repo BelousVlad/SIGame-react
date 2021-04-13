@@ -11,10 +11,11 @@ class BasicConductor extends AbstractConductor {
 		this.QestionProcessController = new StandartQestionProcessController();
 		this.game.addListener('question-choosed',this.questionChoosed.bind(this))
 		this.timer = {};
-		this.status = 0;
-
+		this.status = 'choice_question';
+		this.last_choiced_player_key = Object.keys(this.lobby.players)[0];
 		this.game.registerModuleMessage('test_module_msg', this, this.test_module_msg);
 
+		this.choose_question_time = 3000;
 	}
 
 	test_module_msg(ws, msg)
@@ -25,50 +26,17 @@ class BasicConductor extends AbstractConductor {
 	//override
 	turn()
 	{
-		if (this.test == 0)
-		{
-			let client;
-			for(let cl in this.lobby.clients) //Просто побыстрому получаем любого клиента
-			{
-				client = this.lobby.clients[cl];
-				break;
-			}
-
-			let time = 15000;
-
-			this.status = 'wait';
-
-			this.timer = new Timer(time, { fail: (e) => {
-
-					this.status = 0;
-					let question = { text: 'fail - random question' };
-					this.startQuestionProcess(question);
-
-				}, success:  (e) => {
-
-					this.status = 0;
-					let question = { text: 'success - normal question' };
-					this.startQuestionProcess(question);
-
-				}, filter: (e) => this.status !== 'wait'}
-			)
-			console.log(this.timer);
-
-			client.send('choose_question', { time } );
+		if (this.status == 'choice_question') {
+			
 		}
 	}
 
 	questionChoosed(client, question)
 	{
-		//console.log(this)
-		//console.log(this.timer)
-
-		if (this.status == 'wait') 
+		if (this.status == 'wait_for_choose_question') 
 		{
 			this.timer.forceSuccess();
 		}
-		else
-			this.timer.forceFail();
 	}
 
 	startQuestionProcess(question)
@@ -76,6 +44,71 @@ class BasicConductor extends AbstractConductor {
 		this.QestionProcessController.startQuestion(question);
 	}
 
+	chooseQuestion()
+	{
+		let player = this.getQueueQuestionPlayer();
+
+		this.requireChooceQuestion(player);
+
+	}
+
+	requireChooceQuestion(player)
+	{
+
+		let time = this.choose_question_time;
+		player.send('choose_question', { time: time });
+		this.status = 'wait_for_choose_question';
+
+		this.timer = new Timer(time, { 
+			fail: (e) => {
+				this.status = 0;
+
+
+
+				let question = { text: 'fail - normal question' }; //TODO GET random question
+				this.startQuestionProcess(question);
+
+			}, success:  (e) => {
+
+				this.status = 0;
+				let question = { text: 'success - normal question' };
+				this.startQuestionProcess(question);
+
+			}, filter: (e) => this.status !== 'wait'}
+		)
+
+	}
+
+	getQueueQuestionPlayer() // метод для получения игрока которого очередь отвечать
+	{
+		let keys = Object.keys(this.lobby.players);
+		let last_key_index = keys.indexOf(this.last_choiced_player_key);
+
+		let index = last_key_index++;
+		let player = this.lobby.players[keys[index]];
+
+		let master_key = this.lobby.master.key;
+
+		if (player) {
+			if (player.key == master_key) {
+				this.last_choiced_player_key = master_key;
+				return this.getQueueQuestionPlayer();
+			}
+			this.last_choiced_player_key = player.key;
+			return player;
+		}
+		else {
+			if (this.lobby.player[keys[0]].key == master_key)
+			{
+				player = this.lobby.player[keys[1]];
+				this.last_choiced_player_key = player.key;
+				return this.lobby.player[keys[1]];
+			}
+			player = this.lobby.player[keys[0]];
+			this.last_choiced_player_key = player.key;
+			return this.lobby.player[keys[0]];
+		}
+	}
 }
 
 module.exports = BasicConductor;

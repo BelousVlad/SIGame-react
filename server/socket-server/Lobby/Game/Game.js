@@ -47,6 +47,11 @@ class Game {
 		this.regsitered_messages.push({ message: action_message, module, function: func });
 	}
 
+	getPackController()
+	{
+		return this.pack_controller;
+	}
+
 	moduleMessage(ws, msg)
 	{
 		let action = msg.data.action_module;
