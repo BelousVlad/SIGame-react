@@ -2,12 +2,8 @@
 const event = require('events');
 
 class Game {
-	constructor(conductor, files_loader, question_putter)
+	constructor()
 	{
-		this.files_loader = files_loader //TODO
-		this.question_putter = question_putter //TODO
-		this.conductor = conductor //TODO
-
 		this.regsitered_messages = [];
 	}
 
@@ -18,7 +14,7 @@ class Game {
 
 	loadFile(file) //TODO
 	{
-		console.log(6);	
+		console.log(6);
 
 		return this.files_loader.loadToClientsFile(file)
 		.then(() => {
