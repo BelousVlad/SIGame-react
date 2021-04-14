@@ -1,7 +1,7 @@
 class SIAtom
 {
 	constructor(XMLAtom) {
-		this.type = XMLAtom.type;
+		this.type = (XMLAtom);
 		this.value = XMLAtom._;
 	}
 }
