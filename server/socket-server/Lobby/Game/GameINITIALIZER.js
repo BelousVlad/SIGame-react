@@ -18,6 +18,7 @@ class GameInitializer {
 		game.setFileLoaderModule(file_module);
 		game.conductor = new BasicConductor(lobby, game);
 		game.question_putter = new BasicQuestionPutter(lobby, game);
+		game.pack_controller = null // new BasicPackController(lobby, game); TODO packctrl
 
 		return game;
 	}
