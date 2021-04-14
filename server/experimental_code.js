@@ -197,4 +197,8 @@ class Timer {
 // 	console.log(timer.getLeftTime());
 // }, 1000)
 
+//mess
+// const {parseString} = require('xml2js');
+// parseString(`<hello href="abc"><auf>rrr</auf>world</hello>`, (err, res) => console.log(res));
+
 module.exports = Timer;
