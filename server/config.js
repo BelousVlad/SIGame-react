@@ -17,5 +17,6 @@ module.exports = ( {
 	baseAvatarCode : 'baseAvatar.jpg',
 	baseAvatarPath : path.join(__dirname, 'avatars', 'baseAvatar.jpg' ),
 	timerPath : path.join(__dirname, 'experimental_code.js'),
+	packReaderPath : path.join(__dirname, 'socket-server', 'PackReader', 'PackReader.js'),
 	interfaceClassPath : `https://raw.githubusercontent.com/ynoplanetashka1/cookbook-js/main/interface.js`,
 });

@@ -1,6 +1,6 @@
 const fs = require('fs'),
 	  parseStringToXML = require('xml2js').parseString,
-	  SIPackage = require('../../../SIPackClasses/SIPackage.js');
+	  SIPackage = require('../Lobby/Game/SIPackClasses/SIPackage.js');
 
 class PackReader //static class
 {
@@ -32,8 +32,5 @@ class PackReader //static class
 		return this.getRound(package_, roundIndex).questionList[questionIndex].scenarioList[0].atomList[0];
 	}
 }
-
-var pr = new PackReader;
-pr.getPackFromFolder(`D:\\open server\\OpenServer\\domains\\sigame\\server\\si-packs\\pack1`).then(res => console.log(res.roundList[0].themeList[0].questionList[0].scenarioList[0].atomList[0].type));
 
 module.exports = new PackReader;

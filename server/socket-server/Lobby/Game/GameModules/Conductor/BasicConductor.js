@@ -12,7 +12,7 @@ class BasicConductor extends AbstractConductor {
 		this.game.addListener('question-choosed',this.questionChoosed.bind(this))
 		this.timer = {};
 		this.status = 'choice_question';
-		this.last_choiced_player_key = Object.keys(this.lobby.players)[0];
+		this.last_choiced_player_key = Object.keys(this.lobby.clients)[0];
 		this.game.registerModuleMessage('test_module_msg', this, this.test_module_msg);
 
 		this.choose_question_time = 3000;
@@ -81,11 +81,11 @@ class BasicConductor extends AbstractConductor {
 
 	getQueueQuestionPlayer() // метод для получения игрока которого очередь отвечать
 	{
-		let keys = Object.keys(this.lobby.players);
+		let keys = Object.keys(this.lobby.clients);
 		let last_key_index = keys.indexOf(this.last_choiced_player_key);
 
 		let index = last_key_index++;
-		let player = this.lobby.players[keys[index]];
+		let player = this.lobby.clients[keys[index]];
 
 		let master_key = this.lobby.master.key;
 
@@ -98,15 +98,15 @@ class BasicConductor extends AbstractConductor {
 			return player;
 		}
 		else {
-			if (this.lobby.player[keys[0]].key == master_key)
+			if (this.lobby.clients[keys[0]].key == master_key)
 			{
-				player = this.lobby.player[keys[1]];
+				player = this.lobby.clients[keys[1]];
 				this.last_choiced_player_key = player.key;
-				return this.lobby.player[keys[1]];
+				return this.lobby.clients[keys[1]];
 			}
-			player = this.lobby.player[keys[0]];
+			player = this.lobby.clients[keys[0]];
 			this.last_choiced_player_key = player.key;
-			return this.lobby.player[keys[0]];
+			return this.lobby.clients[keys[0]];
 		}
 	}
 }

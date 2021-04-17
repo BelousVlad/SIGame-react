@@ -5,12 +5,15 @@ const Game = require('./Game/Game');
 const GameInitializer = require('./Game/GameInitializer');
 const Chat = require('./Chat/Chat');
 const fs = require('fs');
+const config = require('../../config.js')
+const PackReader = require(config.packReaderPath);
 
 
 class Lobby {
 
 	packFolder = new Object();
 	packState = 'none'; // состояния в котором может находиться пак. предполагается 3 варианта : none, uploading, ready;
+	pack = {};
 
 	constructor(title, max_p, password)
 	{
@@ -186,14 +189,19 @@ class Lobby {
 
 	startGame()
 	{
-		console.log(3);
-		let factory = GameInitializer.createInstance();		
+		console.log(this.pack);
+		if (this.packState === 'ready')
+		{
+			console.log('pack ready')
+			
+			let factory = GameInitializer.createInstance();		
 
-		this.game = factory.createGame(this.config, this);
-		console.log(4);
-		this.game.start();
+			this.game = factory.createGame(this.config, this);
 
-		this.emit('lobby_game_start');
+			this.game.start();
+
+			this.emit('lobby_game_start');
+		}
 	}
 
 	test_file(args)//test function
@@ -212,7 +220,13 @@ class Lobby {
 
 	uploadPackEnd()
 	{
-		this.packState = 'ready';
+
+		PackReader.getPackFromFolder(this.packFolder)
+		.then((pack) => {
+			this.pack = pack;
+			this.packState = 'ready';
+		})
+
 	}
 
 	static get CLIENT_CONNECT_TO_LOBBY_OK()
