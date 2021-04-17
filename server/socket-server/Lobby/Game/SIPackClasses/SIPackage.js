@@ -8,8 +8,8 @@ class SIPackage
 		//fields like name, date, etc...
 		Object.assign(this, XMLPackage.$);
 
-		this.info = new SIInfo( XMLPackage.info[0] );
-		this.roundList = XMLPackage.rounds[0].round.map( item => new SIRound(item) );
+		this.info = new SIInfo( XMLPackage.info[0], this );
+		this.roundList = XMLPackage.rounds[0].round.map( item => new SIRound(item), this );
 	}
 }
 
