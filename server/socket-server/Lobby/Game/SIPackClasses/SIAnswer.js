@@ -1,6 +1,7 @@
 class SIAnswer
 {
-	constructor(XMLAnswer) {
+	constructor(XMLAnswer, right_) {
+		this.right = right_;
 		this.value = XMLAnswer._;
 	}
 }
