@@ -56,14 +56,14 @@ class Timer {
 		return this.timerEnd();
 	}
 
-	forceFail() {
+	forceFail(...args) {
 		this.die();
-		return this.eachCallback(false);
+		return this.eachCallback(false,...args);
 	}
 
-	forceSuccess() {
+	forceSuccess(...args) {
 		this.die();
-		return this.eachCallback(true);
+		return this.eachCallback(true, ...args);
 	}
 
 	// ---

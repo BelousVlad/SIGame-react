@@ -1,10 +1,12 @@
 //TODO
 const event = require('events');
+const GameData = require('./GameData');
 
 class Game {
 	constructor()
 	{
 		this.regsitered_messages = [];
+		this.game_info = new GameData();
 	}
 
 	setFileLoaderModule(value)
@@ -46,6 +48,17 @@ class Game {
 	getPackController()
 	{
 		return this.pack_controller;
+	}
+
+	setPackController(controller)
+	{
+		this.pack_controller = controller;
+		this.game_info.setQuestionUsedByTemplate(controller.getPackgeTemplate());
+	}
+
+	getRandomQuestion()
+	{
+		this.pack_controller.getRandomQuestion( this.game_info.is_question_used );
 	}
 
 	moduleMessage(ws, msg)

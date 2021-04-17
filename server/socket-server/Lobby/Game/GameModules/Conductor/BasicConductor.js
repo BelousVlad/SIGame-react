@@ -27,7 +27,7 @@ class BasicConductor extends AbstractConductor {
 	turn()
 	{
 		if (this.status == 'choice_question') {
-			
+			this.chooseQuestion();
 		}
 	}
 
@@ -35,7 +35,7 @@ class BasicConductor extends AbstractConductor {
 	{
 		if (this.status == 'wait_for_choose_question') 
 		{
-			this.timer.forceSuccess();
+			this.timer.forceSuccess(client, question);
 		}
 	}
 
@@ -62,15 +62,14 @@ class BasicConductor extends AbstractConductor {
 		this.timer = new Timer(time, { 
 			fail: (e) => {
 				this.status = 0;
-
-
-
-				let question = { text: 'fail - normal question' }; //TODO GET random question
+				//let question = { text: 'fail - normal question' }; //TODO GET random question
+				let question = game.getRandomQuestion();
 				this.startQuestionProcess(question);
 
 			}, success:  (e) => {
 
 				this.status = 0;
+
 				let question = { text: 'success - normal question' };
 				this.startQuestionProcess(question);
 
