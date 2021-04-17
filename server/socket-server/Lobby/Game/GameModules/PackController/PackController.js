@@ -8,7 +8,7 @@ class PackController extends GameModule {
 		this.package = package_;
 	}
 
-	getPackageTemplate() {
+	getPackageTemplate(func = (() => null)) {
 		var template_ = new Array();
 
 		for (var i = 0; i < this.package.roundList.length; i++) {
@@ -21,13 +21,19 @@ class PackController extends GameModule {
 
 				for (var k = 0; k < this.package.roundList.themeList.questionList.length; k++) {
 
-					template_[i][j][k] = null;
+					template_[i][j][k] = func(this.package.roundList[i].themeList[j].questionList[k]);
 
 				}
 			}
 		}
 
 		return template_;
+	}
+
+	getPackageTemplateWithPrices() {
+		return this.getPackageTemplate(function(question_) {
+			return question_.price;
+		})
 	}
 
 	getRandomQuestion(questionCheckList, roundIndex) {
