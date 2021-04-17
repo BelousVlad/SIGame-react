@@ -1,0 +1,22 @@
+
+
+<h1> LOBBY PAGE</h1>
+
+<input type="text" name="lobby_title">
+<input type="text" name="lobby_password">
+<input type="number" name="lobby_max" min="3" max="8">
+<input type="button" id="lobby_send" value="create">
+
+<script type="text/javascript">
+	$('#lobby_send').click(function(e){
+
+		let title = $('input[name=lobby_title]').val().trim();
+		let password = $('input[name=lobby_password]').val().trim();
+		let max_players = $('input[name=lobby_max]').val().trim();
+
+		if (title && max_players && max_players >= 3)
+		{
+			app.speakerctrl.createLobby(title , max_players, password)
+		}
+	});
+</script>

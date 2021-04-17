@@ -1,0 +1,143 @@
+<h1>Lobby</h1>
+<div class="container">
+	<div class="master-container"></div>
+	<div class="game-info-container"></div>
+	<div class="chat-container"></div>
+	<input type="file" class="select-pack">select pack</input>
+	<button class="game-start-btn">start</button>
+	<button class="get-round">get round</button>
+	<button class="next-round-btn">next round</button>
+	<button class="previous-round-btn">previous round</button>
+</div>
+<div class="main-canvas">question table</div>
+<div class="container">player-container</div>
+
+
+<section class="lobby-section">
+
+	<div class="game-container">
+		<div class="lobby-master-box">
+
+		</div>
+		<div class="lobby-main-canvas-box">
+			
+			<div class="main-canvas-paragraph-container">
+				<div class="main-paragraph paragraph">
+					Стол
+				</div>
+				<div class="settings-paragraph paragraph">
+					Настройки
+				</div>
+			</div>
+
+			<div class="main-canvas">
+				
+			</div>
+
+
+		</div>
+
+		<div class="lobby-chat-box">
+			<div class="lobby-chat"></div>
+			<div class="lobby-chat-input-container">
+				<input type="text" id="chat_send_text"></input>
+				<input type="button" name="chat_send_btn" value="Chat">
+			</div>
+		</div>
+	</div>
+
+	<div class="players-container">
+
+	<!--
+		<div class="player-box">
+			<div class="players-box-img-box">
+				<img class="player-box-img">
+			</div>
+			<div class="player-box-name"></div>
+			<div class="player-box-score"></div>
+		</div>
+	-->
+	</div>
+
+
+</section>
+
+<script type="text/javascript">
+
+	$("input[name=chat_send_btn]").click(function(e){
+		let text = $('#chat_send_text').val().trim();
+
+		if (text)
+		{
+			app.speakerctrl.sendChatMessage(text);
+		}
+	})
+
+	$('#chat_send_text').on('keypress',function(e) {
+	    if(e.which == 13) {
+	        $("input[name=chat_send_btn]").trigger('click')
+	    }
+	});
+
+	$(document).on('click','.service-player-menu-kick',function(e){
+
+		let name = $(event.target).parent().parent().attr("name");
+		app.kick_player(name);
+
+	});
+
+	$('.main-paragraph').click(function(e){
+
+	})
+
+	$(document).on('click','.become-master-btn',function(e){
+
+		app.becomeMaster();
+
+	});
+
+	$(document).on('click','.stop-master-btn',function(e){
+
+		app.stopBeMaster();
+
+	});
+
+	$(document).on('click','.service-player-menu-change-score',function(e){
+
+		let name = $(event.target).parent().parent().attr("name");
+
+		app.view_model.viewChangeScorePopup().
+			then(function(obj) {
+				let score = obj.score;
+
+				app.lobbyChangePlayerScore(name, score);
+			})
+
+	});
+
+	document.querySelector('.select-pack').onchange = function( file ) {
+		var formData = new FormData(),
+			request = new XMLHttpRequest();
+		formData.append('userfile', document.querySelector('.select-pack').files[0] );
+		formData.append('CustomField', 'test');
+		request.open('POST', 'api/upload/pack');
+		request.send(formData);
+	}
+
+	document.querySelector('.game-start-btn').onclick = function ( ) {
+		app.speakerctrl.startGame();
+	}
+
+	document.querySelector('.get-round').onclick = function ( ) {
+		app.speakerctrl.getRound();
+	}
+
+	document.querySelector('.next-round-btn').onclick = function ( ) {
+		app.speakerctrl.nextRound();
+	}
+
+	document.querySelector('.previous-round-btn').onclick = function ( ) {
+		app.speakerctrl.previousRound();
+	}
+
+</script>

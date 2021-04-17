@@ -1,0 +1,145 @@
+<img alt="error" id="avatar" src="/api/get/avatar"></img>
+<div class="container">
+  <div class="main-menu-container">
+    <button> click </button>
+    <a href="create-lobby" class="main-menu-btn main-menu-play-btn">
+        Play
+    </a>
+     <a href="record" class="main-menu-btn main-menu-play-btn">
+        Records
+    </a>
+     <a href="game/index.php" class="main-menu-btn main-menu-play-btn">
+        Help
+    </a>
+     <a href="game/index.php" class="main-menu-btn main-menu-play-btn">
+        About us
+    </a>
+     <a href="game/index.php" class="main-menu-btn main-menu-play-btn">
+        Exit
+    </a>
+    <a href="avatar_set" class="main-menu-btn main-menu-play-btn">
+        |||change avatar
+    </a>
+  </div>
+</div>
+
+<div class="container">
+    <div class="lobbies-list-refresh-btn">
+        Refresh
+    </div>
+</div>
+<div class="container">
+    <div class="client-log-out-btn">
+        log out
+    </div>
+</div>
+<div class="container">
+    <div class="lobby-list">
+    <!--
+        <div class="lobby-list-item"></div>
+    -->
+    </div>
+</div>
+
+
+
+<script>
+    app.subscribe_once('avatar_update_succeed', function() {
+            // setTimeout( () => {$('#avatar').attr('src', ''); console.log('timeout1'); console.log($('#avatar'))}, 1000);
+        // app.pager.awaitChangeEnd(`http://localhost:3000/`).then( () => {
+            // console.log('avatar updated');
+            awaitElement( '#avatar', {parentNode : document.body } ).then( avatar => {
+
+            //     avatar = $(avatar);
+                console.log('avatar updated');
+                console.log(document.querySelector('#avatar'));
+                (async function () {$(avatar).attr('src', await getAvatarURL( avatar )/*'api/get/avatar?rnd=' + String(Math.ceil(Math.random()*1e8) )*/ ); } ) ();
+            })
+        // });
+    })
+
+    function getAvatarURL( element ) {
+        return fetch('api/get/avatar')
+        .then( async (data) => {
+            return URL.createObjectURL( await data.blob());
+        })
+    }
+
+    $('.lobbies-list-refresh-btn').click(function(e){
+        //console.log('refresh')
+        app.speakerctrl.getLobbyList()
+    })
+
+
+    $('.client-log-out-btn').click(function(e){
+        app.speakerctrl.eraseName();
+    })
+
+    function awaitElement( selector, custom_configuration = {} ) {
+        return new Promise( (resolve, reject) => {
+            if ( typeof custom_configuration !== 'object' ) {
+                reject( 'invalid configuration value (not an object)' );
+                return;
+            }
+            var config = {
+                /* default config value initialize */
+                parentNode : document.body,
+                dispatchIfElementAlreadyExist : true,
+            }
+            Object.assign( config, custom_configuration ); /* use custom_configuration */
+
+            var element = document.querySelector( selector ); /*get object if exist*/
+
+            if ( config.dispatchIfElementAlreadyExist ) {
+                if ( element ) {
+                    resolve(element);
+                    return;
+
+                } else {
+                    setObserver();
+
+                }
+            } else {
+                if ( element ) {
+                    return;
+
+                } else {
+                    setObserver();
+
+                }
+            }
+
+            function setObserver() {
+                var observer = new MutationObserver( mutations => {
+                    for (let i = 0; i < mutations.length; i++) {
+                        for (let j = 0; j < mutations[i].addedNodes.length; j++) {
+                            let node = mutations[i].addedNodes[j];
+                            // console.log(mutations, i, j, node);
+                            if ( node.nodeName === "#text" ) continue;
+                            if (node.matches(selector)) {
+                                observer.disconnect();
+                                resolve( node );
+                            }
+                        }
+                    }
+                } )
+                observer.observe( config.parentNode, { childList : true, subtree: true } );
+            }
+        } )
+    }
+
+// app.fileLoader.createLoadManager( "question-pack" ).bindToElement( document.querySelector("button") );
+//
+// setTimeout( () => {
+// app.speakerctrl.testT({data : "1 seconds sleep", time : 1});
+// app.speakerctrl.testT({data : "5 seconds sleep", time : 5});
+
+
+// app.speakerctrl.testT({data : "10 seconds sleep", time : 10});
+// } , 100 );
+
+// setInterval( () => {console.log("1 second passed")} , 1000 );
+
+</script>
+
+

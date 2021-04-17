@@ -1,0 +1,17 @@
+
+set avatar<br/>
+
+<input type="file" class="select-avatar" value="select avatar"/>
+<a href="/">to main</a>
+
+<script type="text/javascript">
+	document.querySelector('.select-avatar').onchange = function( file ) {
+		var formData = new FormData(),
+			request = new XMLHttpRequest();
+		formData.append('userfile', document.querySelector('.select-avatar').files[0] );
+		formData.append('meta-data', 'client-avatar-upload');
+		request.open('POST', 'api/upload/avatar');
+		request.send(formData);
+	}
+
+</script>

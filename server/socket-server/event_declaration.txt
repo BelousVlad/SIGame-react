@@ -1,0 +1,64 @@
+---Lobby class :
+
+--declared in Lobby.js :
+
+-subscribe :
+.
+
+-emit :
+lobby_client_kicked
+lobby_client_leave
+lobby_client_removed
+lobby_game_start
+lobby_upload_pack_start
+
+--declared in SocketSpeaker.js
+
+-subscribe :
+player_connected
+lobby_client_kicked
+lobby_client_removed
+
+-emit :
+.
+
+--declared in LobbyManager.js :
+
+-subscribe :
+.
+
+-emit :
+die
+
+
+---Client class :
+
+--declared in Lobby.js :
+
+-emit:
+player_connected
+lobby_client_kicked
+lobby_client_leave
+
+--declared in Client.js :
+.
+
+--declared in ClientManager.js :
+.
+
+--declared in Game.js ( maybe will be deleted ) :
+
+-subscribe_once :
+question_received
+client_leave
+
+
+---Chat class :
+
+--declared in Chat.js :
+
+-emit :
+lobby_chat_message_added
+
+--declared in SocketSpeaker.js :
+lobby_chat_message_added
