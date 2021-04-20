@@ -74,9 +74,7 @@ class BasicConductor extends AbstractConductor {
 		player.send('choose_question', { time: time });
 		this.status = 'wait_for_choose_question';
 
-
-
-		this.timer = new Timer(time, { 
+		this.timer = new Timer(time, {
 			fail: (e) => {
 				this.status = 'processing-question;
 				//let question = { text: 'fail - normal question' }; //TODO GET random question
@@ -84,7 +82,6 @@ class BasicConductor extends AbstractConductor {
 				this.startQuestionProcess(question);
 
 			}, success:  (client, question) => {
-
 				this.status = 'processing-question;
 
 				if (client.key === player.key || client.key === lobby.master.key)
@@ -92,6 +89,11 @@ class BasicConductor extends AbstractConductor {
 					let question = { text: 'success - normal question' };
 					this.startQuestionProcess(question);
 				}
+				this.status = 0;
+				let theme_index = question.theme;
+				let question_index = question.question;
+				let question = this.getQuestion(theme_index, question_index);
+				this.startQuestionProcess(question);
 
 			}, filter: (e) => this.status !== 'wait'}
 		)
