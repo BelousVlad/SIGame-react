@@ -35,6 +35,7 @@ class Timer {
 		this.timeStart = Date.now(); // ofc time when function beggin its invoking
 		this.intermediateStartValue = this.timeStart; // intermediate start time value
 		this.callbackList = new Array(); // list of callback-objects
+		this.__isTimerEnd = false;
 		this.state = {
 			pause : false,
 		};
@@ -43,6 +44,10 @@ class Timer {
 			this.addCallback(callbacks.fail, callbacks.success, callbacks.filter);
 
 		this.timeoutCall = setTimeout(this.timerEnd.bind(this), timeout);
+	}
+
+	get isTimerEnd() {
+		return this.__isTimerEnd;
 	}
 
 	// FORCE END OF TIMER
@@ -165,6 +170,7 @@ class Timer {
 	}
 
 	timerEnd() {
+		this.__isTimerEnd = true;
 		this.eachCallback(function(item) {
 			if (item && typeof item.filter === 'function') // async validation done in CallbackObject constructor
 				return item.filter();
