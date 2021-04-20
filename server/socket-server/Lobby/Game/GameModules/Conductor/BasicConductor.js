@@ -11,9 +11,9 @@ class BasicConductor extends AbstractConductor {
 		this.QestionProcessController = new StandartQestionProcessController();
 		this.game.addListener('question-choosed',this.questionChoosed.bind(this))
 		this.timer = {};
-		this.status = 'choice_question';
+		this.status = 'first_turn';
 		this.last_choiced_player_key = Object.keys(this.lobby.clients)[0];
-		this.game.registerModuleMessage('test_module_msg', this, this.test_module_msg);
+		this.game.registerModuleMessage('test_module_msg', this, this.test_module_msg); //TODO delete
 
 		this.choose_question_time = 3000;
 	}
@@ -29,6 +29,21 @@ class BasicConductor extends AbstractConductor {
 		if (this.status == 'choice_question') {
 			this.chooseQuestion();
 		}
+		else if (this.status == 'first_turn')
+		{
+			this.turn();
+		}
+	}
+
+	nextRound()
+	{
+		this.game.game_data.current_round++;
+		this.sendRound();
+	}
+
+	sendRound(round)
+	{
+		this.game.sendRoundInfo();
 	}
 
 	questionChoosed(client, question)
@@ -59,19 +74,24 @@ class BasicConductor extends AbstractConductor {
 		player.send('choose_question', { time: time });
 		this.status = 'wait_for_choose_question';
 
+
+
 		this.timer = new Timer(time, { 
 			fail: (e) => {
-				this.status = 0;
+				this.status = 'processing-question;
 				//let question = { text: 'fail - normal question' }; //TODO GET random question
 				let question = game.getRandomQuestion();
 				this.startQuestionProcess(question);
 
-			}, success:  (e) => {
+			}, success:  (client, question) => {
 
-				this.status = 0;
+				this.status = 'processing-question;
 
-				let question = { text: 'success - normal question' };
-				this.startQuestionProcess(question);
+				if (client.key === player.key || client.key === lobby.master.key)
+				{
+					let question = { text: 'success - normal question' };
+					this.startQuestionProcess(question);
+				}
 
 			}, filter: (e) => this.status !== 'wait'}
 		)

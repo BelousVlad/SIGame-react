@@ -16,8 +16,6 @@ class Game {
 
 	loadFile(file) //TODO
 	{
-		console.log(6);
-
 		return this.files_loader.loadToClientsFile(file)
 		.then(() => {
 
@@ -25,8 +23,29 @@ class Game {
 		}); // данная функция должна возвращать промис
 	}
 
+	sendRoundInfo()
+	{
+		let obj = this.pack_controller.getPackageTemplateWithPrices();
+
+		obj = obj[this.game_info.current_round];
+
+		// for(let theme of obj)
+		// {
+		// 	for(let i = 0; i < theme.length; ++i)
+		// 	{
+
+		// 	}
+		// }
+
+
+		this.lobby.sendForClients('show_round_info', obj)
+
+	}
+
 	start()
 	{
+		this.emit('game_started');
+		this.game_info.current_round = 0;
 		this.conductor.turn();
 	}
 
