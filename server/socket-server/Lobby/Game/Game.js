@@ -80,6 +80,11 @@ class Game {
 		this.pack_controller.getRandomQuestion( this.game_info.is_question_used );
 	}
 
+	getQuestion(theme_index, question_index)
+	{
+		return question = this.pack_controller.getItemByIndexes(this.game_info.current_round, theme_index, question_index);
+	}
+
 	moduleMessage(ws, msg)
 	{
 		let action = msg.data.action_module;
