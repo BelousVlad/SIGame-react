@@ -6,6 +6,10 @@ class SIRight
 		this.question = question_;
 		XMLRight.answerList = XMLRight.answer.map( item => new SIAnswer(item, this) );
 	}
+
+	getResources() {
+		reutnr this.answerList.map(item => item.getResource());
+	}
 }
 
 module.exports = SIRight;
