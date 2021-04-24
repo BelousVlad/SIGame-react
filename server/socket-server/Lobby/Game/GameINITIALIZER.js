@@ -1,5 +1,6 @@
 const BasicFileLoader = require('./GameModules/FileLoader/BasicFileLoader');
 const BasicConductor = require('./GameModules/Conductor/BasicConductor');
+const PackController = require('./GameModules/PackController/PackController');
 const BasicQuestionPutter = require('./GameModules/QuestionPutter/BasicQuestionPutter');
 const Game = require('./Game');
 
@@ -18,7 +19,7 @@ class GameInitializer {
 		game.setFileLoaderModule(file_module);
 		game.conductor = new BasicConductor(lobby, game);
 		game.question_putter = new BasicQuestionPutter(lobby, game);
-		game.pack_controller = null // new BasicPackController(lobby, game); TODO packctrl
+		game.setPackController(new PackController(lobby, game, lobby.pack));
 
 		return game;
 	}

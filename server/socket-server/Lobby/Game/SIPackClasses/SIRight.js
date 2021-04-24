@@ -8,7 +8,7 @@ class SIRight
 	}
 
 	getResources() {
-		reutnr this.answerList.map(item => item.getResource());
+		return this.answerList.map(item => item.getResource());
 	}
 }
 

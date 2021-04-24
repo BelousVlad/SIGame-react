@@ -7,7 +7,7 @@ class SIQuestion
 		this.theme = theme_;
 		this.price = XMLQuestion.$.price;
 		this.scenario = new SIScenario(XMLQuestion.scenario[0], this);
-		this.right = new SIRight(XMLQuestion.right, this);
+		this.right = new SIRight(XMLQuestion.right[0], this);
 		// this.info = new
 	}
 

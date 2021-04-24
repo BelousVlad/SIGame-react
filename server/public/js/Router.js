@@ -35,6 +35,7 @@ class Router{
 	getServerMessage(message)
 	{
 		let ans = JSON.parse(message);
+		console.log(message);
 		app[this.routes[ans.action]](ans);
 	}
 }

@@ -72,12 +72,12 @@ class Game {
 	setPackController(controller)
 	{
 		this.pack_controller = controller;
-		this.game_info.setQuestionUsedByTemplate(controller.getPackgeTemplate());
+		this.game_info.setQuestionUsedByTemplate(controller.getPackageTemplate());
 	}
 
 	getRandomQuestion()
 	{
-		this.pack_controller.getRandomQuestion( this.game_info.is_question_used );
+		return this.pack_controller.getRandomQuestion( this.game_info.is_question_used, this.game_info.current_round );
 	}
 
 	getQuestion(theme_index, question_index)
