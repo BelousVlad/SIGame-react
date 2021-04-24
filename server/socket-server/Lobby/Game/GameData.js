@@ -1,11 +1,12 @@
 class GameData {
-	current_round_index = 0;
+	current_round = 0;
 	is_question_used = [ [ [] ] ] // Трёхмерный массисв
 
 	constructor(packInfo)
 	{
+		let question_list;
 		if (packInfo) 
-			let question_list = packInfo.question_list;
+			question_list = packInfo.question_list;
 
 		if (question_list)
 		{
@@ -15,7 +16,7 @@ class GameData {
 	}
 	setQuestionUsedByTemplate(question_template_list)
 	{
-		this.setQuestionUsedByTemplate = question_template_list;
+		this.is_question_used = question_template_list;
 		for(let round of question_template_list)
 		{
 			for(let theme of round)
@@ -28,6 +29,10 @@ class GameData {
 		}
 	}
 
-
-
+	getUsedRoundQuestions()
+	{
+		return this.is_question_used[this.current_round];
+	}
 }
+
+module.exports = GameData;

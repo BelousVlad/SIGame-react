@@ -1,8 +1,7 @@
 const GameModule = require('../GameModule');
-const PackReader = require('./PackReader/PackReader');
 
 class PackController extends GameModule {
-	contructor(lobby, game, package_)
+	constructor(lobby, game, package_)
 	{
 		super(lobby, game);
 		this.package = package_;
@@ -15,11 +14,11 @@ class PackController extends GameModule {
 
 			template_[i] = new Array();
 
-			for (var j = 0; j < this.package.roundList.themeList.length; j++) {
+			for (var j = 0; j < this.package.roundList[i].themeList.length; j++) {
 
 				template_[i][j] = new Array();
 
-				for (var k = 0; k < this.package.roundList.themeList.questionList.length; k++) {
+				for (var k = 0; k < this.package.roundList[i].themeList[j].questionList.length; k++) {
 
 					template_[i][j][k] = func(this.package.roundList[i].themeList[j].questionList[k]);
 
@@ -38,7 +37,10 @@ class PackController extends GameModule {
 
 	getRandomQuestion(questionCheckList, roundIndex) {
 		var countOfUnusedQuestions = 0;
-		var themeList = this.package.roundList[roundIndex];
+		// console.log(roundIndex)
+		// console.log(questionCheckList)
+		// console.log(this.package.roundList);
+		var themeList = this.package.roundList[roundIndex].themeList;
 
 		//counting unused questions
 		questionCheckList.forEach( item => item.forEach( item => /*short if-else*/!item ? countOfUnusedQuestions++ : null));

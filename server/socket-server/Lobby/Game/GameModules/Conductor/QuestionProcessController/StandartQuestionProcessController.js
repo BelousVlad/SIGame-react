@@ -10,14 +10,16 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
 		this.question_time = 15e3;
 	}
 
-	startQuestion(question)
+	startQuestionProcess(question)
 	{
-		return new Promise((resove,reject) => {
+		return new Promise((resolve,reject) => {
 			this.current_question = question;
 			this.reply_clients = {};
 			this.service_data = {}
+			resolve();
 		})
 		.then(() => {
+			console.log('log')
 			return this.questionProcess(question)
 		})
 	}
@@ -32,6 +34,7 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
 
 	sendClientResources(client, resources)
 	{
+		console.log('send resouces');
 		client.send('question_resources', resources)
 	}
 
@@ -113,6 +116,7 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
 		}
 
 		lobby.sendForClients('client_question_reply_request', { price: question.price, time: this.reply_request_time });
+
 	}
 
 }

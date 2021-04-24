@@ -8,7 +8,7 @@ class BasicConductor extends AbstractConductor {
 	{
 		super(lobby, game);
 		this.test = 0;
-		this.QestionProcessController = new StandartQestionProcessController();
+		this.QestionProcessController = new StandartQestionProcessController(lobby, game);
 		this.game.addListener('question-choosed',this.questionChoosed.bind(this))
 		this.timer = {};
 		this.status = 'first_turn';
@@ -27,10 +27,12 @@ class BasicConductor extends AbstractConductor {
 	turn()
 	{
 		if (this.status == 'choice_question') {
+			console.log('pre choice_question')
 			this.chooseQuestion();
 		}
 		else if (this.status == 'first_turn')
 		{
+			this.status = 'choice_question'
 			this.turn();
 		}
 	}
@@ -50,13 +52,18 @@ class BasicConductor extends AbstractConductor {
 	{
 		if (this.status == 'wait_for_choose_question') 
 		{
-			this.timer.forceSuccess(client, question);
+			if (client.key === player.key || client.key === lobby.master.key)
+			{
+				console.log('question choised')
+				this.timer.forceSuccess(client, question);
+			}
 		}
 	}
 
 	startQuestionProcess(question)
 	{
-		this.QestionProcessController.startQuestion(question);
+		// console.log(this.QestionProcessController);
+		this.QestionProcessController.startQuestionProcess(question);
 	}
 
 	chooseQuestion()
@@ -69,6 +76,7 @@ class BasicConductor extends AbstractConductor {
 
 	requireChooceQuestion(player)
 	{
+		console.log('requireChooceQuestion');
 
 		let time = this.choose_question_time;
 		player.send('choose_question', { time: time });
@@ -76,26 +84,23 @@ class BasicConductor extends AbstractConductor {
 
 		this.timer = new Timer(time, {
 			fail: (e) => {
-				this.status = 'processing-question;
+				this.status = 'processing-question';
 				//let question = { text: 'fail - normal question' }; //TODO GET random question
-				let question = game.getRandomQuestion();
+				let question = this.game.getRandomQuestion();
+				console.log('start question process');
+				console.log(question);
 				this.startQuestionProcess(question);
 
 			}, success:  (client, question) => {
-				this.status = 'processing-question;
+				this.status = 'processing-question';
 
-				if (client.key === player.key || client.key === lobby.master.key)
-				{
-					let question = { text: 'success - normal question' };
-					this.startQuestionProcess(question);
-				}
-				this.status = 0;
 				let theme_index = question.theme;
 				let question_index = question.question;
-				let question = this.getQuestion(theme_index, question_index);
-				this.startQuestionProcess(question);
-
-			}, filter: (e) => this.status !== 'wait'}
+				let question1 = this.getQuestion(theme_index, question_index);
+				console.log('start question process');
+				this.startQuestionProcess(question1);
+				
+			}, filter: (e) => this.status !== 'wait_for_choose_question'}
 		)
 
 	}
@@ -103,6 +108,8 @@ class BasicConductor extends AbstractConductor {
 	getQueueQuestionPlayer() // метод для получения игрока которого очередь отвечать
 	{
 		let keys = Object.keys(this.lobby.clients);
+		return this.lobby.clients[keys[0]];
+
 		let last_key_index = keys.indexOf(this.last_choiced_player_key);
 
 		let index = last_key_index++;
