@@ -6,9 +6,23 @@ class SIQuestion
 	constructor(XMLQuestion, theme_) {
 		this.theme = theme_;
 		this.price = XMLQuestion.$.price;
-		this.scenarioList = XMLQuestion.scenario.map( item => new SIScenario(item, this) );
-		this.rightList = XMLQuestion.right.map( item => new SIRight(item, this) );
+		this.scenario = new SIScenario(XMLQuestion.scenario[0], this);
+		this.right = new SIRight(XMLQuestion.right, this);
+		// this.info = new
 	}
+
+	getQuestionResources() {
+		return this.scenario.getResources();
+	}
+
+	getRightResources() {
+		return this.right.getResources();
+	}
+
+	getInfoResources() {
+		return null;
+	}
+
 }
 
 module.exports = SIQuestion;
