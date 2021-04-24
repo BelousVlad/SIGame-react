@@ -16,19 +16,9 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
 			this.current_question = question;
 			this.reply_clients = {};
 			this.service_data = {}
-			lobby.sendForClients('client_question_reply_request', { price: question.price, time: this.reply_request_time });
-
-			this.timer = new Timer(this.reply_request_time, {
-				fail: (e) => {
-					reject();
-				}, success:  (client, question) => {
-
-					//resolve(this.questionProcess(question)); TODO CHECK
-					this.questionProcess(question)
-						.then((res) => { resolve(res); });
-
-				}, filter: (e) => Object.keys(this.reply_clients).length > 0 }
-			)
+		})
+		.then(() => {
+			return this.questionProcess(question)
 		})
 	}
 
@@ -40,30 +30,89 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
 		}
 	}
 
-	questionProcess(question)
+	sendClientResources(client, resources)
 	{
-		return Promise((resolve, reject) => { 
-			for(let key in this.reply_clients)
-			{
-				// this.reply_clients[key].send('question', question: {
+		client.send('question_resources', resources)
+	}
 
-				// });
-				//TODO resouces
+	startForAllReady()
+	{
+		this.wait_process = {}
+		this.wait_process.clients = {};
+		for(let key in this.lobby.clients)
+		{
+			this.wait_process.clients[key] = this.lobby.clients[key];
+		}
+	}
+
+	waitForAllReady()
+	{
+		return new Promise((resolve, reject) => {
+			if (Object.keys(this.wait_process.clients).length === 0) {
+				resolve();
+			}
+			this.wait_process.resolve = resolve;
+		})
+	}
+
+	clientReady(client)
+	{
+		if (this.wait_process)
+		{
+			delete this.wait_process.clients[client.key];
+
+			if (Object.keys(this.wait_process.clients).length)
+				this.wait_process.resolve();
+		}
+	}
+
+	clientsStage(stage_number)
+	{
+		for(let key in this.lobby.clients)
+		{
+			lobby.clients[key].send('question_stage', { stage_number: stage_number });
+		}
+	}
+
+	async questionProcess(question)
+	{
+		this.startForAllReady();
+		let resources = question.getQuestionResources();
+		for(let key in this.lobby.clients)
+		{
+			this.sendClientResources(this.lobby.clients[key], question.getQuestionResources())
+		}
+		await this.waitForAllReady();
+
+		console.log('clients ready');
+
+		let stage = 0;
+		for(let resource of resources)
+		{
+			this.startForAllReady();
+
+			this.clientsStage(stage);
+
+			let time = 0;
+			if (resource.time)
+				time = resource.time * 1e3
+			else
+			{
+				if (resource.type === 'text')
+					time = 5 + resource.content.length / 25; // 25 - скорость чтения символов в минуту
 
 			}
 
-			this.timer = new Timer(this.question_time, {
-				fail: (e) => {
-					reject();
-				}, success:  (client, question) => {
+			for(let key in this.lobby.clients)
+			{
+				this.sendClientResources(client, question.getQuestionResources())
+			}
 
-					//resolve(this.questionProcess(question)); TODO CHECK
-					this.questionProcess(question)
-						.then((res) => { resolve(res); });
+			await this.waitForAllReady();
+			stage++;
+		}
 
-				}, filter: (e) => Object.keys(this.reply_clients).length > 0 }
-			)
-		})
+		lobby.sendForClients('client_question_reply_request', { price: question.price, time: this.reply_request_time });
 	}
 
 }
