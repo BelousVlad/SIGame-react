@@ -4,8 +4,8 @@ class SIResource
 		this.value = value;
 		this.type = type;
 
-		{ time /*etc...*/} = params;
-		if (time) this.time = time;
+		// { time /*etc...*/} = params;
+		// if (time) this.time = time;
 	}
 }
 
