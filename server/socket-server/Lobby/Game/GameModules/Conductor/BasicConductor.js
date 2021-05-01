@@ -32,6 +32,7 @@ class BasicConductor extends AbstractConductor {
 		}
 		else if (this.status == 'first_turn')
 		{
+			this.game.sendRoundInfoClients();
 			this.status = 'choice_question'
 			this.turn();
 		}
@@ -43,9 +44,9 @@ class BasicConductor extends AbstractConductor {
 		this.sendRound();
 	}
 
-	sendRound(round)
+	sendRound()
 	{
-		this.game.sendRoundInfo();
+		this.game.sendRoundInfoClients();
 	}
 
 	questionChoosed(client, question)
@@ -71,7 +72,6 @@ class BasicConductor extends AbstractConductor {
 		let player = this.getQueueQuestionPlayer();
 
 		this.requireChooceQuestion(player);
-
 	}
 
 	requireChooceQuestion(player)
@@ -88,7 +88,7 @@ class BasicConductor extends AbstractConductor {
 				//let question = { text: 'fail - normal question' }; //TODO GET random question
 				let question = this.game.getRandomQuestion();
 				console.log('start question process');
-				console.log(question);
+				
 				this.startQuestionProcess(question);
 
 			}, success:  (client, question) => {
@@ -102,7 +102,6 @@ class BasicConductor extends AbstractConductor {
 				
 			}, filter: (e) => this.status !== 'wait_for_choose_question'}
 		)
-
 	}
 
 	getQueueQuestionPlayer() // метод для получения игрока которого очередь отвечать

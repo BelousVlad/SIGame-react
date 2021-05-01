@@ -101,6 +101,11 @@ class ServerSpeakerController{
 		this.sendWithKey('stop_be_master');
 	}
 
+	getGameInfo()
+	{
+		this.sendWithKey('get_game_info');
+	}
+
 	sendWithKey(action ,msg)
 	{
 		this.speaker.send({action, key: this.key ,data: msg})

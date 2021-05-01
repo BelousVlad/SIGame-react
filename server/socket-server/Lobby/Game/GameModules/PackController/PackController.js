@@ -62,6 +62,24 @@ class PackController extends GameModule {
 		return this.package.roundList.indexOf(roundSrc);
 	}
 
+	getThemesTitles(round_ind)
+	{
+		let round = this.getRound(round_ind);
+		let arr = [];
+
+		for(let theme of round.themeList)
+		{
+			arr.push(theme.themeName);
+		}
+
+		return arr;
+	}
+
+	getRound(round_ind)
+	{
+		return this.package.roundList[round_ind];
+	}
+
 	getThemeIndex(themeSrc) {
 		return themeSrc.round.themeList.indexOf(themeSrc);
 	}

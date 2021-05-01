@@ -3,8 +3,9 @@ const event = require('events');
 const GameData = require('./GameData');
 
 class Game {
-	constructor()
+	constructor(lobby)
 	{
+		this.lobby = lobby;
 		this.regsitered_messages = [];
 		this.game_info = new GameData();
 	}
@@ -23,23 +24,26 @@ class Game {
 		}); // данная функция должна возвращать промис
 	}
 
-	sendRoundInfo()
+	getRoundInfo()
 	{
-		let obj = this.pack_controller.getPackageTemplateWithPrices();
+		let prices = this.pack_controller.getPackageTemplateWithPrices();
 
-		obj = obj[this.game_info.current_round];
+		prices = prices[this.game_info.current_round];
+		let themes = this.pack_controller.getThemesTitles(this.game_info.current_round);
+		return { themes, prices };
+	}
 
-		// for(let theme of obj)
-		// {
-		// 	for(let i = 0; i < theme.length; ++i)
-		// 	{
+	sendRoundInfo(client)
+	{
+		client.send('show_round_info', this.getRoundInfo());
+	}
 
-		// 	}
-		// }
-
-
-		this.lobby.sendForClients('show_round_info', obj)
-
+	sendRoundInfoClients()
+	{
+		for(let cl in this.lobby.clients)
+		{
+			this.sendRoundInfo(this.lobby.clients[cl]);
+		}
 	}
 
 	start()
@@ -96,6 +100,13 @@ class Game {
 		}
 	}
 
+	getGameStatus()
+	{
+		let obj = {}
+		obj.round_info = this.getRoundInfo();
+		//TODO
+		return obj;
+	}
 
 
 }

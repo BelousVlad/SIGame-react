@@ -14,7 +14,7 @@ class GameInitializer {
 	createGame(config, lobby)
 	{
 		//TODO процесс сборки игры
-		let game = new Game();
+		let game = new Game(lobby);
 		let file_module = new BasicFileLoader(lobby);
 		game.setFileLoaderModule(file_module);
 		game.conductor = new BasicConductor(lobby, game);
