@@ -235,6 +235,8 @@ class App{
 		let is_host = msg.data.is_host;
 		let is_master = msg.data.is_master;
 		this.lobby = new Lobby(title, max_players, is_host, is_master);
+
+
 	
 		if (document.location.pathname != '/lobby')
 		{
@@ -242,8 +244,18 @@ class App{
 			.then(() => {
 				console.log('page_updated')
 				app.view_model.viewPlayers(this.lobby.players_, is_host, is_master)
+				if (msg.data.game)
+				{
+					this.get_game_info();
+					//TODO
+				}
 			});
 		}
+		else
+		{
+			this.get_game_info();
+		}
+		
 	}
 
 	lobbyCreateFailed( msg ) {
@@ -264,10 +276,7 @@ class App{
 				let lobby = msg.data.lobby;
 				this.lobby_connected({ data:
 						{
-						title: lobby.title,
-						max_players: lobby.max_players,
-						is_host: lobby.is_host,
-						is_master: lobby.is_master
+						...lobby
 					}}
 				)
 			}
@@ -428,7 +437,25 @@ class App{
 		document.location.reload()
 	}
 
+	get_game_info()
+	{
+		this.speakerctrl.getGameInfo()
+	}
 
+	show_round_info()
+	{
+		this.view_model.showRoundInfo(msg.data);
+	}
+
+	game_info(msg)
+	{
+		// let { themes } = msg.data;
+		// let { prices } = msg.data;
+
+		//console.log(123,msg.data.prices)
+
+		this.view_model.showRoundInfo(msg.data.round_info);
+	}
 
 	GOTOPage ( msg ) {
 		let path;
@@ -467,6 +494,7 @@ class App{
 		this.dispatch('avatar_update_succeed');
 		// console.log( 'avatar succeed!!!!'.repeat(5) );
 	}
+
 
 //  -------------------
 	//  END of Actions block

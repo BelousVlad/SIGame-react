@@ -259,7 +259,7 @@ class ViewModel {
 		{
 			let html = this.getLobbyInfoView();
 			//console.log(html)
-			$('.main-canvas').html(html);
+			$('.main-canvas .lobby-info-container').html(html);
 		}
 	}
 
@@ -280,6 +280,33 @@ class ViewModel {
 
 		return `<div class="lobby-info-fields-container">${items}</div>`;
 	}
+
+	showRoundInfo(data)
+	{
+		let game_html = this.getRoundInfo(data);
+
+		console.log(123)
+		console.log($('.lobby-game-container'))
+
+		$('.lobby-game-container').html(game_html);
+	}
+
+	getRoundInfo(data)
+	{
+		let prices = data.prices;
+		let themes = data.themes;
+
+		console.log(data);
+
+		let html = themes.reduce((sum, item, i) => sum + `
+				<div class="game-theme-box">${ prices[i].reduce((sum2, price, ii) => sum2 + `
+						<div class="game-theme-price-item" theme-index="${i}" question-index="${ii}">${price}</div>
+					`, '')}
+				</div>
+			`,'')
+
+		return `<div class="game-round-box">${html}</div>`;
+	}	
 
 	addLobbyInfoField(field, value)
 	{

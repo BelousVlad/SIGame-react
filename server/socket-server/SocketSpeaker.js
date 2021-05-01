@@ -105,6 +105,10 @@ module.exports = class SocketSpeaker{
 				let is_host = lobby_.host.key == key;
 				let is_master = lobby_.master ? lobby_.master.key == key : false;
 				lobby = { title: lobby_.title, max_players: lobby_.max_players, is_host, is_master }
+				if (lobby_.game)
+				{
+					lobby.game = true;
+				}
 			}
 
 			let avatarCode = client.avatarCode || config.baseAvatarCode;
@@ -252,7 +256,12 @@ module.exports = class SocketSpeaker{
 				{
 					let code = LobbyManager.addClientToLobby(lobby, client);
 					let is_host = lobby.host.key == key;
-					client.send('lobby_connected', { title : lobby.title, max_players: lobby.max_players, code, is_host });
+					let lobby_ = { title : lobby.title, max_players: lobby.max_players, code, is_host }
+					if (lobby.game) {
+						lobby_.game = true;
+					}
+
+					client.send('lobby_connected', lobby_);
 					this.update_players(client, lobby);
 				}
 				else
@@ -597,6 +606,24 @@ module.exports = class SocketSpeaker{
 		}
 	}
 
+	get_game_info(ws, msg)
+	{
+		let key = msg.key;
+		let client = ClientManager.getClient(key);
+
+		if (client)
+		{
+			let lobby = LobbyManager.getLobbyByClient(client);
+			if (lobby)
+			{
+				if (lobby.game)
+				{
+					this.send(ws,'game_info', lobby.game.getGameStatus())
+				}
+			}
+		}
+	}
+
 	displayError( text ) {
 		this.send( ws, "display_error", text );
 	}
@@ -628,7 +655,8 @@ module.exports = class SocketSpeaker{
 			"getLobbyConfiguration" : "getLobbyConfiguration",
 			"test_file" : "test_file",
 			"choose_question" : "question_choosed",
-			"module_message" : "module_message"
+			"module_message" : "module_message",
+			"get_game_info" : "get_game_info"
 		}
 	}
 }

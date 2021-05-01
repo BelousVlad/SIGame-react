@@ -29,6 +29,8 @@ class Router{
 			"receive_lobby_configuration" : "receiveLobbyConfiguration",
 			"file" : "test_file", //TODO test route
 			"choose_question" : "ping", //TODO test route
+			"show_round_info" : "show_round_info",
+			"game_info" : "game_info"
 		};
 	}
 
