@@ -36,6 +36,7 @@ class Client {
 			}
 		})
 	}
+	
 	getDisplayParams() {
 		return {
 			name : this.name,
