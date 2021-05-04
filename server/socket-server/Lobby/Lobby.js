@@ -26,6 +26,7 @@ class Lobby {
 		this.master = undefined;
 
 		this.config = Lobby.defaultConfig;
+		
 		this.game = undefined;
 
 		this.chat = new Chat(this);
@@ -55,18 +56,6 @@ class Lobby {
 		return undefined;
 	}
 
-	changeClientScore(client, score)
-	{
-		if (this.clients[client.key])
-		{
-			this.scores[client.key] = score;
-
-			this.emit('lobby_client_score_changed', client, score)
-
-			return true;
-		}
-		return false;
-	}
 
 	sendForClients(action, data)
 	{
@@ -123,10 +112,6 @@ class Lobby {
 		if ( Object.keys( this.clients ).length < this.max_players)
 		{
 			this.clients[clientKey] = client;
-			if (!this.scores[clientKey])
-			{
-				this.scores[clientKey] = 0;
-			}
 
 			if (!this.host)
 			{
@@ -204,11 +189,6 @@ class Lobby {
 		}
 	}
 
-	test_file(args)//test function
-	{
-		this.game.file_sended(args);
-	}
-
 	uploadPackStart()
 	{
 		this.emit('lobby_upload_pack_start');
@@ -220,13 +200,63 @@ class Lobby {
 
 	uploadPackEnd()
 	{
-
 		PackReader.getPackFromFolder(this.packFolder)
 		.then((pack) => {
 			this.pack = pack;
 			this.packState = 'ready';
 		})
+	}
 
+	getClientPosition(client)
+	{
+		return {
+			is_master: !!this.master ? this.master.key === client.key : false,
+			is_host: this.host.key === client.key
+		}
+	}
+
+	getPlayersInfo()
+	{
+		let players = [];
+		for (let p in this.clients)
+		{
+			let client = this.clients[p];
+
+			players.push({
+				score: this.game != undefined ? this.game.game_info.scores[client.key] : 0,
+				...client.getDisplayParams(),
+				...this.getClientPosition(client)
+			})
+		}
+		return players;
+	}
+
+	getInfo()
+	{
+		let lobby_ = {
+			title : this.title, 
+			max_players: this.max_players,
+			is_password: !!this.password,
+			is_game: !!this.game
+		}
+
+		return lobby_;
+	}
+
+	getFullInfo(client)
+	{
+		let players = this.getPlayersInfo();
+		let info = this.getInfo();
+
+		let result = {
+			players,
+			info
+		}
+
+		if (client)
+			result.position = this.getClientPosition(client);
+		
+		return result;
 	}
 
 	static get CLIENT_CONNECT_TO_LOBBY_OK()
@@ -250,7 +280,7 @@ class Lobby {
 		return 404;
 	}
 
-	static get defaultConfig(){
+	static get defaultConfig() {
 		return {
 			maxPlayers : 3,
 			rules : {},

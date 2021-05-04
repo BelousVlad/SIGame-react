@@ -4,14 +4,12 @@ logIn page<br/>
 <input type="button" value="Set Name" id="clientNameFieldBtn" />
 
 <script type="text/javascript">
-	$("#clientNameFieldBtn").click(function(e){
-
+	$("#clientNameFieldBtn").click(function(e) {
 		let name = $("#clientNameField").val().trim();
 
 		if (name && name != '')
 		{
-			app.speakerctrl.setName(name)
+			app.ServerCommandManager.setName(name)
 		}
-
 	});
 </script>

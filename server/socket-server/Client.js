@@ -40,7 +40,7 @@ class Client {
 	getDisplayParams() {
 		return {
 			name : this.name,
-			avatarCode : this.avatarCode,
+			avatar : this.avatarCode,
 		}
 	}
 }

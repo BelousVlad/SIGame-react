@@ -8,5 +8,44 @@ class ServerResponseManager {
 	{
 		Cookie.set("key", msg.data);
 	}
+
+	lobby_list(msg)
+	{
+		app.view.showLobbyList(msg.data)
+	}
+
+	name_set_status(msg)
+	{
+		console.log(msg);
+	}
+
+	lobby_create(msg)
+	{
+		console.log(msg)
+	}
+
+	status(msg)
+	{
+		app.lobby = msg.data.lobby;
+		if (app.lobby)
+		{
+			//this.lobby_connected()
+		}
+		console.log(msg)
+	}
+
+	lobby_connected(msg)
+	{
+		let code = msg.data.code;
+		if (code == 200)
+		{
+			if (document.location.pathname !== '/lobby')
+				document.location.href = '/lobby'
+			else
+			{
+
+			}
+		}
+	}
 	
 }

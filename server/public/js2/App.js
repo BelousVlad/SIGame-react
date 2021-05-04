@@ -8,12 +8,12 @@ class App{
 		this.ServerSpeaker = new ServerSpeaker(this.Router);
 		this.ServerCommandManager = new ServerCommandManager(this.ServerSpeaker);
 
+		this.lobby;
+
 		this.ServerSpeaker.onopen = () => {
 			this.ServerCommandManager.sendKey();
 		}
 
 		this.ServerSpeaker.openSocket();
-
-
 	}
 }

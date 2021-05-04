@@ -9,6 +9,23 @@ class ServerCommandManager {
 		this.send("client.key", this.key)
 	}
 
+	setName(name)
+	{
+		this.send("client.name", name)
+	}
+
+	getLobbies()
+	{
+		this.send('lobby.get_lobbies');
+	}
+
+	createLobby(title , max_players, password)
+	{
+		this.send('lobby.create_lobby', { title, max_players, password });
+	}
+
+	//Дальше идут служебные методы (приватные)
+
 	send(action, data)
 	{
 		let key = this.key;
