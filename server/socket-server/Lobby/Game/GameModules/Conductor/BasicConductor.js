@@ -23,7 +23,7 @@ class BasicConductor extends AbstractConductor {
 		console.log(msg);
 	}
 
-	//override
+	//overrided
 	turn()
 	{
 		if (this.status == 'choice_question') {
@@ -51,7 +51,7 @@ class BasicConductor extends AbstractConductor {
 
 	questionChoosed(client, question)
 	{
-		if (this.status == 'wait_for_choose_question') 
+		if (this.status == 'wait_for_choose_question')
 		{
 			if (client.key === player.key || client.key === lobby.master.key)
 			{
@@ -99,7 +99,7 @@ class BasicConductor extends AbstractConductor {
 				let question1 = this.getQuestion(theme_index, question_index);
 				console.log('start question process');
 				this.startQuestionProcess(question1);
-				
+
 			}, filter: (e) => this.status !== 'wait_for_choose_question'}
 		)
 	}

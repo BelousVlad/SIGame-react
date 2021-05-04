@@ -1,13 +1,12 @@
 //TODO
 const event = require('events');
-const GameData = require('./GameData');
+
 
 class Game {
 	constructor(lobby)
 	{
 		this.lobby = lobby;
 		this.regsitered_messages = [];
-		this.game_info = new GameData();
 	}
 
 	setFileLoaderModule(value)
