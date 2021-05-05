@@ -13,6 +13,7 @@ class Router{
 			'name_set_status' : 'name_set_status',
 			'lobby_connected' : 'lobby_connected',
 			'lobby_create' : 'lobby_create',
+			'question_resources' : 'lobby_game_question_resources',
 			'status' : 'status'
 		};
 	}

@@ -24,6 +24,15 @@ class ServerResponseManager {
 		console.log(msg)
 	}
 
+	//there are methods for lobby processes
+
+	lobby_game_question_resources(msg)
+	{
+		var data = msg && msg.data || undefined;
+
+		//TODO
+	}
+
 	status(msg)
 	{
 		app.lobby = msg.data.lobby;
@@ -47,5 +56,5 @@ class ServerResponseManager {
 			}
 		}
 	}
-	
+
 }
