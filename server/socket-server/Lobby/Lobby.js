@@ -83,7 +83,7 @@ class Lobby {
 		if (!this.master && this.hasClient(client))
 		{
 			this.master = client;
-			this.emit('lobby_master_set', client)
+			this._updatePlayers();
 			return true;
 		}
 		return false;
@@ -91,11 +91,10 @@ class Lobby {
 
 	removeMaster()
 	{
-
 		if (this.master)
 		{
 			this.master = null;
-			this.emit('lobby_master_set', null)
+			this._updatePlayers();
 			return true;
 		}
 		return false;
@@ -179,8 +178,6 @@ class Lobby {
 			this.game = factory.createGame(this.config, this);
 
 			this.game.start();
-
-			this.emit('lobby_game_start');
 		}
 	}
 

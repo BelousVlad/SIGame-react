@@ -34,6 +34,12 @@ class ViewModel {
 		$(".players-container").html(html);
 	}
 
+	renderBecameMasterBtn()
+	{
+		let html = `<div class="become-master-btn">Стать ведущим</div>`;
+		$(".lobby-master-box").html(html);
+	}
+
 	getPlayerBanner(player, position)
 	{
 		let builder = new PlayerBannerBuilder();

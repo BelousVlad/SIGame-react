@@ -29,8 +29,19 @@ class ServerCommandManager {
 		this.send('lobby.create_lobby', { title, max_players, password });
 	}
 
-	getLobbyId() {
+	getLobbyId()
+	{
 		this.send('lobby.get_lobby_id');
+	}
+
+	becameMaster()
+	{
+		this.send('lobby.became_master');
+	}
+
+	stopBeMaster()
+	{
+		this.send('lobby.stop_master');
 	}
 
 	//Дальше идут служебные методы (приватные)

@@ -12,6 +12,11 @@ class Lobby {
 	set players(data) { 
 		this._players = data;
 		this._view.renderPlayers(this._players, this._position);
+		if (!this.hasMaster)
+		{
+
+			this._view.renderBecameMasterBtn();
+		}
 	} //mb TODO
 
 	get info() { return this._info }
@@ -19,4 +24,9 @@ class Lobby {
 
 	get position() { return this._position }
 	set position(data) { this._position = data } //mb TODO
+
+	get hasMaster()
+	{
+		return !!this._players.find((item) => item.is_master == true );
+	}
 }

@@ -37,7 +37,6 @@ class ServerResponseManager {
 	{
 		if (msg.data)
 		{
-			console.log(msg.data);
 			app.lobby.players = msg.data;
 		}
 	}

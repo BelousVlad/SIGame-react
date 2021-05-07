@@ -92,15 +92,11 @@
 	})
 
 	$(document).on('click','.become-master-btn',function(e){
-
-		app.becomeMaster();
-
+		app.ServerCommandManager.becameMaster();
 	});
 
 	$(document).on('click','.stop-master-btn',function(e){
-
-		app.stopBeMaster();
-
+		app.ServerCommandManager.stopBeMaster();
 	});
 
 	$(document).on('click','.service-player-menu-change-score',function(e){

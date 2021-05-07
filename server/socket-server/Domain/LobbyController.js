@@ -12,7 +12,9 @@ class LobbyController extends DomainController{
 			'create_lobby' : 'create_lobby',
 			'connect_lobby' : 'connect_lobby',
 			'get_lobby_id' : 'get_lobby_id',
-			'connect_lobby' : 'connect_lobby'
+			'connect_lobby' : 'connect_lobby',
+			'became_master' : 'became_master',
+			'stop_master' : 'stop_master'
 		})
 	}
 
@@ -116,10 +118,42 @@ class LobbyController extends DomainController{
 	get_lobby_id(ws, msg) {
 		let key = msg.key;
 		let client = ClientManager.getClient(key);
-		let lobby = LobbyManager.getLobbyByClientKey(key);
+		if (client)
+		{
+			let lobby = LobbyManager.getLobbyByClientKey(key);
 
-		if (lobby)
-			this.send(ws,'lobby_id', lobby.id);
+			if (lobby)
+				this.send(ws,'lobby_id', lobby.id);
+		}
+	}
+
+	became_master(ws, msg)
+	{
+		let key = msg.key;
+		let client = ClientManager.getClient(key);
+		if (client)
+		{
+			let lobby = LobbyManager.getLobbyByClientKey(key);
+			if (lobby)
+			{
+				lobby.setMaster(client);
+			}
+		}
+	}
+
+	stop_master(ws, msg)
+	{
+		let key = msg.key;
+		let client = ClientManager.getClient(key);
+		if (client)
+		{
+			let lobby = LobbyManager.getLobbyByClientKey(key);
+			if (lobby && lobby.master?.key === key)
+			{
+				lobby.removeMaster();
+			}
+		}
+
 	}
 
 }
