@@ -15,8 +15,9 @@ class Lobby {
 	packState = 'none'; // состояния в котором может находиться пак. предполагается 3 варианта : none, uploading, ready;
 	pack = {};
 
-	constructor(title, max_p, password)
+	constructor(id, title, max_p, password)
 	{
+		this.id = id;
 		this.clients = new Object();
 		this.max_players = max_p ;
 		this.title = title ;

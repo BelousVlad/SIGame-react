@@ -35,10 +35,12 @@ class ServerResponseManager {
 
 	status(msg)
 	{
-		app.lobby = msg.data.lobby;
-		if (app.lobby)
+
+		if (msg.data.lobby)
 		{
-			//this.lobby_connected()
+			this.lobby_connected({
+
+			})
 		}
 		console.log(msg)
 	}
@@ -52,7 +54,7 @@ class ServerResponseManager {
 				document.location.href = '/lobby'
 			else
 			{
-
+				app.lobby = msg.data.lobby;
 			}
 		}
 	}
