@@ -41,11 +41,29 @@
     </div>
 </div>
 
-
+<div class="lobby-password-popup">
+    
+</div>
 
 <script>
     $('.lobbies-list-refresh-btn').click(function(e) {
         app.ServerCommandManager.getLobbies();
+    })
+
+    $(document).on('click', '.lobby-list-item', function(e) {
+        let is_pass = $(this).attr('is_password');
+        let id = $(this).attr('id')
+        
+        if (is_pass === 'true')
+            app.view.viewPasswordPopup()
+            .then((obj) => {
+                let password = obj.password;
+                app.ServerCommandManager.connetLobby(id, password);
+            });
+        else
+        {
+            app.ServerCommandManager.connetLobby(id, '');
+        }
     })
 
 </script>

@@ -11,7 +11,8 @@ class LobbyController extends DomainController{
 			'get_lobbies' : 'get_lobbies',
 			'create_lobby' : 'create_lobby',
 			'connect_lobby' : 'connect_lobby',
-			'get_lobby_id' : 'get_lobby_id'
+			'get_lobby_id' : 'get_lobby_id',
+			'connect_lobby' : 'connect_lobby'
 		})
 	}
 
@@ -24,12 +25,7 @@ class LobbyController extends DomainController{
 		for(let item in lobbies_)
 		{
 			let lobby = lobbies_[item];
-			lobbies.push({
-				title: lobby.title,
-				max_players: lobby.max_players,
-				players_count: Object.keys( lobby.clients ).length,
-				is_password: Boolean(lobby.password)
-			});
+			lobbies.push(lobby.getInfo());
 		}
 
 		this.send(ws,'lobby_list', lobbies);
@@ -59,7 +55,9 @@ class LobbyController extends DomainController{
 
 				// this.set_lobby_events(lobby);
 
-				this.connect_lobby(ws, msg)
+				console.log();
+				msg.data.id = lobby.id;
+				this.connect_lobby(ws, msg )
 			}
 			else
 			{
@@ -75,9 +73,9 @@ class LobbyController extends DomainController{
 
 		if (client && client.name )
 		{
-			let title = msg.data.title;
+			let id = msg.data.id;
 
-			let lobby = LobbyManager.getLobbyByTitle(title)
+			let lobby = LobbyManager.getLobbyById(id)
 
 			if (lobby)
 			{
@@ -95,11 +93,11 @@ class LobbyController extends DomainController{
 						let is_host = lobby.host.key == key;
 						let lobby_ = lobby.getFullInfo(client);
 
-						client.send('lobby_connected', { lobby : lobby_, code: code });
+						client.send('lobby_connected', { lobby : lobby_, code });
 					}
 					else
 					{
-						client.send('lobby_connected', lobby_);
+						client.send('lobby_connected', { code });
 
 					}
 					

@@ -8,12 +8,13 @@ class App{
 		this.ServerSpeaker = new ServerSpeaker(this.Router);
 		this.ServerCommandManager = new ServerCommandManager(this.ServerSpeaker);
 
-		this.lobby;
-
 		this.ServerSpeaker.onopen = () => {
 			this.ServerCommandManager.sendKey();
 		}
 
 		this.ServerSpeaker.openSocket();
 	}
+
+	get lobby() { return this._lobby }
+	set lobby(data) { this._lobby = new Lobby(data.info, data.players, data.position, this.view) }
 }

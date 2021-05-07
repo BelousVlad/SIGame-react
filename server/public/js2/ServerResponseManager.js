@@ -33,13 +33,24 @@ class ServerResponseManager {
 		//TODO
 	}
 
+	update_players(msg)
+	{
+		if (msg.data)
+		{
+			console.log(msg.data);
+			app.lobby.players = msg.data;
+		}
+	}
+
 	status(msg)
 	{
 
 		if (msg.data.lobby)
 		{
-			this.lobby_connected({
-
+			this.lobby_connected({ data: {
+					code: 200,
+					lobby: msg.data.lobby
+				}
 			})
 		}
 		console.log(msg)

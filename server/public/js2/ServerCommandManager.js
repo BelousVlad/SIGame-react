@@ -19,6 +19,11 @@ class ServerCommandManager {
 		this.send('lobby.get_lobbies');
 	}
 
+	connetLobby(id, password)
+	{
+		this.sendWithKey('lobby.connect_lobby', { id, password })
+	}
+
 	createLobby(title , max_players, password)
 	{
 		this.send('lobby.create_lobby', { title, max_players, password });

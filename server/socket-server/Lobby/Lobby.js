@@ -119,7 +119,7 @@ class Lobby {
 				this.host = client;
 			}
 
-			this.emit("player_connected", client);
+			this._updatePlayers();
 			return Lobby.CLIENT_CONNECT_TO_LOBBY_OK;
 		}
 		else
@@ -138,9 +138,6 @@ class Lobby {
 
 				let client = ClientManager.getClient(item);
 
-				client.emit('lobby_client_kicked', this);
-				this.emit('lobby_client_kicked', client);
-
 				return true;
 			}
 		}
@@ -152,9 +149,6 @@ class Lobby {
 		let clientKey = client.key;
 
 		this.deleteClient(clientKey);
-		client.emit('lobby_client_leave');
-		this.emit('lobby_client_leave');
-
 	}
 
 	deleteClient(clientKey)
@@ -235,8 +229,10 @@ class Lobby {
 	getInfo()
 	{
 		let lobby_ = {
+			id : this.id, 
 			title : this.title, 
 			max_players: this.max_players,
+			players_count: Object.keys(this.clients).length,
 			is_password: !!this.password,
 			is_game: !!this.game
 		}
@@ -258,6 +254,11 @@ class Lobby {
 			result.position = this.getClientPosition(client);
 		
 		return result;
+	}
+
+	_updatePlayers()
+	{
+		this.sendForClients('update_players', this.getPlayersInfo());
 	}
 
 	static get CLIENT_CONNECT_TO_LOBBY_OK()
