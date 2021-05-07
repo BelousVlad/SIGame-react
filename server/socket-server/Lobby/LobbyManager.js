@@ -11,11 +11,8 @@ class LobbyManager{
 
 	createLobby(title, password, max_p)
 	{
-		let lobby = new Lobby(title, max_p, password);
+		let lobby = new Lobby(this.getRandomLobbyId(), title, max_p, password);
 		this.lobbies[title] = lobby;
-
-		// lobby id initialization
-		lobby.id = this.getRandomLobbyId();
 
 		return lobby;
 	}
@@ -112,11 +109,11 @@ class LobbyManager{
 	}
 
 	getRandomLobbyId() {
-		let id = parseInt( Math.random() );
+		let id = parseInt( Math.random() * 1e10 );
 
 		//check if lobby with such id already exist
-		while (this.lobbies.find(item => item.id === id))
-			id = parseInt( Math.random() );
+		while (Object.values(this.lobbies).find(item => item.id === id))
+			id = parseInt( Math.random() * 1e10 );
 
 		return id;
 	}
