@@ -14,6 +14,7 @@ class Router{
 			'lobby_connected' : 'lobby_connected',
 			'lobby_create' : 'lobby_create',
 			'question_resources' : 'lobby_game_question_resources',
+			'lobby_id' : 'lobby_id_collected',
 			'status' : 'status'
 		};
 	}

@@ -57,4 +57,9 @@ class ServerResponseManager {
 		}
 	}
 
+	lobby_id_collected(msg) {
+		let lobbyId = parseInt( msg.data );
+		console.log(lobbyId);
+	}
+
 }

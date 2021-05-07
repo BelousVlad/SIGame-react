@@ -143,6 +143,11 @@ class Lobby {
 		}
 	}
 
+	// TODO
+	hasPassword() {
+		return !!this.password;
+	}
+
 	kickClientByName(name)
 	{
 		for(let item in this.clients)
@@ -228,6 +233,59 @@ class Lobby {
 			this.packState = 'ready';
 		})
 
+	}
+
+
+	getClientPosition(client)
+	{
+		return {
+			is_master: !!this.master ? this.master.key === client.key : false,
+			is_host: this.host.key === client.key
+		}
+	}
+
+	getPlayersInfo()
+	{
+		let players = [];
+		for (let p in this.clients)
+		{
+			let client = this.clients[p];
+
+			players.push({
+				score: this.game != undefined ? this.game.game_info.scores[client.key] : 0,
+				...client.getDisplayParams(),
+				...this.getClientPosition(client)
+			})
+		}
+		return players;
+	}
+
+	getInfo()
+	{
+		let lobby_ = {
+			title : this.title,
+			max_players: this.max_players,
+			is_password: !!this.password,
+			is_game: !!this.game
+		}
+
+		return lobby_;
+	}
+
+	getFullInfo(client)
+	{
+		let players = this.getPlayersInfo();
+		let info = this.getInfo();
+
+		let result = {
+			players,
+			info
+		}
+
+		if (client)
+			result.position = this.getClientPosition(client);
+
+		return result;
 	}
 
 	static get CLIENT_CONNECT_TO_LOBBY_OK()

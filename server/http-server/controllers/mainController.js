@@ -151,6 +151,42 @@ class MainController{
 
 		});
 	}
+
+	follow_invite(req, res) {
+		let cookies = helper.parseCookies(req) || new Object;
+		let client = ClientManager.getClient(req.key) || new Object;
+
+		if (!client) {
+			// TODO
+			// show page for authorization
+			res.end('you havent complete authorization');
+			return;
+		}
+
+		let lobbyId = req.url.split('?')[1].substring(3); // get arguments looks like 'id=123...', so we just getting our id argument
+		let lobby = LobbyManager.getLobbyById(lobbyId);
+
+		if (!lobby) {
+			// TODO
+			// show page for "lobby not found"
+			res.end('such lobby doesnt exist');
+			return;
+		}
+
+		// TODO lobby.hasPassword() method
+		if (lobby.hasPassword()) {
+			// TODO
+			// show page for "enter password"
+			res.end('enter lobby password');
+		}
+
+		//next goes successful lobby entering
+		// it implementation is simple make, client join lobby, if possible, afther that redirect him to /lobby page
+
+		// TODO
+		res.end('successful entering...');
+	}
+
 	avatar_set_page( req, res ) {
 		let path_ = 'public/avatar/set_avatar.html';
 

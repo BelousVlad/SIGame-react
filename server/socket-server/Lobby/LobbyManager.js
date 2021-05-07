@@ -17,6 +17,10 @@ class LobbyManager{
 		return lobby;
 	}
 
+	getLobbyById(id) {
+		return Object.values(this.lobbies).find(item => item.id == id);
+	}
+
 	isPlayerIntoLobby(client)
 	{
 		for(let lobby in this.lobbies)

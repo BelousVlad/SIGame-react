@@ -10,7 +10,8 @@ class LobbyController extends DomainController{
 		super({
 			'get_lobbies' : 'get_lobbies',
 			'create_lobby' : 'create_lobby',
-			'connect_lobby' : 'connect_lobby'
+			'connect_lobby' : 'connect_lobby',
+			'get_lobby_id' : 'get_lobby_id'
 		})
 	}
 
@@ -106,6 +107,15 @@ class LobbyController extends DomainController{
 			}
 
 		}
+	}
+
+	get_lobby_id(ws, msg) {
+		let key = msg.key;
+		let client = ClientManager.getClient(key);
+		let lobby = LobbyManager.getLobbyByClientKey(key);
+
+		if (lobby)
+			this.send(ws,'lobby_id', lobby.id);
 	}
 
 }

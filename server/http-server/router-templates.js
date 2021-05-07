@@ -15,8 +15,8 @@ module.exports =
 	},
 
 	'mainController/get_avatar' : ( req ) => {
-		var bool =  req.url.split('?')[0] === '/api/get/avatar' && req.method.toLowerCase() === 'get';
-		return bool;
+		var bool_ =  req.url.split('?')[0] === '/api/get/avatar' && req.method.toLowerCase() === 'get';
+		return bool_;
 	},
 
 	'mainController/send' : ( req ) => {
@@ -37,6 +37,16 @@ module.exports =
         let client = ClientManager.getClient(cookies.key);
 
         return !(client && client.name);
+    },
+
+    'mainController/follow_invite' : ( req ) => {
+    	var flag = Boolean(
+    		req.url.split('?')[0] === '/follow' &&
+    		req.method.toLowerCase() === 'get' &&
+    		/^id=\d{1,10}$/.test(req.url.split('?')[1])
+    	)
+
+    	return flag;
     },
 
 	'mainController/create_lobby' : '^/create-lobby$',

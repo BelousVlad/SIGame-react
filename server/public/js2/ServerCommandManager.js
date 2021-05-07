@@ -24,6 +24,10 @@ class ServerCommandManager {
 		this.send('lobby.create_lobby', { title, max_players, password });
 	}
 
+	getLobbyId() {
+		this.send('lobby.get_lobby_id');
+	}
+
 	//Дальше идут служебные методы (приватные)
 
 	send(action, data)
