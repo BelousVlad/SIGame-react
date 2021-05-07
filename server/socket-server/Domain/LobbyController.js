@@ -90,13 +90,19 @@ class LobbyController extends DomainController{
 				if (is_pass)
 				{
 					let code = LobbyManager.addClientToLobby(lobby, client);
-					let is_host = lobby.host.key == key;
-					let lobby_ = { title : lobby.title, max_players: lobby.max_players, code, is_host }
-					if (lobby.game) {
-						lobby_.game = true;
-					}
+					if (code === LobbyManager.LOBBY_CREATED_OK)
+					{
+						let is_host = lobby.host.key == key;
+						let lobby_ = lobby.getFullInfo(client);
 
-					client.send('lobby_connected', lobby_);
+						client.send('lobby_connected', { lobby : lobby_, code: code });
+					}
+					else
+					{
+						client.send('lobby_connected', lobby_);
+
+					}
+					
 				}
 				else
 					client.send('lobby_connected', { title : lobby.title, max_players: lobby.max_players, code: Lobby.INCORRECT_PASSWORD });

@@ -15,9 +15,8 @@ class Lobby {
 	packState = 'none'; // состояния в котором может находиться пак. предполагается 3 варианта : none, uploading, ready;
 	pack = {};
 
-	constructor(id, title, max_p, password)
+	constructor(title, max_p, password)
 	{
-		this.id = id;
 		this.clients = new Object();
 		this.max_players = max_p ;
 		this.title = title ;
@@ -27,6 +26,7 @@ class Lobby {
 		this.master = undefined;
 
 		this.config = Lobby.defaultConfig;
+		
 		this.game = undefined;
 
 		this.chat = new Chat(this);
@@ -56,18 +56,6 @@ class Lobby {
 		return undefined;
 	}
 
-	changeClientScore(client, score)
-	{
-		if (this.clients[client.key])
-		{
-			this.scores[client.key] = score;
-
-			this.emit('lobby_client_score_changed', client, score)
-
-			return true;
-		}
-		return false;
-	}
 
 	sendForClients(action, data)
 	{
@@ -124,10 +112,6 @@ class Lobby {
 		if ( Object.keys( this.clients ).length < this.max_players)
 		{
 			this.clients[clientKey] = client;
-			if (!this.scores[clientKey])
-			{
-				this.scores[clientKey] = 0;
-			}
 
 			if (!this.host)
 			{
@@ -141,11 +125,6 @@ class Lobby {
 		{
 			return Lobby.MAX_PLAYERS_ERROR;
 		}
-	}
-
-	// TODO
-	hasPassword() {
-		return !!this.password;
 	}
 
 	kickClientByName(name)
@@ -190,7 +169,7 @@ class Lobby {
 		{
 			this.master = undefined;
 		}
-		this.emit('lobby_client_removed', client)
+		// this.emit('lobby_client_removed', client)
 	}
 
 	startGame()
@@ -199,8 +178,8 @@ class Lobby {
 		if (this.packState === 'ready')
 		{
 			console.log('pack ready')
-
-			let factory = GameInitializer.createInstance();
+			
+			let factory = GameInitializer.createInstance();		
 
 			this.game = factory.createGame(this.config, this);
 
@@ -208,11 +187,6 @@ class Lobby {
 
 			this.emit('lobby_game_start');
 		}
-	}
-
-	test_file(args)//test function
-	{
-		this.game.file_sended(args);
 	}
 
 	uploadPackStart()
@@ -226,15 +200,12 @@ class Lobby {
 
 	uploadPackEnd()
 	{
-
 		PackReader.getPackFromFolder(this.packFolder)
 		.then((pack) => {
 			this.pack = pack;
 			this.packState = 'ready';
 		})
-
 	}
-
 
 	getClientPosition(client)
 	{
@@ -263,7 +234,7 @@ class Lobby {
 	getInfo()
 	{
 		let lobby_ = {
-			title : this.title,
+			title : this.title, 
 			max_players: this.max_players,
 			is_password: !!this.password,
 			is_game: !!this.game
@@ -284,7 +255,7 @@ class Lobby {
 
 		if (client)
 			result.position = this.getClientPosition(client);
-
+		
 		return result;
 	}
 
@@ -309,7 +280,7 @@ class Lobby {
 		return 404;
 	}
 
-	static get defaultConfig(){
+	static get defaultConfig() {
 		return {
 			maxPlayers : 3,
 			rules : {},
