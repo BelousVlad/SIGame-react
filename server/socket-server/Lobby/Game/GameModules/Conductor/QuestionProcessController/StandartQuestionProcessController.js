@@ -6,7 +6,7 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
 	constructor(lobby, game)
 	{
 		super(lobby, game);
-		this.reply_request_time = .15e5; 
+		this.reply_request_time = .15e5;
 		this.question_time = 15e3;
 	}
 
@@ -48,9 +48,10 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
 		}
 	}
 
-	waitForAllReady()
+	waitForAllReady(timeout_)
 	{
 		return new Promise((resolve, reject) => {
+			setTimeout(() => resolve(), timeout_);
 			if (Object.keys(this.wait_process.clients).length === 0) {
 				resolve();
 			}
@@ -79,16 +80,20 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
 
 	async questionProcess(question)
 	{
+
+		// send all resources.
 		this.startForAllReady();
 		let resources = question.getQuestionResources();
 		for(let key in this.lobby.clients)
 		{
 			this.sendClientResources(this.lobby.clients[key], resources)
 		}
-		await this.waitForAllReady();
+		await this.waitForAllReady(resources.length * 1e3); // 1 sec for each resource
 
 		console.log('clients ready');
 
+
+		// show resources one by one up to back of array.
 		let stage = 0;
 		for(let resource of resources)
 		{
@@ -102,14 +107,16 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
 			else
 			{
 				if (resource.type === 'text')
-					time = 5 + resource.content.length / 25; // 25 - скорость чтения символов в минуту
+					time = 1.375 + resource.content.length / 25; // 25 - скорость чтения символов в минуту
 
+				time *= 1e3;
 			}
 
-			await this.waitForAllReady();
+			await this.waitForAllReady(time + 1e3); // gives 1 additional second
 			stage++;
 		}
 
+		// answer stage start
 		lobby.sendForClients('client_question_reply_request', { time: this.reply_request_time });
 
 	}
