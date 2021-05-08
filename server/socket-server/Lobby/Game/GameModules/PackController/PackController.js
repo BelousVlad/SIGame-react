@@ -43,17 +43,17 @@ class PackController extends GameModule {
 		var themeList = this.package.roundList[roundIndex].themeList;
 
 		//counting unused questions
-		questionCheckList.forEach( item => item.forEach( item => /*short if-else*/!item ? countOfUnusedQuestions++ : null));
-
+		questionCheckList[roundIndex].forEach( item => item.forEach( item => /*short if-else*/!item ? countOfUnusedQuestions++ : null));
+		console.log(countOfUnusedQuestions);
 		var index = parseInt( Math.random() * countOfUnusedQuestions );
 		var count = 0;
 
-		for (var i = 0; i < questionCheckList.length; i++)
-			for (var j = 0; j < questionCheckList[i].length; j++) {
+		for (var i = 0; i < questionCheckList[roundIndex].length; i++)
+			for (var j = 0; j < questionCheckList[roundIndex][i].length; j++) {
 				if (count === index)
 					return themeList[i].questionList[j];
 
-				if (!questionCheckList[i][j])
+				if (!questionCheckList[roundIndex][i][j])
 					count++;
 			}
 	}
