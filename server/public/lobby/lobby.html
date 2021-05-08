@@ -145,9 +145,15 @@
 	document.querySelector('.previous-round-btn').onclick = function ( ) {
 		app.speakerctrl.previousRound();
 	}
+	
+	$(document).on('click', '.round-question', function(e) {
+		let theme_id = $(this).data('theme-index');
+		let question_id = $(this).data('question-index');
+
+		app.ServerCommandManager.choiceQuestion(theme_id, question_id);
+	});
 
 </script>
-
 
 </body>
 </html>

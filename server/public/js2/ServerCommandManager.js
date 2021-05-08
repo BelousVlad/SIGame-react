@@ -49,9 +49,9 @@ class ServerCommandManager {
 		this.send('lobby.start_game');
 	}
 
-	chooseQuestion(themeIndex, questionIndex)
+	choiceQuestion(theme_index, question_index)
 	{
-		this.send('lobby.choose_question', {themeIndex, questionIndex});
+		this.send('lobby.choice_question', { theme_index, question_index });
 	}
 
 	//Дальше идут служебные методы (приватные)
