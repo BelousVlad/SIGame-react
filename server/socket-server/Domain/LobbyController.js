@@ -1,10 +1,12 @@
 const DomainController = require('./DomainController');
+const GameController = require('./GameController');
 const LobbyManager = require('./../Lobby/LobbyManager');
 const Lobby = require('./../Lobby/Lobby');
 const ClientManager = require('./../ClientManager');
+const DomainRouter = require('./DomainRouter');
 
 
-class LobbyController extends DomainController{
+class LobbyController extends DomainController {
 	constructor()
 	{
 		super({
@@ -16,6 +18,10 @@ class LobbyController extends DomainController{
 			'became_master' : 'became_master',
 			'stop_master' : 'stop_master'
 		})
+		this.router = new DomainRouter();
+		this.GameController = new GameController();
+
+		this.router.registerDomain('game', this.GameController);
 	}
 
 	get_lobbies(ws, msg)
@@ -153,7 +159,20 @@ class LobbyController extends DomainController{
 				lobby.removeMaster();
 			}
 		}
+	}
 
+	action(rout, ws, msg)
+	{
+		if (rout.includes('.'))
+		{
+			this.router.run(rout, ws, msg)
+		}
+		else
+		{
+			let method = this.routes[rout];
+			this[method](ws, msg);
+		}
+	
 	}
 
 }

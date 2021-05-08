@@ -44,6 +44,11 @@ class ServerCommandManager {
 		this.send('lobby.stop_master');
 	}
 
+	choiceQuestion(theme_id, question_id)
+	{
+		this.send('lobby.choice_question', { theme_id, question_id });
+	}
+
 	//Дальше идут служебные методы (приватные)
 
 	send(action, data)

@@ -51,7 +51,7 @@ class BasicConductor extends AbstractConductor {
 
 	questionChoosed(client, question)
 	{
-		if (this.status == 'wait_for_choose_question')
+		if (this.status == 'wait-choose-question')
 		{
 			if (client.key === player.key || client.key === lobby.master.key)
 			{
@@ -64,7 +64,12 @@ class BasicConductor extends AbstractConductor {
 	startQuestionProcess(question)
 	{
 		// console.log(this.QestionProcessController);
-		this.QestionProcessController.startQuestionProcess(question);
+		this.status = 'question-process'
+		this.QestionProcessController.startQuestionProcess(question)
+			.then(() => {
+				this.status = 'question-process' //TODO check next round
+				this.turn();
+		});
 	}
 
 	chooseQuestion()
@@ -79,8 +84,9 @@ class BasicConductor extends AbstractConductor {
 		console.log('requireChooceQuestion');
 
 		let time = this.choose_question_time;
+		this.lobby.sendForClients('choosing_question', { player_name: player.name, time: time } );
 		player.send('choose_question', { time: time });
-		this.status = 'wait_for_choose_question';
+		this.status = 'wait-choose-question';
 
 		this.timer = new Timer(time, {
 			fail: (e) => {
@@ -100,7 +106,7 @@ class BasicConductor extends AbstractConductor {
 				console.log('start question process');
 				this.startQuestionProcess(question1);
 
-			}, filter: (e) => this.status !== 'wait_for_choose_question'}
+			}, filter: (e) => this.status !== 'wait-choose-question'}
 		)
 	}
 
