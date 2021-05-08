@@ -23,6 +23,7 @@ class Router{
 
 	getServerMessage(message)
 	{
+		console.log(message);
 		this.manager[this.routes[message.action]](message);
 	}
 }

@@ -117,7 +117,7 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
 		}
 
 		// answer stage start
-		lobby.sendForClients('client_question_reply_request', { time: this.reply_request_time });
+		this.lobby.sendForClients('client_question_reply_request', { time: this.reply_request_time });
 
 	}
 

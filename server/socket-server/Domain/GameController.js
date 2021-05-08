@@ -1,4 +1,6 @@
 const DomainController = require('./DomainController');
+const LobbyManager = require('./../Lobby/LobbyManager');
+const ClientManager = require('./../ClientManager');
 
 class GameController extends DomainController {
 	constructor()

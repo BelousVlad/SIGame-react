@@ -4,15 +4,14 @@ class GameData {
 
 	constructor(packInfo)
 	{
-		let question_list;
-		if (packInfo) 
-			question_list = packInfo.question_list;
+		if (packInfo.package_template) 
+			this.setQuestionUsedByTemplate(packInfo.package_template);
 
-		if (question_list)
-		{
-			this.setQuestionUsedByTemplate(question_list);
-		}
-		
+		this.scores = {};
+		if (packInfo.clients)
+			for(let key in packInfo.clients)
+				this.scores[key] = 0;
+
 	}
 	setQuestionUsedByTemplate(question_template_list)
 	{

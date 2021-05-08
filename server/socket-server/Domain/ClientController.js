@@ -86,8 +86,6 @@ class ClientController extends DomainController{
 		let lobby_ = LobbyManager.getLobbyByClient(client);
 		let lobby;
 
-		console.log(lobby_, client);
-
 		if (lobby_)
 		{
 			lobby = lobby_.getFullInfo(client);

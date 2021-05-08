@@ -118,6 +118,9 @@ class Lobby {
 				this.host = client;
 			}
 
+			if (this.game && (clientKey in this.game.game_data.scores))
+				this.game.game_data.scores[clientKey] = 0;
+
 			this._updatePlayers();
 			return Lobby.CLIENT_CONNECT_TO_LOBBY_OK;
 		}
@@ -178,7 +181,7 @@ class Lobby {
 
 		let factory = GameInitializer.createInstance();
 
-		this.game = factory.createGame(this.config, this);
+		this.game = factory.createGame({ ...this.config, clients: this.clients }, this);
 
 		this.game.start();
 

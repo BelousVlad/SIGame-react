@@ -17,7 +17,7 @@ class GameInitializer {
 		//TODO процесс сборки игры
 		let game = new Game(lobby);
 		let file_module = new BasicFileLoader(lobby);
-		game.game_info = new GameData(); // order is matter
+		game.game_info = new GameData(config); // order is matter
 		game.setFileLoaderModule(file_module);
 		game.conductor = new BasicConductor(lobby, game);
 		game.question_putter = new BasicQuestionPutter(lobby, game);

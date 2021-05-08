@@ -85,7 +85,7 @@ class Game {
 
 	getQuestion(theme_index, question_index)
 	{
-		return question = this.pack_controller.getItemByIndexes(this.game_info.current_round, theme_index, question_index);
+		return this.pack_controller.getItemByIndexes(this.game_info.current_round, theme_index, question_index);
 	}
 
 	moduleMessage(ws, msg)

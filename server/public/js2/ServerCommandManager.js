@@ -51,7 +51,7 @@ class ServerCommandManager {
 
 	choiceQuestion(theme_index, question_index)
 	{
-		this.send('lobby.choice_question', { theme_index, question_index });
+		this.send('lobby.game.choice_question', { theme_index, question_index });
 	}
 
 	//Дальше идут служебные методы (приватные)

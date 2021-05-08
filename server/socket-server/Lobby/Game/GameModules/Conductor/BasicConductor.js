@@ -52,7 +52,7 @@ class BasicConductor extends AbstractConductor {
 	{
 		if (this.status == 'wait-choose-question')
 		{
-			if (client.key === player.key || client.key === lobby.master.key)
+			if (client.key === this.choose_player.key || client.key === lobby.master.key)
 			{
 				console.log('question choised')
 				this.timer.forceSuccess(client, question);
@@ -73,7 +73,7 @@ class BasicConductor extends AbstractConductor {
 	chooseQuestion()
 	{
 		let player = this.getQueueQuestionPlayer();
-
+		this.choose_player = player;
 		this.requireChooceQuestion(player);
 	}
 
@@ -95,9 +95,9 @@ class BasicConductor extends AbstractConductor {
 			}, success:  (client, question) => {
 				this.status = 'processing-question';
 
-				let theme_index = question.theme;
-				let question_index = question.question;
-				let question1 = this.getQuestion(theme_index, question_index);
+				let theme_index = question.theme_index;
+				let question_index = question.question_index;
+				let question1 = this.game.getQuestion(theme_index, question_index);
 				this.startQuestionProcess(question1);
 
 			}, filter: (e) => this.status !== 'wait-choose-question'}
