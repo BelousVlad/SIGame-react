@@ -14,7 +14,9 @@ class LobbyController extends DomainController{
 			'get_lobby_id' : 'get_lobby_id',
 			'connect_lobby' : 'connect_lobby',
 			'became_master' : 'became_master',
-			'stop_master' : 'stop_master'
+			'stop_master' : 'stop_master',
+			'start_game' : 'start_game',
+			'choose_question' : 'choose_question'
 		})
 	}
 
@@ -102,7 +104,7 @@ class LobbyController extends DomainController{
 						client.send('lobby_connected', { code });
 
 					}
-					
+
 				}
 				else
 					client.send('lobby_connected', { title : lobby.title, max_players: lobby.max_players, code: Lobby.INCORRECT_PASSWORD });
@@ -153,9 +155,30 @@ class LobbyController extends DomainController{
 				lobby.removeMaster();
 			}
 		}
-
 	}
 
+	start_game(ws, msg)
+	{
+		let key = msg.key;
+		let client = ClientManager.getClient(key);
+		if (!client)
+			return;
+
+		let lobby = LobbyManager.getLobbyByClientKey(key);
+		if (!lobby)
+			return;
+
+		let master = lobby.master || new Object;
+		if (master.key !== key)
+			return;
+
+		lobby.startGame();
+	}
+
+	choose_question(ws, msg)
+	{
+
+	}
 }
 
 module.exports = LobbyController;

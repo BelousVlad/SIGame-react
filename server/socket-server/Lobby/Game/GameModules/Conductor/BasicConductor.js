@@ -7,7 +7,6 @@ class BasicConductor extends AbstractConductor {
 	constructor(lobby, game)
 	{
 		super(lobby, game);
-		this.test = 0;
 		this.QestionProcessController = new StandartQestionProcessController(lobby, game);
 		this.game.addListener('question-choosed',this.questionChoosed.bind(this))
 		this.timer = {};
@@ -63,7 +62,6 @@ class BasicConductor extends AbstractConductor {
 
 	startQuestionProcess(question)
 	{
-		// console.log(this.QestionProcessController);
 		this.QestionProcessController.startQuestionProcess(question);
 	}
 
@@ -76,8 +74,6 @@ class BasicConductor extends AbstractConductor {
 
 	requireChooceQuestion(player)
 	{
-		console.log('requireChooceQuestion');
-
 		let time = this.choose_question_time;
 		player.send('choose_question', { time: time });
 		this.status = 'wait_for_choose_question';
@@ -87,8 +83,7 @@ class BasicConductor extends AbstractConductor {
 				this.status = 'processing-question';
 				//let question = { text: 'fail - normal question' }; //TODO GET random question
 				let question = this.game.getRandomQuestion();
-				console.log('start question process');
-				
+
 				this.startQuestionProcess(question);
 
 			}, success:  (client, question) => {
@@ -97,7 +92,6 @@ class BasicConductor extends AbstractConductor {
 				let theme_index = question.theme;
 				let question_index = question.question;
 				let question1 = this.getQuestion(theme_index, question_index);
-				console.log('start question process');
 				this.startQuestionProcess(question1);
 
 			}, filter: (e) => this.status !== 'wait_for_choose_question'}

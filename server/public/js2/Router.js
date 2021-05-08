@@ -16,7 +16,8 @@ class Router{
 			'question_resources' : 'lobby_game_question_resources',
 			'lobby_id' : 'lobby_id_collected',
 			'status' : 'status',
-			'update_players' : 'update_players'
+			'update_players' : 'update_players',
+			'show_round_info' : 'show_round_info'
 		};
 	}
 

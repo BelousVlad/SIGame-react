@@ -27,7 +27,7 @@ class Lobby {
 		this.master = undefined;
 
 		this.config = Lobby.defaultConfig;
-		
+
 		this.game = undefined;
 
 		this.chat = new Chat(this);
@@ -166,19 +166,23 @@ class Lobby {
 		// this.emit('lobby_client_removed', client)
 	}
 
+	// return true if game have successful created, else return false
 	startGame()
 	{
-		console.log(this.pack);
-		if (this.packState === 'ready')
-		{
-			console.log('pack ready')
-			
-			let factory = GameInitializer.createInstance();		
+		if (this.packState !== 'ready') // check for pack ready state
+			return false;
 
-			this.game = factory.createGame(this.config, this);
+		if (this.game) // check if game already exist
+			return false;
 
-			this.game.start();
-		}
+
+		let factory = GameInitializer.createInstance();
+
+		this.game = factory.createGame(this.config, this);
+
+		this.game.start();
+
+		return true;
 	}
 
 	uploadPackStart()
@@ -226,8 +230,8 @@ class Lobby {
 	getInfo()
 	{
 		let lobby_ = {
-			id : this.id, 
-			title : this.title, 
+			id : this.id,
+			title : this.title,
 			max_players: this.max_players,
 			players_count: Object.keys(this.clients).length,
 			is_password: !!this.password,
@@ -249,7 +253,7 @@ class Lobby {
 
 		if (client)
 			result.position = this.getClientPosition(client);
-		
+
 		return result;
 	}
 

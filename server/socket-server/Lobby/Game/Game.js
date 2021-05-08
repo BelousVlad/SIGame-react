@@ -19,7 +19,6 @@ class Game {
 		return this.files_loader.loadToClientsFile(file)
 		.then(() => {
 
-			console.log('LOOOOOOOOOOOOOOG');
 		}); // данная функция должна возвращать промис
 	}
 
@@ -29,6 +28,7 @@ class Game {
 
 		prices = prices[this.game_info.current_round];
 		let themes = this.pack_controller.getThemesTitles(this.game_info.current_round);
+
 		return { themes, prices };
 	}
 

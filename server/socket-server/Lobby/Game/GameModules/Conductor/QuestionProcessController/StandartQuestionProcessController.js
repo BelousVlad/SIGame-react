@@ -74,7 +74,7 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
 	{
 		for(let key in this.lobby.clients)
 		{
-			lobby.clients[key].send('question_stage', { stage_number: stage_number });
+			this.lobby.clients[key].send('question_stage', { stage_number: stage_number });
 		}
 	}
 

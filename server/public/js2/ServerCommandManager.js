@@ -44,6 +44,16 @@ class ServerCommandManager {
 		this.send('lobby.stop_master');
 	}
 
+	startLobbyGame()
+	{
+		this.send('lobby.start_game');
+	}
+
+	chooseQuestion(themeIndex, questionIndex)
+	{
+		this.send('lobby.choose_question', {themeIndex, questionIndex});
+	}
+
 	//Дальше идут служебные методы (приватные)
 
 	send(action, data)

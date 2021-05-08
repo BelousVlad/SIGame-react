@@ -1,3 +1,11 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<link rel="stylesheet" type="text/css" href="./style.css">
+</head>
+<body>
+
 <h1>Lobby</h1>
 <div class="container">
 	<div class="master-container"></div>
@@ -20,7 +28,7 @@
 
 		</div>
 		<div class="lobby-main-canvas-box">
-			
+
 			<div class="main-canvas-paragraph-container">
 				<div class="main-paragraph paragraph">
 					Стол
@@ -31,10 +39,11 @@
 			</div>
 
 			<div class="main-canvas">
-				<div class="lobby-game-container"></div>
+				<div class="lobby-game-container">
+
+				</div>
 				<div class="lobby-info-container"></div>
 			</div>
-
 
 		</div>
 
@@ -122,7 +131,7 @@
 	}
 
 	document.querySelector('.game-start-btn').onclick = function ( ) {
-		app.speakerctrl.startGame();
+		app.ServerCommandManager.startLobbyGame();
 	}
 
 	document.querySelector('.get-round').onclick = function ( ) {
@@ -138,3 +147,7 @@
 	}
 
 </script>
+
+
+</body>
+</html>

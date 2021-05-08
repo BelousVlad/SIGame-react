@@ -11,7 +11,7 @@ class ServerResponseManager {
 
 	lobby_list(msg)
 	{
-		app.view.showLobbyList(msg.data)
+		this.app.view.showLobbyList(msg.data)
 	}
 
 	name_set_status(msg)
@@ -72,6 +72,11 @@ class ServerResponseManager {
 	lobby_id_collected(msg) {
 		let lobbyId = parseInt( msg.data );
 		console.log(lobbyId);
+	}
+
+	show_round_info(msg) {
+		// msg.data is object which looks like {themes: [...], prices: [...]}
+		this.app.view.viewRoundInfo(msg.data);
 	}
 
 }

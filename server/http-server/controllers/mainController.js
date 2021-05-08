@@ -101,6 +101,13 @@ class MainController{
 	*/
 	send( req, res ){
 		let url = (req.url).split('?')[0];
+
+		let extname = path.extname(url);
+		if (extname === '.ico') {
+			res.end('');
+			return;
+		}
+
 		let path_ = path.join( config.rootPath , 'public', url);
 		fs.readFile( path_, 'utf-8', ( err, data ) => {
 			if (err){

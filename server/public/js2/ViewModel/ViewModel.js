@@ -1,7 +1,7 @@
 class ViewModel {
 	constructor()
 	{
-		
+
 	}
 
 	showLobbyList(arr)
@@ -30,7 +30,7 @@ class ViewModel {
 			else
 				html += this.getPlayerBanner(player, position)
 		}
-		
+
 		$(".players-container").html(html);
 	}
 
@@ -106,5 +106,36 @@ class ViewModel {
 
 			$('.wrapper').append(element)
 		})
+	}
+
+	viewRoundInfo(input_)
+	{
+		let themes = input_.themes;
+		let prices = input_.prices;
+		let container = $(`.lobby-game-container`);
+		var result = '';
+
+		console.log(prices);
+		for (var i = 0; i < themes.length; i++) {
+			result +=
+				`
+					<div class="theme-container">
+						<div class="theme-box">
+							${themes[i]}
+						</div>
+						${prices[i].reduce((accamulator, item, index) => {
+							return accamulator +
+							`
+							<div class="question-box round-question theme-question" data-theme-index="${i}" data-question-index="${index}">
+								${item}
+							</div>
+							`
+						}, '')}
+
+					</div>
+				`;
+		}
+
+		container.html(result);
 	}
 }
