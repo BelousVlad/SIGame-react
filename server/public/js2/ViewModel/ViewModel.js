@@ -66,7 +66,6 @@ class ViewModel {
 		builder.BuildAvatar(player.avatar);
 		if (position.is_host)
 			builder.BuildHostMenu();
-		
 
 		let html = builder.getResult();
 		if (position.is_host)

@@ -83,7 +83,7 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
 		let resources = question.getQuestionResources();
 		for(let key in this.lobby.clients)
 		{
-			this.sendClientResources(this.lobby.clients[key], question.getQuestionResources())
+			this.sendClientResources(this.lobby.clients[key], resources)
 		}
 		await this.waitForAllReady();
 
@@ -106,16 +106,11 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
 
 			}
 
-			for(let key in this.lobby.clients)
-			{
-				this.sendClientResources(client, question.getQuestionResources())
-			}
-
 			await this.waitForAllReady();
 			stage++;
 		}
 
-		lobby.sendForClients('client_question_reply_request', { price: question.price, time: this.reply_request_time });
+		lobby.sendForClients('client_question_reply_request', { time: this.reply_request_time });
 
 	}
 
