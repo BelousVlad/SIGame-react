@@ -37,14 +37,14 @@ class PackController extends GameModule {
 
 	getRandomQuestion(questionCheckList, roundIndex) {
 		var countOfUnusedQuestions = 0;
-		console.log(roundIndex)
-		console.log(questionCheckList)
-		console.log(this.package.roundList);
+		// console.log(roundIndex)
+		// console.log(questionCheckList)
+		// console.log(this.package.roundList);
 		var themeList = this.package.roundList[roundIndex].themeList;
 
 		//counting unused questions
 		questionCheckList[roundIndex].forEach( item => item.forEach( item => /*short if-else*/!item ? countOfUnusedQuestions++ : null));
-		console.log(countOfUnusedQuestions);
+
 		var index = parseInt( Math.random() * countOfUnusedQuestions );
 		var count = 0;
 

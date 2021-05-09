@@ -19,7 +19,7 @@ class BasicConductor extends AbstractConductor {
 
 	test_module_msg(ws, msg)
 	{
-		console.log(msg);
+		console.log('test message: ', msg);
 	}
 
 	//overrided
@@ -86,18 +86,20 @@ class BasicConductor extends AbstractConductor {
 
 		this.timer = new Timer(time, {
 			fail: (e) => {
+				console.log('fail branch');
 				this.status = 'processing-question';
 				//let question = { text: 'fail - normal question' }; //TODO GET random question
 				let question = this.game.getRandomQuestion();
-
+				console.log('question: ', question);
 				this.startQuestionProcess(question);
 
 			}, success:  (client, question) => {
 				this.status = 'processing-question';
-
+				console.log('suc branch');
 				let theme_index = question.theme_index;
 				let question_index = question.question_index;
 				let question1 = this.game.getQuestion(theme_index, question_index);
+				console.log('question: ', question1);
 				this.startQuestionProcess(question1);
 
 			}, filter: (e) => this.status !== 'wait-choose-question'}

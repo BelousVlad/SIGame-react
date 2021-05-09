@@ -115,7 +115,14 @@ class ViewModel {
 		let container = $(`.lobby-game-container`);
 		var result = '';
 
-		console.log(prices);
+		// fill array with empty items to achive same items count.
+		var maxQuestionsInTheme = Math.max( ...prices.map(item => item.length) );
+		prices = prices.map(priceList => {
+			while (priceList.length < maxQuestionsInTheme)
+				priceList.push('');
+			return priceList;
+		})
+
 		for (var i = 0; i < themes.length; i++) {
 			result +=
 				`
@@ -137,5 +144,15 @@ class ViewModel {
 		}
 
 		container.html(result);
+	}
+
+	enableAnswerButton()
+	{
+		$('.game-answer-btn').removeAttr('disabled');
+	}
+
+	disableAnswerButton()
+	{
+		$('.game-answer-btn').prop('disabled', true);
 	}
 }
