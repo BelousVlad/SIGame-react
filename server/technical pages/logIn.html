@@ -9,7 +9,8 @@ logIn page<br/>
 
 		if (name && name != '')
 		{
-			app.ServerCommandManager.setName(name)
+			app.ServerCommandManager.setName(name);
+			location.reload();
 		}
 	});
 </script>
