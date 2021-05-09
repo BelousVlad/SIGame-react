@@ -6,7 +6,8 @@ class GameController extends DomainController {
 	constructor()
 	{
 		super({
-			'choice_question' : 'choice_question'
+			'choice_question' : 'choice_question',
+			'client_ready' : 'client_ready'
 		})
 	}
 
@@ -20,14 +21,20 @@ class GameController extends DomainController {
 			if (lobby)
 			{
 				lobby?.game.questionChoosed(
-					client, 
-					{ 
+					client,
+					{
 						theme_index: msg.data.theme_index,
 						question_index: msg.data.question_index
 					}
 				);
 			}
 		}
+	}
+
+	client_ready(ws, msg)
+	{
+		//TODO
+		console.log('client ready invoked, msg: ', msg);
 	}
 }
 
