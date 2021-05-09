@@ -99,7 +99,7 @@ class Game {
 		}
 	}
 
-	playerReady(client)
+	clientReady(client)
 	{
 		this.conductor.clientReady(client);
 	}

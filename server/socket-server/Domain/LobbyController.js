@@ -62,9 +62,6 @@ class LobbyController extends DomainController {
 				let lobby = LobbyManager.createLobby(title, password, max);
 				client.send('lobby_create', { title : lobby.title, code: LobbyManager.LOBBY_CREATED_OK });
 
-				// this.set_lobby_events(lobby);
-
-				console.log();
 				msg.data.id = lobby.id;
 				this.connect_lobby(ws, msg )
 			}

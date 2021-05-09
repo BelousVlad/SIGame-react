@@ -64,9 +64,14 @@ class BasicConductor extends AbstractConductor {
 	{
 		this.status = 'question-process'
 		this.QestionProcessController.startQuestionProcess(question)
-			.then(() => {
-				this.status = 'question-process' //TODO check next round
-				this.turn();
+		.then(() => {
+			//this.status = 'question-process' //TODO check next round
+			this.turn();
+		})
+		.catch((val) => {
+			console.log('question process catch:', val);
+			if (val === 1)
+				console.log('No one reply')
 		});
 	}
 
@@ -100,7 +105,7 @@ class BasicConductor extends AbstractConductor {
 				this.status = 'processing-question';
 				//let question = { text: 'fail - normal question' }; //TODO GET random question
 				let question = this.game.getRandomQuestion();
-				console.log('question: ', question);
+
 				this.startQuestionProcess(question);
 
 			}, success:  (client, question) => {
@@ -109,7 +114,7 @@ class BasicConductor extends AbstractConductor {
 				let theme_index = question.theme_index;
 				let question_index = question.question_index;
 				let question1 = this.game.getQuestion(theme_index, question_index);
-				console.log('question: ', question1);
+
 				this.startQuestionProcess(question1);
 
 			}, filter: (e) => this.status !== 'wait-choose-question'}
