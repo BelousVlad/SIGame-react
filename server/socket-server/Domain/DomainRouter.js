@@ -17,6 +17,7 @@ class DomainRouter{
 		let action = rout.substring(index + this.splitter.length);
 
 		this.domains[domain].action(action, ws, msg);
+
 	}
 }
 

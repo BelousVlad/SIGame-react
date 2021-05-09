@@ -22,8 +22,8 @@ class GameController extends DomainController {
 			if (lobby)
 			{
 				lobby?.game.questionChoosed(
-					client, 
-					{ 
+					client,
+					{
 						theme_index: msg.data.theme_index,
 						question_index: msg.data.question_index
 					}
@@ -44,6 +44,7 @@ class GameController extends DomainController {
 				lobby?.game.clientReady(client)
 			}
 		}
+		console.log('client ready invoked, msg: ', msg);
 	}
 
 	client_ask_to_reply(ws, msg)
@@ -59,10 +60,6 @@ class GameController extends DomainController {
 			}
 		}
 	}
-
-
-
-
 }
 
 module.exports = GameController;
