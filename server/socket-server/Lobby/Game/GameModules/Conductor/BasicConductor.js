@@ -11,7 +11,7 @@ class BasicConductor extends AbstractConductor {
 		this.game.addListener('question-choosed',this.questionChoosed.bind(this))
 		this.timer = {};
 		this.status = 'first_turn';
-		this.last_choiced_player_key = Object.keys(this.lobby.clients)[0];
+		this.last_choiced_player_key = undefined; /*Object.keys(this.lobby.clients)[0];*/
 		this.game.registerModuleMessage('test_module_msg', this, this.test_module_msg); //TODO delete
 
 		this.choose_question_time = 3000;
@@ -118,35 +118,15 @@ class BasicConductor extends AbstractConductor {
 
 	getQueueQuestionPlayer() // метод для получения игрока которого очередь отвечать
 	{
-		let keys = Object.keys(this.lobby.clients);
-		return this.lobby.clients[keys[0]];
+		// if specific player with right for choose is avaiable then return it.
+		if ( Object.keys(this.lobby.clients).indexOf(this.player_with_right_for_choose) !== -1 && this.lobby.master !== this.player_with_right_for_choose)
+			return this.player_with_right_for_choose;
 
-		let last_key_index = keys.indexOf(this.last_choiced_player_key);
+		var playersList = Object.values(this.lobby.clients).filter(player => player.key !== this.lobby.master.key);
 
-		let index = last_key_index++;
-		let player = this.lobby.clients[keys[index]];
+		this.player_with_right_for_choose = playersList[ /*get random index*/ parseInt( Math.random() * playersList.length ) ];
 
-		let master_key = this.lobby.master.key;
-
-		if (player) {
-			if (player.key == master_key) {
-				this.last_choiced_player_key = master_key;
-				return this.getQueueQuestionPlayer();
-			}
-			this.last_choiced_player_key = player.key;
-			return player;
-		}
-		else {
-			if (this.lobby.clients[keys[0]].key == master_key)
-			{
-				player = this.lobby.clients[keys[1]];
-				this.last_choiced_player_key = player.key;
-				return this.lobby.clients[keys[1]];
-			}
-			player = this.lobby.clients[keys[0]];
-			this.last_choiced_player_key = player.key;
-			return this.lobby.clients[keys[0]];
-		}
+		return this.player_with_right_for_choose;
 	}
 }
 
