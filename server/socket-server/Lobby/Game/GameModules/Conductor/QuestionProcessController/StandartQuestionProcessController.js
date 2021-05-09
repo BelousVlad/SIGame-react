@@ -70,11 +70,16 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
 		}
 	}
 
-	clientsStage(stage_number)
+	askToReply(client)
+	{
+		this.reply_clients[client.key] = client;
+	}
+
+	clientsStage(stage_number, time)
 	{
 		for(let key in this.lobby.clients)
 		{
-			this.lobby.clients[key].send('question_stage', { stage_number: stage_number });
+			this.lobby.clients[key].send('question_stage', { stage_number: stage_number, time: time });
 		}
 	}
 
@@ -97,9 +102,8 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
 		let stage = 0;
 		for(let resource of resources)
 		{
-			this.startForAllReady();
+			// this.startForAllReady();
 
-			this.clientsStage(stage);
 
 			let time = 0;
 			if (resource.time)
@@ -111,16 +115,21 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
 
 				time *= 1e3;
 			}
+			this.clientsStage(stage, time);
 
-			await this.waitForAllReady(time + 1e3); // gives 1 additional second
+			await time; //TODO
+
+			// await this.waitForAllReady(time + 1e3); // gives 1 additional second
 			stage++;
 		}
 
 		// answer stage start
+		// this.startForAllReady();
 		this.lobby.sendForClients('client_question_reply_request', { time: this.reply_request_time });
+		// await this.waitForAllReady(this.reply_request_time);
+
 
 	}
-
 }
 
 module.exports = StandartQuestionProcessController;

@@ -99,6 +99,16 @@ class Game {
 		}
 	}
 
+	playerReady(client)
+	{
+		this.conductor.clientReady(client);
+	}
+
+	askToReply(client)
+	{
+		this.conductor.askToReply(client);
+	}
+
 	getGameStatus()
 	{
 		let obj = {}

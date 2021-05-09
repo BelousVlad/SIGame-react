@@ -77,6 +77,16 @@ class BasicConductor extends AbstractConductor {
 		this.requireChooceQuestion(player);
 	}
 
+	clientReady(client)
+	{
+		this.QestionProcessController.clientReady(client);
+	}
+
+	askToReply(client)
+	{
+		this.QestionProcessController.askToReply(client);
+	}
+
 	requireChooceQuestion(player)
 	{
 		let time = this.choose_question_time;

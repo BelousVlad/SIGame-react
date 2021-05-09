@@ -6,7 +6,9 @@ class GameController extends DomainController {
 	constructor()
 	{
 		super({
-			'choice_question' : 'choice_question'
+			'choice_question' : 'choice_question',
+			'client_ready' : 'client_ready',
+			'ask_to_reply' : 'client_ask_to_reply'
 		})
 	}
 
@@ -29,6 +31,38 @@ class GameController extends DomainController {
 			}
 		}
 	}
+
+	client_ready(ws, msg)
+	{
+		let key = msg.key;
+		let client = ClientManager.getClient(key);
+		if (client)
+		{
+			let lobby = LobbyManager.getLobbyByClientKey(key);
+			if (lobby)
+			{
+				lobby?.game.clientReady(client)
+			}
+		}
+	}
+
+	client_ask_to_reply(ws, msg)
+	{
+		let key = msg.key;
+		let client = ClientManager.getClient(key);
+		if (client)
+		{
+			let lobby = LobbyManager.getLobbyByClientKey(key);
+			if (lobby)
+			{
+				lobby?.game.askToReply(client)
+			}
+		}
+	}
+
+
+
+
 }
 
 module.exports = GameController;
