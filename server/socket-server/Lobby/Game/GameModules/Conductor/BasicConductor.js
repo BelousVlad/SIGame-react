@@ -14,7 +14,7 @@ class BasicConductor extends AbstractConductor {
 		this.last_choiced_player_key = undefined; /*Object.keys(this.lobby.clients)[0];*/
 		this.game.registerModuleMessage('test_module_msg', this, this.test_module_msg); //TODO delete
 
-		this.choose_question_time = 3000;
+		this.choose_question_time = 10e3;
 	}
 
 	test_module_msg(ws, msg)
@@ -123,6 +123,10 @@ class BasicConductor extends AbstractConductor {
 
 	getQueueQuestionPlayer() // метод для получения игрока которого очередь отвечать
 	{
+
+		let keys = Object.keys(this.lobby.clients);
+		return this.lobby.clients[keys[0]];
+
 		// if specific player with right for choose is avaiable then return it.
 		if ( Object.keys(this.lobby.clients).indexOf(this.player_with_right_for_choose) !== -1 && this.lobby.master !== this.player_with_right_for_choose)
 			return this.player_with_right_for_choose;

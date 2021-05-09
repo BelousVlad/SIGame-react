@@ -1,6 +1,7 @@
 const AbstractQuestionProcessController = require('./AbstractQuestionProcessController');
 const config = require('../../../../../../config.js');
 const Timer = require(config.timerPath);
+const Helper = require(config.helperClassPath);
 
 class StandartQuestionProcessController extends AbstractQuestionProcessController {
 	constructor(lobby, game)
@@ -123,24 +124,21 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
 			}
 			this.clientsStage(stage, time);
 
-			await time; //TODO
+			await Helper.sleep(time);
 
-			// await this.waitForAllReady(time + 1e3); // gives 1 additional second
 			stage++;
 		}
 	}
 
 	questionReplyPreprocess()
 	{
-		return Promise((resolve, reject) => {
+		return new Promise((resolve, reject) => {
 			this.lobby.sendForClients('client_question_reply_request', { 
 				time: this.reply_request_time
 			});
 
 			this.reply_question_timer = new Timer(this.reply_request_time, {
-				fail: () => {
-					reject();
-				},
+				fail: reject,
 				success:  () => {
 					resolve(this.reply_clients);
 				}, filter: () => Object.keys(this.reply_clients).length > 0 }
