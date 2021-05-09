@@ -19,7 +19,8 @@ class Router{
 			'lobby_id' : 'lobby_id_collected',
 			'status' : 'status',
 			'update_players' : 'update_players',
-			'show_round_info' : 'show_round_info'
+			'show_round_info' : 'show_round_info',
+			'start_game' : 'start_game'
 		};
 	}
 

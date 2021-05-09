@@ -7,6 +7,11 @@ class PackController extends GameModule {
 		this.package = package_;
 	}
 
+	getPackInfo()
+	{
+		return this.package.info;
+	}
+
 	getPackageTemplate(func = (() => null)) {
 		var template_ = new Array();
 

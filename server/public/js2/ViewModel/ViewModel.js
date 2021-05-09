@@ -155,4 +155,9 @@ class ViewModel {
 	{
 		$('.game-answer-btn').prop('disabled', true);
 	}
+
+	showProcessText(text)
+	{
+		$('.process-text').text(text);
+	}
 }

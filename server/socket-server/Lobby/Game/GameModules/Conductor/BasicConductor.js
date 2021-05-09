@@ -14,6 +14,8 @@ class BasicConductor extends AbstractConductor {
 		this.last_choiced_player_key = undefined; /*Object.keys(this.lobby.clients)[0];*/
 		this.game.registerModuleMessage('test_module_msg', this, this.test_module_msg); //TODO delete
 
+		this.pregame_info_time = 5e3;
+		this.round_title_time = 5e3;
 		this.choose_question_time = 10e3;
 	}
 
@@ -31,15 +33,23 @@ class BasicConductor extends AbstractConductor {
 		}
 		else if (this.status == 'first_turn')
 		{
-			this.game.sendRoundInfoClients();
-			this.status = 'choice_question'
-			this.turn();
+			this.game.game_info.current_round = 0;
+			this.showPregameInfo()
+			.then(() => {
+				let round = this.game.getRoundInfo();
+				return this.showRoundTitle(round)
+			})
+			.then((round) => {
+				this.lobby.sendForClients('show_round_info', round);
+				this.status = 'choice_question'
+				this.turn();
+			})
 		}
 	}
 
 	nextRound()
 	{
-		this.game.game_data.current_round++;
+		this.game.game_info.current_round++;
 		this.sendRound();
 	}
 
@@ -101,7 +111,7 @@ class BasicConductor extends AbstractConductor {
 
 		this.timer = new Timer(time, {
 			fail: (e) => {
-				console.log('fail branch');
+				
 				this.status = 'processing-question';
 				//let question = { text: 'fail - normal question' }; //TODO GET random question
 				let question = this.game.getRandomQuestion();
@@ -110,7 +120,7 @@ class BasicConductor extends AbstractConductor {
 
 			}, success:  (client, question) => {
 				this.status = 'processing-question';
-				console.log('suc branch');
+
 				let theme_index = question.theme_index;
 				let question_index = question.question_index;
 				let question1 = this.game.getQuestion(theme_index, question_index);
@@ -124,7 +134,7 @@ class BasicConductor extends AbstractConductor {
 	getQueueQuestionPlayer() // метод для получения игрока которого очередь отвечать
 	{
 
-		let keys = Object.keys(this.lobby.clients);
+		let keys = Object.keys(this.lobby.clients); //TODO DELETE
 		return this.lobby.clients[keys[0]];
 
 		// if specific player with right for choose is avaiable then return it.
@@ -136,6 +146,38 @@ class BasicConductor extends AbstractConductor {
 		this.player_with_right_for_choose = playersList[ /*get random index*/ parseInt( Math.random() * playersList.length ) ];
 
 		return this.player_with_right_for_choose;
+	}
+
+	showPregameInfo()
+	{
+		this.lobby.sendForClients('pregame_info', { 
+			info: this.game.getPackInfo(),
+			time: this.pregame_info_time
+		});
+
+		return new Promise((resolve,reject) => {
+			this.timer = new Timer(this.pregame_info_time, {
+				fail: resolve,
+				success: resolve,
+				filter: () => true
+			})
+		})
+	}
+
+	showRoundTitle(round)
+	{
+		this.lobby.sendForClients('show_round_title', { 
+			title: round.roundName,
+			time: this.pregame_info_time
+		});
+
+		return new Promise((resolve, reject) => {
+			this.timer = new Timer(this.round_title_time, {
+				fail: () => { resolve(round) },
+				success: () => { resolve(round) },
+				filter: () => true
+			})
+		})
 	}
 }
 

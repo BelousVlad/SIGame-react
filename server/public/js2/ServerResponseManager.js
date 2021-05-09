@@ -62,6 +62,11 @@ class ServerResponseManager {
 		}
 	}
 
+	start_game(msg)
+	{
+		app.lobby.game = msg.data;
+	}
+
 	lobby_id_collected(msg) {
 		let lobbyId = parseInt( msg.data );
 		console.log(lobbyId);
@@ -69,7 +74,8 @@ class ServerResponseManager {
 
 	show_round_info(msg) {
 		// msg.data is object which looks like {themes: [...], prices: [...]}
-		this.app.view.viewRoundInfo(msg.data);
+
+		this.app.lobby.game.round = msg.data;
 	}
 
 	question_resources(msg)

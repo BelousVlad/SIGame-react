@@ -241,6 +241,9 @@ class Lobby {
 			is_game: !!this.game
 		}
 
+		if (this.game)
+			lobby_.game = this.game.getGameStatus()
+
 		return lobby_;
 	}
 

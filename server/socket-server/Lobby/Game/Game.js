@@ -24,12 +24,17 @@ class Game {
 
 	getRoundInfo()
 	{
-		let prices = this.pack_controller.getPackageTemplateWithPrices();
+		if (this.game_info.current_round !== undefined)
+		{
+			let prices = this.pack_controller.getPackageTemplateWithPrices();
 
-		prices = prices[this.game_info.current_round];
-		let themes = this.pack_controller.getThemesTitles(this.game_info.current_round);
+			prices = prices[this.game_info.current_round];
+			let themes = this.pack_controller.getThemesTitles(this.game_info.current_round);
+			let round = this.pack_controller.getRound(this.game_info.current_round);
 
-		return { themes, prices };
+			return { themes, prices, title: round.roundName };
+		}
+		return undefined;
 	}
 
 	sendRoundInfo(client)
@@ -48,7 +53,8 @@ class Game {
 	start()
 	{
 		this.emit('game_started');
-		this.game_info.current_round = 0;
+		this.game_info.current_round = undefined;
+		this.lobby.sendForClients('start_game', this.getGameStatus());
 		this.conductor.turn();
 	}
 
@@ -70,6 +76,14 @@ class Game {
 	getPackController()
 	{
 		return this.pack_controller;
+	}
+
+	getPackInfo()
+	{
+		let info = this.pack_controller.getPackInfo();
+		return {
+			authors: info.authorList
+		}
 	}
 
 	setPackController(controller)

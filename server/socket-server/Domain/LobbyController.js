@@ -104,7 +104,6 @@ class LobbyController extends DomainController {
 					else
 					{
 						client.send('lobby_connected', { code });
-
 					}
 
 				}
