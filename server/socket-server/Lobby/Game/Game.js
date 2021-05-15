@@ -131,6 +131,10 @@ class Game {
 		return obj;
 	}
 
+	skip_stage()
+	{
+		this.conductor.skip_stage();
+	}
 
 }
 

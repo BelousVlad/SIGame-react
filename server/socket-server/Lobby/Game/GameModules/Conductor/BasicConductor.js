@@ -184,6 +184,12 @@ class BasicConductor extends AbstractConductor {
 			})
 		})
 	}
+
+	skip_stage()
+	{
+		console.log('skip stage')
+		this.QestionProcessController.skip();
+	}
 }
 
 module.exports = BasicConductor;
