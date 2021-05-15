@@ -105,8 +105,13 @@ class BasicConductor extends AbstractConductor {
 	requireChooceQuestion(player)
 	{
 		let time = this.choose_question_time;
-		this.lobby.sendForClients('choosing_question', { player_name: player.name, time: time } );
-		player.send('choose_question', { time: time });
+		// this.lobby.sendForClients();
+
+		for(let p in this.lobby.clients)
+		{
+			clients[p].send('choosing_question', {player_name: player.name, time: time, is_you: player.key === p });
+		}
+		// player.send('choose_question', { time: time });
 		this.status = 'wait-choose-question';
 
 		this.timer = new Timer(time, {

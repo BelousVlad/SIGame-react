@@ -109,8 +109,6 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
 		for(let resource of resources)
 		{
 			// this.startForAllReady();
-
-
 			let time = 0;
 			if (resource.time)
 				time = resource.time * 1e3
