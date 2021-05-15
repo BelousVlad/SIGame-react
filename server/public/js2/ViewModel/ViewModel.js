@@ -160,4 +160,35 @@ class ViewModel {
 	{
 		$('.process-text').text(text);
 	}
+
+	getProcessText()
+	{
+		return $('.process-text').text();
+	}
+
+	showPregameInfo(authorList, time)
+	{
+		$('.lobby-info-container').text('Aвторы: ' + authorList.join(', '));
+		$('.lobby-info-container').show();
+		// setTimeout(() =>
+		// 	{
+		// 		$('.lobby-info-container').hide();
+		// 		$('.lobby-info-container').text('');
+		// 	},
+		// time
+		// );
+	}
+
+	showRoundTitle(title, time)
+	{
+		$('.lobby-info-container').text('Hазвание: ' + title);
+		$('.lobby-info-container').show();
+		setTimeout(() =>
+			{
+				$('.lobby-info-container').hide();
+				$('.lobby-info-container').text('');
+			},
+		time
+		);
+	}
 }

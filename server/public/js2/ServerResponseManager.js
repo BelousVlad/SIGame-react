@@ -104,7 +104,28 @@ class ServerResponseManager {
 		this.app.view.enableAnswerButton()
 		setTimeout(() => this.app.view.disableAnswerButton(), time)
 	}
+
+	pregame_info(msg) {
+		this.app.view.showPregameInfo(msg.data.info.authors, msg.data.time);
+	}
+
+	show_round_title(msg) {
+		this.app.view.showRoundTitle(msg.data.title, msg.data.time);
+	}
+
+	choosing_question(msg) {
+		var text = `Cейчас выбирает игрок ${msg.data.player_name}`;
+		this.app.view.showProcessText(text);
+
+		setTimeout(() => {
+			if (this.app.view.getProcessText() === text)
+				this.app.view.showProcessText('');
+		}, msg.data.time);
+
+		this.app.lobby.game.current_choosing_player = msg.data;
+	}
 }
+
 
 // question_resources | incomplete
 // lobby.game.client_ready | done

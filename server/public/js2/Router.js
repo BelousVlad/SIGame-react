@@ -20,7 +20,10 @@ class Router{
 			'status' : 'status',
 			'update_players' : 'update_players',
 			'show_round_info' : 'show_round_info',
-			'start_game' : 'start_game'
+			'start_game' : 'start_game',
+			'pregame_info' : 'pregame_info',
+			'show_round_title' : 'show_round_title',
+			'choosing_question' : 'choosing_question'
 		};
 	}
 

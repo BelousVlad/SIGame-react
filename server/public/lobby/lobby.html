@@ -58,7 +58,7 @@
 	</div>
 
 	<div class="process-text">
-		
+
 	</div>
 
 	<div class="players-container">
@@ -159,7 +159,8 @@
 		let theme_id = $(this).data('theme-index');
 		let question_id = $(this).data('question-index');
 
-		app.ServerCommandManager.choiceQuestion(theme_id, question_id);
+		if (app.lobby.game.current_choosing_player && app.lobby.game.current_choosing_player.is_you)
+			app.ServerCommandManager.choiceQuestion(theme_id, question_id);
 	});
 
 </script>
