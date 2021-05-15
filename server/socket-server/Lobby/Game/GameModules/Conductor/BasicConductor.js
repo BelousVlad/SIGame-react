@@ -109,7 +109,7 @@ class BasicConductor extends AbstractConductor {
 
 		for(let p in this.lobby.clients)
 		{
-			clients[p].send('choosing_question', {player_name: player.name, time: time, is_you: player.key === p });
+			this.lobby.clients[p].send('choosing_question', {player_name: player.name, time: time, is_you: player.key === p });
 		}
 		// player.send('choose_question', { time: time });
 		this.status = 'wait-choose-question';
