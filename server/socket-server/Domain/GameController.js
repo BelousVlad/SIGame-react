@@ -9,7 +9,8 @@ class GameController extends DomainController {
 			'choice_question' : 'choice_question',
 			'client_ready' : 'client_ready',
 			'ask_to_reply' : 'client_ask_to_reply',
-			'skip_stage' : 'skip_stage'
+			'skip_stage' : 'skip_stage',
+			'question_answer' : 'question_answer'
 		})
 	}
 
@@ -73,6 +74,19 @@ class GameController extends DomainController {
 			{
 				if ((lobby.master && lobby.master.key == key) || lobby.host.key == key)
 					lobby.game.skip_stage(client)
+			}
+		}
+	}
+	question_answer(ws, msg)
+	{
+		let key = msg.key;
+		let client = ClientManager.getClient(key);
+		if (client)
+		{
+			let lobby = LobbyManager.getLobbyByClientKey(key);
+			if (lobby && lobby.game)
+			{
+				lobby.game.client_reply(client, msg.data.answer);
 			}
 		}
 	}

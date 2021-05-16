@@ -130,10 +130,13 @@ class Game {
 		//TODO
 		return obj;
 	}
-
 	skip_stage()
 	{
 		this.conductor.skip_stage();
+	}
+	client_reply(client, answer)
+	{
+		this.conductor.clientReply(client, answer);
 	}
 
 }

@@ -9,6 +9,7 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
 		super(lobby, game);
 		this.reply_request_time = .15e5;
 		this.reply_question_time = 15e3;
+		this.answers_check_question_time = 15e3;
 		this.question_time = 15e3;
 		this.timer = null;
 	}
@@ -31,7 +32,14 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
 		})
 		.then((reply_clients) => {
 			console.log('questionProcess')
-			this.questionProcess(reply_clients)
+			return this.questionProcess(reply_clients)
+		})
+		.then(() => {
+			console.log('checkProcess')
+			return this.checkProcess().
+				then(() => {
+					this.wait_process = null;
+				})
 		})
 		.catch((err) => {
 			console.log('err: ' + err);
@@ -169,9 +177,26 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
 		})
 	}
 
+	start_reply_wait(reply_clients)
+	{
+		this.reply_process = {};
+		this.reply_process.players = reply_clients;
+		this.reply_process.answers = {};
+	}
+
+	clientReply(client, answer)
+	{
+		let keys = Object.keys(this.reply_process.players);
+
+		if (keys.includes(client.key))
+			this.reply_process.answers[client.key] = answer;
+	}
+
 	questionProcess(reply_clients)
 	{
 		return new Promise((resolve, reject) => {
+			this.start_reply_wait(reply_clients)
+
 			let arr = []
 			for(let key in reply_clients)
 			{
@@ -188,11 +213,34 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
 					time: this.reply_question_time
 				})
 			}
-
 			this.timer = new Timer(this.reply_request_time, {
 				fail: reject,
 				success: resolve,
 				filter: () => true
+			})
+		})
+	}
+
+	start_check_wait()
+	{
+		this.check_process = {}
+		
+	}
+
+	checkProcess()
+	{
+		return new Promise((resolve, reject) => {
+			let arr = []
+			for(let key in this.reply_process.players)
+			{
+				arr.push({
+					...this.lobby.clients[key].getDisplayParams(),
+					answer: this.reply_process.answers[key]
+				})
+			}
+			this.lobby.sendForClients('question_answers', { 
+				reply_clients: arr,
+				time: this.answers_check_question_time
 			})
 		})
 	}

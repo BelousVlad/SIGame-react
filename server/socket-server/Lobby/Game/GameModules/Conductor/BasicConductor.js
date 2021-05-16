@@ -190,6 +190,11 @@ class BasicConductor extends AbstractConductor {
 		console.log('skip stage')
 		this.QestionProcessController.skip();
 	}
+
+	clientReply(client, answer)
+	{
+		this.QestionProcessController.clientReply(client, answer);
+	}
 }
 
 module.exports = BasicConductor;
