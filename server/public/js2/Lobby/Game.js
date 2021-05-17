@@ -36,6 +36,13 @@ class Game
 		};
 	}
 
+	loadResources()
+	{
+		return new Promise((resolve, reject) => {
+			
+		})
+	}
+
 }
 
 

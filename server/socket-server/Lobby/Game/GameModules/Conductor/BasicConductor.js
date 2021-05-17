@@ -13,7 +13,6 @@ class BasicConductor extends AbstractConductor {
 		this.status = 'first_turn';
 		this.last_choiced_player_key = undefined; /*Object.keys(this.lobby.clients)[0];*/
 		this.game.registerModuleMessage('test_module_msg', this, this.test_module_msg); //TODO delete
-
 		this.pregame_info_time = 5e3;
 		this.round_title_time = 5e3;
 		this.choose_question_time = 10e3;
@@ -194,6 +193,11 @@ class BasicConductor extends AbstractConductor {
 	clientReply(client, answer)
 	{
 		this.QestionProcessController.clientReply(client, answer);
+	}
+
+	rightAnswerClient(client)
+	{
+		this.QestionProcessController.rightAnswerClient(client);
 	}
 }
 

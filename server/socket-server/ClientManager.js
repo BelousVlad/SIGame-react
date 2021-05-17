@@ -24,6 +24,11 @@ class ClientManager{
 		return this.clients.find((client) => client.key == key);
 	}
 
+	getClientByName(name)
+	{
+		return this.clients.find((client) => client.name === name);
+	}
+
 	generateKey()
 	{
 		return '_' + Math.random().toString(36).substr(2, 9); // TODO check if this key already exist and regenerate.

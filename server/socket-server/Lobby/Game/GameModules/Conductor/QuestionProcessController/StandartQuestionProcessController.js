@@ -20,6 +20,7 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
 			this.current_question = question;
 			this.reply_clients = {};
 			this.service_data = {}
+			console.log(question.getRightResources());
 			resolve();
 		})
 		.then(() => {
@@ -36,10 +37,17 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
 		})
 		.then(() => {
 			console.log('checkProcess')
-			return this.checkProcess().
-				then(() => {
-					this.wait_process = null;
-				})
+			return this.checkProcess()
+		})
+		.then(() => {
+			let right_keys = Object.keys(this.check_process.right_clients);
+			for(key in this.reply_process.players)
+			{
+				if (right_keys.includes(key))
+					this.game.addScore(this.current_question.price)
+				else
+					this.game.addScore(-this.current_question.price)
+			}
 		})
 		.catch((err) => {
 			console.log('err: ' + err);
@@ -96,11 +104,11 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
 		this.reply_clients[client.key] = client;
 	}
 
-	clientsStage(stage_number, time)
+	clientsStage(stage_number, time, resource)
 	{
 		for(let key in this.lobby.clients)
 		{
-			this.lobby.clients[key].send('question_stage', { stage_number: stage_number, time: time });
+			this.lobby.clients[key].send('question_stage', { stage_number: stage_number, time: time, resource });
 		}
 	}
 
@@ -141,7 +149,7 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
 				time *= 1e3;
 			}
 			time = 10e3;
-			this.clientsStage(stage, time);
+			this.clientsStage(stage, time, resource);
 
 			await this.sleep(time);
 
@@ -224,7 +232,15 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
 	start_check_wait()
 	{
 		this.check_process = {}
-		
+		this.check_process.right_clients = {};
+	}
+
+	rightAnswerClient(right_client)
+	{
+		let keys = Object.keys(this.reply_process.players);
+
+		if (keys.includes(right_client.key))
+			this.check_process.right_clients[right_client.key];
 	}
 
 	checkProcess()
@@ -241,6 +257,17 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
 			this.lobby.sendForClients('question_answers', { 
 				reply_clients: arr,
 				time: this.answers_check_question_time
+			})
+
+			this.lobby.master.send('check_answer', {
+				right: this.current_question.getRightResources(),
+				time: this.answers_check_question_time
+			})
+
+			this.timer = new Timer(this.reply_request_time, {
+				fail: reject,
+				success: resolve,
+				filter: () => true
 			})
 		})
 	}

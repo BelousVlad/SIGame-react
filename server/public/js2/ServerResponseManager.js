@@ -82,18 +82,16 @@ class ServerResponseManager {
 	{
 		var data = msg && msg.data;
 
-		 this.app.currentQuestionResources = new Object;
-		/*
-		await for resources loaded
-		 */
-
-		 this.app.ServerCommandManager.sendReady();
+		this.app.game.loadResources(msg.data)
+			then(() => {
+				 this.app.ServerCommandManager.sendReady();
+			});
 	}
 
 	question_stage(msg)
 	{
 		var index = msg && msg.data && msg.data.stage_number;
-		console.log('current index is: ', index, ', with time: ', msg.data.time);
+		// console.log('current index is: ', index, ', with time: ', msg.data.time);
 		// TODO
 		// something like this.app.view.viewQuestionResource( this.app.currentQuestionResources, index)
 	}
@@ -117,10 +115,10 @@ class ServerResponseManager {
 		var text = `Cейчас выбирает игрок ${msg.data.player_name}`;
 		this.app.view.showProcessText(text);
 
-		setTimeout(() => {
-			if (this.app.view.getProcessText() === text)
-				this.app.view.showProcessText('');
-		}, msg.data.time);
+		// setTimeout(() => {
+		// 	if (this.app.view.getProcessText() === text)
+		// 		this.app.view.showProcessText('');
+		// }, msg.data.time);
 
 		this.app.lobby.game.current_choosing_player = msg.data;
 	}
