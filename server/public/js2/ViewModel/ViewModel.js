@@ -191,4 +191,9 @@ class ViewModel {
 		time
 		);
 	}
+
+	showQuestionStage(element, time)
+	{
+		$('.lobby-game-container').html(element)
+	}
 }

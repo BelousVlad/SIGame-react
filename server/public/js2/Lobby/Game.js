@@ -36,13 +36,38 @@ class Game
 		};
 	}
 
-	loadResources()
+	loadResources(data)
 	{
-		return new Promise((resolve, reject) => {
-			
-		})
+		this._question_resources = [];
+		let promises = [];
+		for(let res of data)
+		{
+			promises.push(
+				new Promise((resolve, reject) => {
+					if (res.value.startsWith('@'))
+					{
+						let loader = new GameResoucesLoader();
+						this._question_resources.push(loader.loadRes(res.value, resolve));
+					}
+					else
+					{
+						let elem = document.createElement('div');
+						elem.innerText = res.value;
+						this._question_resources.push(elem);
+						resolve1();
+					}
+				})
+			)
+		}
+		return Promise.all(promises);
 	}
 
+	setQuestionStage(number)
+	{
+		this._view.showQuestionStage(
+			this._question_resources[number]
+		)
+	}
 }
 
 

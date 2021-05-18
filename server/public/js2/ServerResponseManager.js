@@ -80,24 +80,28 @@ class ServerResponseManager {
 
 	question_resources(msg)
 	{
-		var data = msg && msg.data;
+		let data = msg && msg.data;
 
-		this.app.game.loadResources(msg.data)
-			then(() => {
-				 this.app.ServerCommandManager.sendReady();
+		console.log(msg.data);
+		this.app.lobby.game.loadResources(msg.data)
+			.then(() => {
+				console.log('loaded')
+				this.app.ServerCommandManager.sendReady();
 			});
 	}
 
 	question_stage(msg)
 	{
-		var index = msg && msg.data && msg.data.stage_number;
+		let index = msg.data.stage_number;
+
+		this.app.lobby.game.setQuestionStage(index);
 		// console.log('current index is: ', index, ', with time: ', msg.data.time);
 		// TODO
 		// something like this.app.view.viewQuestionResource( this.app.currentQuestionResources, index)
 	}
 
 	client_question_reply_request(msg) {
-		var time = msg.data.time
+		let time = msg.data.time
 
 		this.app.view.enableAnswerButton()
 		setTimeout(() => this.app.view.disableAnswerButton(), time)

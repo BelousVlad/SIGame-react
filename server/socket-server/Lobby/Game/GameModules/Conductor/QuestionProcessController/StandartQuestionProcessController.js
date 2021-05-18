@@ -82,6 +82,7 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
 		return new Promise((resolve, reject) => {
 			setTimeout(resolve, timeout_, this.wait_process);
 			if (Object.keys(this.wait_process.clients).length === 0) {
+				console.log('waited')
 				resolve();
 			}
 			this.wait_process.resolve = resolve;
@@ -127,7 +128,7 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
 		console.log('questionPreprocess wait')
 		let resources = question.getQuestionResources();
 		this.sendResources(resources)
-		await this.waitForAllReady(resources.length * 1e3); // 1 sec for each resource
+		await this.waitForAllReady(resources.length * 10e3) // 1 sec for each resource
 		console.log('questionPreprocess ready')
 
 		// console.log('clients ready');
