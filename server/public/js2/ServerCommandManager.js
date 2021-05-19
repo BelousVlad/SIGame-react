@@ -64,6 +64,11 @@ class ServerCommandManager {
 		this.send('lobby.game.client_ready');
 	}
 
+	sendQuestionAnswer(ans)
+	{
+		this.send('lobby.game.question_answer', { answer: ans })
+	}
+
 	//Дальше идут служебные методы (приватные)
 
 	send(action, data)

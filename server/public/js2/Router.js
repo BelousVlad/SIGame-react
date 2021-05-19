@@ -23,7 +23,9 @@ class Router{
 			'start_game' : 'start_game',
 			'pregame_info' : 'pregame_info',
 			'show_round_title' : 'show_round_title',
-			'choosing_question' : 'choosing_question'
+			'choosing_question' : 'choosing_question',
+			'question_process': 'question_process',
+			'reply_question' : 'reply_question'
 		};
 	}
 

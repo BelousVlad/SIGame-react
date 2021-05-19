@@ -44,6 +44,7 @@ class Game
 	loadResources(data)
 	{
 		this._question_resources = [];
+		this._view.viewMainLoader();
 		let promises = [];
 		for(let res of data)
 		{
@@ -71,6 +72,7 @@ class Game
 	{
 		if (data)
 		{
+			this.process_text = 'Кто желает отвечать?'
 			this._view.enableAnswerButton()
 			this._view.setTimer(data.time)
 				.then(() => {
@@ -92,7 +94,19 @@ class Game
 			time
 		)
 	}
+
+	questionProcess(data)
+	{
+		this._view.showQuestionProcessPlayers(data.reply_clients)
+		this._view.setTimer(data.time);
+	}
+
+	replyQuestion(data)
+	{
+		this._view.inputTextPopup(data.time)
+		.then((text) => {
+			app.ServerCommandManager.sendQuestionAnswer(text);
+		})
+	}
 }
-
-
 

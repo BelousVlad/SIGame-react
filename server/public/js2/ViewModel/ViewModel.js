@@ -222,4 +222,87 @@ class ViewModel {
 			}, 10)
 		})
 	}
+
+	viewMainLoader()
+	{
+		if (this.timer)
+		{
+			this.timer.forceSuccess();
+		}
+		$('.lobby-game-container').html(
+			`<div class="main-game-loader">
+				<div class="lds-grid">
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+				</div>
+			</div>`)
+	}
+
+	showQuestionProcessPlayers(players)
+	{
+		let clients_html = players.reduce((sum, player) => sum + `
+			<div class="question-process-player">
+				<div class="question-process-player-name">
+					${player.name}
+				</div>
+			</div>
+			`, '');
+
+		let html = `<div class="question-process-player-container">
+			<div class="question-process-text">Отвечающте игроки: </div>
+			${clients_html}
+		</div>`
+
+		$('.lobby-game-container').html(html);
+	}
+
+	inputTextPopup(time)
+	{
+		let el = document.createElement('div');
+		return new Promise((resolve, reject) => {
+
+			$(el).html(`
+				<div class="input-text-popup">
+					<input type="text" name="text"/>
+					<button class="input-text-popup-btn">Ok</button>
+				</div>
+			`)
+
+			$(el).find('.input-text-popup-btn').click(function(e) {
+				let text = $(el).find('input').val().trim();
+
+				if (text)
+				{
+					resolve(text);
+				}
+			})
+
+			if (time)
+			{
+				if (this.popup_timer)
+					this.popup_timer.forceSuccess();
+				this.popup_timer = new Timer(time,{
+					success: () => {
+						$(el).find('.input-text-popup-btn').trigger('click')
+					},
+					fail: () => {
+						$(el).find('.input-text-popup-btn').trigger('click')
+					}
+				})
+			}
+
+			$('.wrapper').append(el);
+		})
+		.then((text) => {
+			$(el).remove()
+			return text;
+		})
+	}
 }

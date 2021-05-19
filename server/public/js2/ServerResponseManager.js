@@ -73,8 +73,6 @@ class ServerResponseManager {
 	}
 
 	show_round_info(msg) {
-		// msg.data is object which looks like {themes: [...], prices: [...]}
-
 		this.app.lobby.game.round = msg.data;
 	}
 
@@ -109,5 +107,15 @@ class ServerResponseManager {
 
 	choosing_question(msg) {
 		this.app.lobby.game.current_choosing_player = msg.data;
+	}
+
+	question_process(msg)
+	{
+		this.app.lobby.game.questionProcess(msg.data);
+	}
+
+	reply_question(msg)
+	{
+		this.app.lobby.game.replyQuestion(msg.data);
 	}
 }

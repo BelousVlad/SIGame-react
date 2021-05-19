@@ -103,6 +103,8 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
 	askToReply(client)
 	{
 		this.reply_clients[client.key] = client;
+
+		this.lobby.sendForClients('client_ask_reply', client.getDisplayParams())
 	}
 
 	clientsStage(stage_number, time, resource)
