@@ -281,6 +281,7 @@ input[name=chat_send_btn] {
 .lobby-main-canvas-box{
   width: 100%;
   height: 100%;
+  position: relative;
 }
 .main-canvas{
   height: calc(100% - 30px);
@@ -318,4 +319,31 @@ input[name=chat_send_btn] {
   width: 100%;
   height: 100%;
   border: 1px solid purple;
+}
+
+.process-loader{
+  width: 100%;
+  height: 8px;
+  position: relative;
+  left: 0;
+  right: 0;
+  bottom: 8px;
+}
+
+.process-loader .loader{
+  width: 0;
+  height: 100%;
+  background: orange;
+}
+
+@keyframes process_loader{
+  from {
+    width: 100%;
+  }
+  to {
+    width: 0;
+  }
+}
+.process-loader.active .loader{
+  animation: process_loader linear;
 }

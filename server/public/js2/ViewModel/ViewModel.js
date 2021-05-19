@@ -170,6 +170,7 @@ class ViewModel {
 	{
 		$('.lobby-info-container').text('Aвторы: ' + authorList.join(', '));
 		$('.lobby-info-container').show();
+		this.setTimer(time);
 		// setTimeout(() =>
 		// 	{
 		// 		$('.lobby-info-container').hide();
@@ -183,17 +184,42 @@ class ViewModel {
 	{
 		$('.lobby-info-container').text('Hазвание: ' + title);
 		$('.lobby-info-container').show();
-		setTimeout(() =>
-			{
-				$('.lobby-info-container').hide();
-				$('.lobby-info-container').text('');
-			},
-		time
-		);
+
+		this.setTimer(time);
 	}
 
 	showQuestionStage(element, time)
 	{
-		$('.lobby-game-container').html(element)
+		$('.lobby-game-container').html(element);
+
+		if (time)
+		{
+			this.setTimer(time);
+		}
+	}
+
+	setTimer(time)
+	{
+		return new Promise((resolve, reject) => {
+			if (this.timer)
+			{
+				this.timer.forceFail();
+			}
+
+			setTimeout(() => {
+				$('.process-loader .loader').css('animation-duration', time+'ms');
+				$('.process-loader').addClass('active')
+				this.timer = new Timer(time, {
+					success: function(...args) {
+						$('.process-loader').removeClass('active')
+							resolve(...args);
+					},
+					fail: function(...args) {
+						$('.process-loader').removeClass('active')
+							resolve(...args);
+					}
+				});
+			}, 10)
+		})
 	}
 }

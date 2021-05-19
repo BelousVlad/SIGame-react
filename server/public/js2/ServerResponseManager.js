@@ -92,19 +92,11 @@ class ServerResponseManager {
 
 	question_stage(msg)
 	{
-		let index = msg.data.stage_number;
-
-		this.app.lobby.game.setQuestionStage(index);
-		// console.log('current index is: ', index, ', with time: ', msg.data.time);
-		// TODO
-		// something like this.app.view.viewQuestionResource( this.app.currentQuestionResources, index)
+		this.app.lobby.game.setQuestionStage(msg.data);
 	}
 
 	client_question_reply_request(msg) {
-		let time = msg.data.time
-
-		this.app.view.enableAnswerButton()
-		setTimeout(() => this.app.view.disableAnswerButton(), time)
+		this.app.lobby.game.canReply(msg.data);
 	}
 
 	pregame_info(msg) {
@@ -116,21 +108,6 @@ class ServerResponseManager {
 	}
 
 	choosing_question(msg) {
-		var text = `Cейчас выбирает игрок ${msg.data.player_name}`;
-		this.app.view.showProcessText(text);
-
-		// setTimeout(() => {
-		// 	if (this.app.view.getProcessText() === text)
-		// 		this.app.view.showProcessText('');
-		// }, msg.data.time);
-
 		this.app.lobby.game.current_choosing_player = msg.data;
 	}
 }
-
-
-// question_resources | incomplete
-// lobby.game.client_ready | done
-// question_stage {data: {stage_number: 0, time: 10}}; | incomplete
-// client_question_reply_request {data: {time: 10}}; | incomplete
-// lobby.game.ask_to_reply

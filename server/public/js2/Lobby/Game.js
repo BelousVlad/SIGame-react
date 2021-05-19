@@ -30,6 +30,11 @@ class Game
 	get current_choosing_player() { return this._current_choosing_player; }
 	set current_choosing_player(data)
 	{
+
+		let text = `Cейчас выбирает игрок ${data.player_name}`;
+		this._view.showProcessText(text);
+		this._view.setTimer(data.time);
+
 		this._current_choosing_player = {
 			player_name: data.player_name,
 			is_you: data.is_you
@@ -54,7 +59,7 @@ class Game
 						let elem = document.createElement('div');
 						elem.innerText = res.value;
 						this._question_resources.push(elem);
-						resolve1();
+						resolve();
 					}
 				})
 			)
@@ -62,10 +67,29 @@ class Game
 		return Promise.all(promises);
 	}
 
-	setQuestionStage(number)
+	canReply(data)
 	{
+		if (data)
+		{
+			this._view.enableAnswerButton()
+			this._view.setTimer(data.time)
+				.then(() => {
+					this.can_reply = false;
+				})
+		}
+		else
+		{
+			this._view.disableAnswerButton()
+		}
+	}
+
+	setQuestionStage(stage_data)
+	{
+		let number = stage_data.stage_number;
+		let time = stage_data.time;
 		this._view.showQuestionStage(
-			this._question_resources[number]
+			this._question_resources[number],
+			time
 		)
 	}
 }
