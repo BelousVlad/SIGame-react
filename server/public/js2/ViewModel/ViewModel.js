@@ -267,21 +267,15 @@ class ViewModel {
 	{
 		let el = document.createElement('div');
 		return new Promise((resolve, reject) => {
-
+			$(el).addClass('input-text-popup');
 			$(el).html(`
-				<div class="input-text-popup">
-					<input type="text" name="text"/>
-					<button class="input-text-popup-btn">Ok</button>
-				</div>
+				<input type="text" name="text"/>
+				<button class="input-text-popup-btn">Ok</button>
 			`)
 
 			$(el).find('.input-text-popup-btn').click(function(e) {
 				let text = $(el).find('input').val().trim();
-
-				if (text)
-				{
-					resolve(text);
-				}
+				resolve(text);
 			})
 
 			if (time)

@@ -26,11 +26,9 @@ class Game
 		this._view.showProcessText(text);
 	}
 
-
 	get current_choosing_player() { return this._current_choosing_player; }
 	set current_choosing_player(data)
 	{
-
 		let text = `Cейчас выбирает игрок ${data.player_name}`;
 		this._view.showProcessText(text);
 		this._view.setTimer(data.time);

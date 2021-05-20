@@ -18,7 +18,6 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
 	{
 		return new Promise((resolve,reject) => {
 			this.current_question = question;
-			this.reply_clients = {};
 			this.service_data = {}
 			console.log(question.getRightResources());
 			resolve();
@@ -53,13 +52,6 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
 			console.log('err: ', err);
 		})
 	}
-	questionReply(client)
-	{
-		if (!this.timer.isTimerEnd)
-		{
-			this.reply_clients[client.key] = client;
-		}
-	}
 
 	sendClientResources(client, resources)
 	{
@@ -80,10 +72,14 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
 	waitForAllReady(timeout_)
 	{
 		return new Promise((resolve, reject) => {
-			setTimeout(resolve, timeout_, this.wait_process);
+			this.wait_process.wait_timer = new Timer(timeout_, {
+				success: resolve,
+				fail: resolve
+			})
+
 			if (Object.keys(this.wait_process.clients).length === 0) {
 				console.log('waited')
-				resolve();
+				this.wait_process.wait_timer.forceSuccess();
 			}
 			this.wait_process.resolve = resolve;
 		})
@@ -95,18 +91,12 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
 		{
 			delete this.wait_process.clients[client.key];
 
-			if (Object.keys(this.wait_process.clients).length)
-				this.wait_process.resolve(this.wait_process);
+			if (Object.keys(this.wait_process.clients).length === 0)
+			{
+				this.wait_process.wait_timer.forceSuccess();
+			}
 		}
 	}
-
-	askToReply(client)
-	{
-		this.reply_clients[client.key] = client;
-
-		this.lobby.sendForClients('client_ask_reply', client.getDisplayParams())
-	}
-
 	clientsStage(stage_number, time, resource)
 	{
 		for(let key in this.lobby.clients)
@@ -127,12 +117,9 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
 	{
 		// send all resources.
 		this.startForAllReady();
-		console.log('questionPreprocess wait')
 		let resources = question.getQuestionResources();
 		this.sendResources(resources)
-		await this.waitForAllReady(resources.length * 10e3) // 1 sec for each resource
-		console.log('questionPreprocess ready')
-
+		await this.waitForAllReady(resources.length * 10e3) // 10 sec for each resource
 		// console.log('clients ready');
 
 		// show resources one by one up to back of array.
@@ -158,7 +145,7 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
 
 			stage++;
 		}
-		console.log('func end')
+
 		return null;
 	}
 
@@ -169,21 +156,40 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
 		this.timer.forceFail(-1);
 	}
 
+	startAskReplyProcess()
+	{
+		this.ask_reply_process = {};
+
+		this.ask_reply_process.clients = {}
+	}
+
+	askToReply(client)
+	{
+		console.log('ask')
+		if (this.ask_reply_process)
+		{
+			this.ask_reply_process.clients[client.key] = client;
+			this.lobby.sendForClients('client_ask_reply', client.getDisplayParams())
+		}
+	}
 	questionReplyPreprocess()
 	{
 		return new Promise((resolve, reject) => {
+			this.startAskReplyProcess()
 			this.lobby.sendForClients('client_question_reply_request', {
 				time: this.reply_request_time
 			});
 
 			this.timer = new Timer(this.reply_request_time, {
 				fail: () => {
-					reject(this.reply_clients);
+					reject(-2);
+					this.ask_reply_process = null;
 				},
 				success:  () => {
-					resolve(this.reply_clients);
+					resolve(this.ask_reply_process.clients);
+					this.ask_reply_process = null;
 				},
-				filter: () => Object.keys(this.reply_clients).length > 0 }
+				filter: () => Object.keys(this.ask_reply_process.clients).length > 0 }
 			)
 		})
 	}
@@ -197,10 +203,13 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
 
 	clientReply(client, answer)
 	{
-		let keys = Object.keys(this.reply_process.players);
+		if (this.reply_process)
+		{
+			let keys = Object.keys(this.reply_process.players);
 
-		if (keys.includes(client.key))
-			this.reply_process.answers[client.key] = answer;
+			if (keys.includes(client.key))
+				this.reply_process.answers[client.key] = answer;
+		}
 	}
 
 	questionProcess(reply_clients)
