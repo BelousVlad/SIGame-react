@@ -48,7 +48,7 @@
 
 			<div class="process-loader">
 				<div class="loader"></div>
-			</div>	
+			</div>
 		</div>
 
 		<div class="lobby-chat-box">
@@ -133,7 +133,7 @@
 		var formData = new FormData(),
 			request = new XMLHttpRequest();
 		formData.append('userfile', document.querySelector('.select-pack').files[0] );
-		formData.append('CustomField', 'test');
+		// formData.append('CustomField', 'test');
 		request.open('POST', 'api/upload/pack');
 		request.send(formData);
 	}

@@ -50,7 +50,7 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
 			}
 		})
 		.catch((err) => {
-			console.log('err: ' + err);
+			console.log('err: ', err);
 		})
 	}
 	questionReply(client)
@@ -172,7 +172,7 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
 	questionReplyPreprocess()
 	{
 		return new Promise((resolve, reject) => {
-			this.lobby.sendForClients('client_question_reply_request', { 
+			this.lobby.sendForClients('client_question_reply_request', {
 				time: this.reply_request_time
 			});
 
@@ -213,7 +213,7 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
 			{
 				arr.push(this.lobby.clients[key])
 			}
-			this.lobby.sendForClients('question_process', { 
+			this.lobby.sendForClients('question_process', {
 				reply_clients: arr.map((i) => i.getDisplayParams()),
 				time: this.reply_question_time
 			})
@@ -257,7 +257,7 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
 					answer: this.reply_process.answers[key]
 				})
 			}
-			this.lobby.sendForClients('question_answers', { 
+			this.lobby.sendForClients('question_answers', {
 				reply_clients: arr,
 				time: this.answers_check_question_time
 			})

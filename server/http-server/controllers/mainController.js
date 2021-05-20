@@ -125,16 +125,16 @@ class MainController{
 	}
 
 	upload_pack ( req, res ) {
-		let cookies = helper.parseCookies(req);
+		const cookies = helper.parseCookies(req);
+		const lobby = LobbyManager.getLobbyByClientKey( cookies.key );
 
-		let lobby = LobbyManager.getLobbyByClientKey( cookies.key );
-		// console.log(lobby, 'tttttttttttttt');
-
-		if ( !lobby )
+		if ( !lobby ) {
+			res.end('lobby not found');
 			return;
+		}
 
 		lobby.uploadPackStart();
-		lobby.emit('lobby_pack_state_change');
+		// lobby.emit('lobby_pack_state_change');
 
 		const form = formidable({
 			uploadDir : config.packDirPath,
@@ -144,10 +144,13 @@ class MainController{
 		});
 
 		form.parse(req, async ( err, fields, file ) => {
-			if ( err || !file.userfile )
+			if ( err || !file.userfile ) {
+				lobby.uploadPackEnd();
+				res.end(JSON.stringify({message: 'upload failed'}));
 				return;
+			}
 
-			let zip = new AdmZip(file.userfile.path);
+			const zip = new AdmZip(file.userfile.path);
 
 			fs.mkdirSync( file.userfile.path + '_');
 			await zip.extractAllTo(/*target path*/file.userfile.path + '_' , /*overwrite*/true);
@@ -155,13 +158,13 @@ class MainController{
 			fs.renameSync( file.userfile.path + '_', file.userfile.path );
 			lobby.packFolder = file.userfile.path;
 			lobby.uploadPackEnd();
-
+			res.end(JSON.stringify({message: 'upload succeed'}));
 		});
 	}
 
 	follow_invite(req, res) {
 		let cookies = helper.parseCookies(req) || new Object;
-		let client = ClientManager.getClient(req.key) || new Object;
+		let client = ClientManager.getClient(cookies.key) || new Object;
 
 		if (!client) {
 			// TODO
@@ -170,7 +173,7 @@ class MainController{
 			return;
 		}
 
-		let lobbyId = req.url.split('?')[1].substring(3); // get arguments looks like 'id=123...', so we just getting our id argument
+		let lobbyId = req.url.split('?')[1].substring(3); // resieved arguments looks like 'id=123...', so we just rid out 'id='
 		let lobby = LobbyManager.getLobbyById(lobbyId);
 
 		if (!lobby) {
@@ -180,7 +183,6 @@ class MainController{
 			return;
 		}
 
-		// TODO lobby.hasPassword() method
 		if (lobby.hasPassword()) {
 			// TODO
 			// show page for "enter password"
@@ -192,6 +194,74 @@ class MainController{
 
 		// TODO
 		res.end('successful entering...');
+	}
+
+	get_question_resource(req, res) {
+		console.log('here we go!\n\n');
+		const cookies = helper.parseCookies(req) || new Object;
+		const client = ClientManager.getClient(cookies.key);
+
+		if (!client) {
+			res.end('client not found.');
+			return;
+		}
+
+		const lobby = LobbyManager.getLobbyByClient(client);
+
+		if (!lobby) {
+			res.end('client hasnt corresponding lobby');
+			return;
+		}
+
+		// TODO
+		// check if player has access for such resource
+
+		const uri = req.url;
+		const fileName = uri.substring( (uri.indexOf('?')) + 1 ).match(/name=([^&]+)/)?.[1];
+		console.log(uri, fileName);
+
+		if (!fileName) {
+			res.end('file not specified');
+			return;
+		}
+
+		const fileExtension = fileName.substring( fileName.indexOf('.') );
+		let directoryName;
+
+		// directoryName = 'Images';
+		switch(fileExtension) {
+			case '.jpg':
+			case '.png':
+			case '.gif':
+				directoryName = 'Images';
+				break;
+
+			case '.mp4':
+			case '.ogg':
+				directoryName = 'Video';
+				break;
+
+			case '.mp3':
+				directoryName = 'Audio';
+				break;
+
+			default:
+				res.end('invalid file extension');
+				return;
+		}
+
+		const fullPath = lobby.packFolder + '/' + directoryName + '/' + fileName;
+
+		res.setHeader('Content-Type', 'image/jpeg');
+		fs.readFile(fullPath, undefined, (err, data) => {
+			if (err) {
+				console.error(err);
+				res.end('failed to read file');
+				return;
+			}
+
+			res.end(data);
+		})
 	}
 
 	avatar_set_page( req, res ) {

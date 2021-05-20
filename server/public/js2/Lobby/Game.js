@@ -53,7 +53,8 @@ class Game
 					if (res.value.startsWith('@'))
 					{
 						let loader = new GameResoucesLoader();
-						this._question_resources.push(loader.loadRes(res.value, resolve));
+						let uri_ = `/get_question_resource?name=${encodeURI(res.value.substring(1))}`;
+						this._question_resources.push(loader.loadRes(uri_, resolve));
 					}
 					else
 					{

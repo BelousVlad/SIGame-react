@@ -49,6 +49,16 @@ module.exports =
     	return flag;
     },
 
+   	'mainController/get_question_resource' : ( req ) => {
+    	var flag = Boolean(
+    		req.url.split('?')[0] === '/get_question_resource' &&
+    		req.method.toLowerCase() === 'get' &&
+    		/^name=.+$/.test( req.url.substring( decodeURI(req.url.indexOf('?') + 1 ) ))
+    	)
+
+    	return flag;
+    },
+
 	'mainController/create_lobby' : '^/create-lobby$',
 	'mainController/lobby' : '^/lobby$',
 	'mainController/avatar_set_page' : '^/avatar_set$',

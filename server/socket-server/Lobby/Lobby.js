@@ -11,7 +11,6 @@ const PackReader = require(config.packReaderPath);
 
 class Lobby {
 
-	packFolder = new Object();
 	packState = 'none'; // состояния в котором может находиться пак. предполагается 3 варианта : none, uploading, ready;
 	pack = {};
 
@@ -25,6 +24,7 @@ class Lobby {
 		this.scores = {}
 		this.host = undefined;
 		this.master = undefined;
+		this.packFolder = undefined;
 
 		this.config = Lobby.defaultConfig;
 
