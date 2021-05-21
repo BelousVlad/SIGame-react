@@ -16,6 +16,8 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
 
 	startQuestionProcess(question)
 	{
+		console.log('question right');
+		console.log(question.getRightResources());
 		return new Promise((resolve,reject) => {
 			this.current_question = question;
 			this.service_data = {}
@@ -36,20 +38,17 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
 		})
 		.then(() => {
 			console.log('checkProcess')
-			return this.checkProcess()
+			return this.checkProcess();
 		})
 		.then(() => {
-			let right_keys = Object.keys(this.check_process.right_clients);
-			for(key in this.reply_process.players)
+			for(let key in this.check_process.evaluation_clients)
 			{
-				if (right_keys.includes(key))
-					this.game.addScore(this.current_question.price)
+				const ball = this.check_process.evaluation_clients[key];
+				if (ball)
+					this.game.addScore(this.current_question.price);
 				else
-					this.game.addScore(-this.current_question.price)
+					this.game.addScore(-this.current_question.price);
 			}
-		})
-		.catch((err) => {
-			console.log('err: ', err);
 		})
 	}
 
@@ -205,9 +204,7 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
 	{
 		if (this.reply_process)
 		{
-			let keys = Object.keys(this.reply_process.players);
-
-			if (keys.includes(client.key))
+			if (client.key in this.reply_process.players)
 				this.reply_process.answers[client.key] = answer;
 		}
 	}
@@ -241,23 +238,29 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
 		})
 	}
 
-	start_check_wait()
+	start_check_process()
 	{
 		this.check_process = {}
-		this.check_process.right_clients = {};
+		this.check_process.evaluation_clients = {};
+
+		for (let key in this.reply_process.players)
+			this.check_process.evaluation_clients[key] = false;
 	}
 
-	rightAnswerClient(right_client)
+	evaluationAnswerClient(ev_client, ball)
 	{
-		let keys = Object.keys(this.reply_process.players);
-
-		if (keys.includes(right_client.key))
-			this.check_process.right_clients[right_client.key];
+		if (ev_client.key in this.check_process.evaluation_clients)
+			this.check_process.evaluation_clients[ev_client.key] = ball;
+		this.lobby.sendForClients('question_answer_evaluated', {
+			...ev_client.getDisplayParams(),
+			ball
+		})
 	}
 
 	checkProcess()
 	{
 		return new Promise((resolve, reject) => {
+			this.start_check_process();
 			let arr = []
 			for(let key in this.reply_process.players)
 			{
@@ -278,8 +281,7 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
 
 			this.timer = new Timer(this.reply_request_time, {
 				fail: reject,
-				success: resolve,
-				filter: () => true
+				success: resolve
 			})
 		})
 	}
@@ -289,8 +291,7 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
 		return new Promise((resolve, reject) => {
 			this.timer = new Timer(time, {
 				fail: resolve,
-				success: resolve,
-				filter: () => true
+				success: resolve
 			})
 		})
 	}

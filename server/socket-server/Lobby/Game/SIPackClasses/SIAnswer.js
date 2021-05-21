@@ -4,7 +4,7 @@ class SIAnswer
 {
 	constructor(XMLAnswer, right_) {
 		this.right = right_;
-		this.value = XMLAnswer._;
+		this.value = XMLAnswer;
 		this.resource = new SIResource(this.value, "text");
 	}
 

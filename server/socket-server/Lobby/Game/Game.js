@@ -138,11 +138,11 @@ class Game {
 	{
 		this.conductor.clientReply(client, answer);
 	}
-	right_answer_client(master_client, client)
+	evaluation_answer_client(master_client, client, ball)
 	{
-		if (this.master.key === master_client.key) 
+		if (this.lobby.master.key === master_client.key) 
 		{
-			this.conductor.rightAnswerClient(client);
+			this.conductor.evaluationAnswerClient(client, ball);
 		}
 	}
 	addScore(client, count)

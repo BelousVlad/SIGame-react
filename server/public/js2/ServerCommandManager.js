@@ -69,6 +69,11 @@ class ServerCommandManager {
 		this.send('lobby.game.question_answer', { answer: ans })
 	}
 
+	playerEvaluationAnswer(name, ball)
+	{
+		this.send('lobby.game.question_evaluation', { name, ball })
+	}
+
 	//Дальше идут служебные методы (приватные)
 
 	send(action, data)

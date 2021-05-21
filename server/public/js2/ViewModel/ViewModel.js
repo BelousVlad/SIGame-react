@@ -299,4 +299,26 @@ class ViewModel {
 			return text;
 		})
 	}
+
+	showPlayerAnswer(player, answer, is_show_btns)
+	{
+		$(`.players-container .player-box[data-name=${player.name}]`).each((i, banner) => {
+			let answer_box = document.createElement('div');
+			answer_box = $(answer_box);
+			answer_box.addClass('player-answer-box');
+			answer_box.html(`
+				<div class="answer-box-btns">
+				${
+					is_show_btns ?
+					`<button class="answer-box-btn-yes">Верно</button>
+					<button class="answer-box-btn-no">Не верно</button>` : ''
+				}
+				</div>
+				<div>
+					${answer}
+				</div>
+			`)
+			$(banner).append(answer_box.get(0));
+		})
+	}
 }

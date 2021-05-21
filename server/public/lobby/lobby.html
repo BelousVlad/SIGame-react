@@ -166,6 +166,18 @@
 			app.ServerCommandManager.choiceQuestion(theme_id, question_id);
 	});
 
+	$(document).on('click', '.answer-box-btn-yes', function(answer) {
+		let banner = $(this).parent().parent().parent();
+		let name = banner.data('name')
+		app.ServerCommandManager.playerEvaluationAnswer(name, true)
+	})
+
+	$(document).on('click', '.answer-box-btn-no', function(answer) {
+		let banner = $(this).parent().parent().parent();
+		let name = banner.data('name')
+		app.ServerCommandManager.playerEvaluationAnswer(name, false)
+	})
+
 </script>
 
 </body>

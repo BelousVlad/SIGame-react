@@ -75,11 +75,15 @@ class BasicConductor extends AbstractConductor {
 		this.QestionProcessController.startQuestionProcess(question)
 		.then(() => {
 			//this.status = 'question-process' //TODO check next round
+			// this.lobby._updatePlayers();
+			console.log('ended question process');
 			this.turn();
 		})
 		.catch((val) => {
 			console.log('question process catch:', val);
-			if (val === 1)
+			if (val === -1)
+				console.log('Sjip stage')
+			else if (val === -2)
 				console.log('No one reply')
 		});
 	}
@@ -195,9 +199,9 @@ class BasicConductor extends AbstractConductor {
 		this.QestionProcessController.clientReply(client, answer);
 	}
 
-	rightAnswerClient(client)
+	evaluationAnswerClient(client, ball)
 	{
-		this.QestionProcessController.rightAnswerClient(client);
+		this.QestionProcessController.evaluationAnswerClient(client, ball);
 	}
 }
 

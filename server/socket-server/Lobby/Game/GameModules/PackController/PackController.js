@@ -54,7 +54,8 @@ class PackController extends GameModule {
 		var count = 0;
 
 		for (var i = 0; i < questionCheckList[roundIndex].length; i++)
-			for (var j = 0; j < questionCheckList[roundIndex][i].length; j++) {
+			for (var j = 0; j < questionCheckList[roundIndex][i].length; j++)
+			{
 				if (count === index)
 					return themeList[i].questionList[j];
 

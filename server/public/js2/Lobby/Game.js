@@ -107,5 +107,15 @@ class Game
 			app.ServerCommandManager.sendQuestionAnswer(text);
 		})
 	}
+
+	setAnswers(data)
+	{
+		for(let player of data.reply_clients)
+		{
+			this._view.showPlayerAnswer(player, player.answer, app.lobby.position.is_master);
+		}
+		if (data.time)
+			this._view.setTimer(dat.time);
+	}
 }
 

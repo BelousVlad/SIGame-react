@@ -24,6 +24,7 @@ class PlayerBannerBuilder {
 	BuildName(name)
 	{
 		this.name_html = `<div class="player-box-name">${name}</div>`;
+		this._name = name;
 	}
 
 	BuildAvatar(src)
@@ -49,7 +50,7 @@ class PlayerBannerBuilder {
 		}
 
 		return `
-			<div class="player-box">
+			<div class="player-box" data-name="${this._name}">
 				${ service ?? ''}
 				${ this.avatar_html ?? ''}
 				${ this.name_html ?? ''}

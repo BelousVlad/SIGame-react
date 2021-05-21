@@ -88,6 +88,11 @@ class ServerResponseManager {
 			});
 	}
 
+	question_answers(msg)
+	{
+		this.app.lobby.game.setAnswers(msg.data);
+	}
+
 	question_stage(msg)
 	{
 		this.app.lobby.game.setQuestionStage(msg.data);
