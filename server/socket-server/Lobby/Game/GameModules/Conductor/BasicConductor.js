@@ -27,7 +27,7 @@ class BasicConductor extends AbstractConductor {
 		else if (this.status === 'after_question')
 		{
 			let round = this.game.getRoundInfo();
-			let res = round.prices.find(i => i.length !== 0)
+			let res = round.prices.find(theme => (theme.find(questionPrice => questionPrice !== null) !== undefined));
 			if (!res)
 				this.nextRound().then(() => {
 					this.status = 'choice_question';
@@ -132,7 +132,7 @@ class BasicConductor extends AbstractConductor {
 
 		this.timer = new Timer(time, {
 			fail: (e) => {
-				
+
 				this.status = 'processing-question';
 				//let question = { text: 'fail - normal question' }; //TODO GET random question
 				let question = this.game.getRandomQuestion();
@@ -145,7 +145,9 @@ class BasicConductor extends AbstractConductor {
 				let theme_index = question.theme_index;
 				let question_index = question.question_index;
 				let question1 = this.game.getQuestion(theme_index, question_index);
-
+				// if (!question1)
+					// return;
+				console.log(question1, theme_index, question_index);
 				this.startQuestionProcess(question1);
 
 			}, filter: (e) => this.status !== 'wait-choose-question'}
@@ -171,7 +173,7 @@ class BasicConductor extends AbstractConductor {
 
 	showPregameInfo()
 	{
-		this.lobby.sendForClients('pregame_info', { 
+		this.lobby.sendForClients('pregame_info', {
 			info: this.game.getPackInfo(),
 			time: this.pregame_info_time
 		});
@@ -187,7 +189,7 @@ class BasicConductor extends AbstractConductor {
 
 	showRoundTitle(round)
 	{
-		this.lobby.sendForClients('show_round_title', { 
+		this.lobby.sendForClients('show_round_title', {
 			title: round.roundName,
 			time: this.pregame_info_time
 		});
@@ -219,4 +221,3 @@ class BasicConductor extends AbstractConductor {
 }
 
 module.exports = BasicConductor;
-

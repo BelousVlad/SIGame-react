@@ -20,7 +20,7 @@
 
 @media (min-width: 767.98px){
   .container {
-    width: 720px;	
+    width: 720px;
   }
 }
 
@@ -143,7 +143,7 @@
 }
 .lobby-list-item{
   display: flex;
-  justify-content: space-between; 
+  justify-content: space-between;
 }
 .popup-bg{
   background: rgba(0,0,0,.5);
@@ -195,7 +195,7 @@
 }
 .lobby-chat-box{
   width: 240px;
-  border: 1px solid blue;  
+  border: 1px solid blue;
 }
 .lobby-main-canvas{
   flex-grow: 1;
@@ -271,7 +271,7 @@ input[name=chat_send_btn] {
   border: 1px solid green;
   flex-grow: 1;
   margin: 0px 0px;
-  text-align: center; 
+  text-align: center;
 }
 .main-canvas-paragraph-container{
   width: 100%;
@@ -286,7 +286,7 @@ input[name=chat_send_btn] {
 .main-canvas{
   height: calc(100% - 30px);
   width: 100%;
-  border: 1px solid red; 
+  border: 1px solid red;
 }
 .game-container{
   display: flex;
@@ -447,6 +447,10 @@ input[name=chat_send_btn] {
 }
 .player-box{
   position: relative;
+}
+.player-box-img{
+  max-width: 100%;
+  max-height: 100%;
 }
 .player-answer-box{
   position: absolute;

@@ -24,7 +24,8 @@ class PackController extends GameModule {
 				template_[i][j] = new Array();
 
 				for (var k = 0; k < this.package.roundList[i].themeList[j].questionList.length; k++) {
-					if(questionCheckList && !questionCheckList[i][j][k])
+					if(questionCheckList
+						&& (!questionCheckList || !questionCheckList[i][j][k]))
 						template_[i][j][k] = func(this.package.roundList[i].themeList[j].questionList[k]);
 					else
 						template_[i][j][k] = null;
@@ -38,7 +39,7 @@ class PackController extends GameModule {
 	getPackageTemplateWithPrices(questionCheckList) {
 		return this.getPackageTemplate(function(question_) {
 			return question_.price;
-		},questionCheckList)
+		}, questionCheckList)
 	}
 
 	getRandomQuestion(questionCheckList, roundIndex) {
@@ -49,7 +50,7 @@ class PackController extends GameModule {
 		var themeList = this.package.roundList[roundIndex].themeList;
 
 		//counting unused questions
-		questionCheckList[roundIndex].forEach( item => item.forEach( item => /*short if-else*/!item ? countOfUnusedQuestions++ : null));
+		questionCheckList[roundIndex].forEach( item => item.forEach( item => /*short if-else*/!item ? countOfUnusedQuestions++ : undefined));
 
 		var index = parseInt( Math.random() * countOfUnusedQuestions );
 		var count = 0;
@@ -57,7 +58,7 @@ class PackController extends GameModule {
 		for (var i = 0; i < questionCheckList[roundIndex].length; i++)
 			for (var j = 0; j < questionCheckList[roundIndex][i].length; j++)
 			{
-				if (count === index)
+				if (count === index && !questionCheckList[roundIndex][i][j])
 					return themeList[i].questionList[j];
 
 				if (!questionCheckList[roundIndex][i][j])
@@ -142,13 +143,13 @@ class PackController extends GameModule {
 	getItemByLocation(location_) {
 		var { roundIndex, themeIndex, questionIndex } = location_;
 
-		if (questionIndex)
+		if (questionIndex !== undefined)
 			return this.package.roundList[roundIndex].themeList[themeIndex].questionList[questionIndex];
 
-		if (themeIndex)
+		if (themeIndex !== undefined)
 			return this.package.roundList[roundIndex].themeList[themeIndex];
 
-		if (roundIndex)
+		if (roundIndex !== undefined)
 			return this.package.roundList[roundIndex];
 
 		return null;
