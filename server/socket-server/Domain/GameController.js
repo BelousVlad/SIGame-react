@@ -47,7 +47,6 @@ class GameController extends DomainController {
 				lobby?.game.clientReady(client)
 			}
 		}
-		console.log('client ready invoked, msg: ', msg);
 	}
 
 	client_ask_to_reply(ws, msg)

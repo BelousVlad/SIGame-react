@@ -21,30 +21,29 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
 		return new Promise((resolve,reject) => {
 			this.current_question = question;
 			this.service_data = {}
-			console.log(question.getRightResources());
 			resolve();
 		})
 		.then(() => {
-			console.log('questionPreprocess')
 			return this.questionPreprocess(question)
 		})
 		.then(() => {
-			console.log('questionReplyPreprocess')
 			return this.questionReplyPreprocess(question)
 		})
 		.then((reply_clients) => {
-			console.log('questionProcess')
 			return this.questionProcess(reply_clients)
 		})
 		.then(() => {
-			console.log('checkProcess')
 			return this.checkProcess();
 		})
 		.then(() => {
 			for(let key in this.check_process.evaluation_clients)
 			{
-				const ball = this.check_process.evaluation_clients[key];
-				if (ball)
+				const mark = this.check_process.evaluation_clients[key];
+				console.log(this.check_process.evaluation_clients[key]);
+				console.log(mark);
+				console.log(this.current_question.price);
+
+				if (mark)
 					this.game.addScore(this.current_question.price);
 				else
 					this.game.addScore(-this.current_question.price);
@@ -77,7 +76,6 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
 			})
 
 			if (Object.keys(this.wait_process.clients).length === 0) {
-				console.log('waited')
 				this.wait_process.wait_timer.forceSuccess();
 			}
 			this.wait_process.resolve = resolve;
@@ -150,8 +148,6 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
 
 	skip()
 	{
-		console.log('skip');
-
 		this.timer.forceFail(-1);
 	}
 
@@ -164,7 +160,6 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
 
 	askToReply(client)
 	{
-		console.log('ask')
 		if (this.ask_reply_process)
 		{
 			this.ask_reply_process.clients[client.key] = client;
@@ -244,7 +239,10 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
 		this.check_process.evaluation_clients = {};
 
 		for (let key in this.reply_process.players)
+		{
+			console.log('key' , key)
 			this.check_process.evaluation_clients[key] = false;
+		}
 	}
 
 	evaluationAnswerClient(ev_client, ball)

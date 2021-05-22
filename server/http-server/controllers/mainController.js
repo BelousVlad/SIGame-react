@@ -197,7 +197,6 @@ class MainController{
 	}
 
 	get_question_resource(req, res) {
-		console.log('here we go!\n\n');
 		const cookies = helper.parseCookies(req) || new Object;
 		const client = ClientManager.getClient(cookies.key);
 
@@ -218,7 +217,6 @@ class MainController{
 
 		const uri = req.url;
 		const fileName = uri.substring( (uri.indexOf('?')) + 1 ).match(/name=([^&]+)/)?.[1];
-		console.log(uri, fileName);
 
 		if (!fileName) {
 			res.end('file not specified');
@@ -277,8 +275,8 @@ class MainController{
 	}
 
 	upload_avatar ( req, res ) {
-		let cookies = helper.parseCookies(req)
-		,	client = ClientManager.getClient( cookies.key )
+		let cookies = helper.parseCookies(req),
+			client = ClientManager.getClient( cookies.key )
 
 		if( !client)
 			return;
@@ -310,8 +308,8 @@ class MainController{
 	}
 
 	get_avatar( req, res ) {
-		let cookies = helper.parseCookies(req)
-		,	client = ClientManager.getClient( cookies.key )
+		let cookies = helper.parseCookies(req),
+			client = ClientManager.getClient( cookies.key )
 
 		if( !client)
 			return;
