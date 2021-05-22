@@ -101,7 +101,7 @@ class GameController extends DomainController {
 			{
 				let ans_client = ClientManager.getClientByName(msg.data.name);
 				if (ans_client)
-					lobby.game.evaluation_answer_client(client, ans_client);
+					lobby.game.evaluation_answer_client(client, ans_client, msg.data.mark);
 			}
 		}
 	}

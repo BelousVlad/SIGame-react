@@ -39,14 +39,11 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
 			for(let key in this.check_process.evaluation_clients)
 			{
 				const mark = this.check_process.evaluation_clients[key];
-				console.log(this.check_process.evaluation_clients[key]);
-				console.log(mark);
-				console.log(this.current_question.price);
-
+				
 				if (mark)
-					this.game.addScore(this.current_question.price);
+					this.game.addScore(this.reply_process.players[key], this.current_question.price);
 				else
-					this.game.addScore(-this.current_question.price);
+					this.game.addScore(this.reply_process.players[key], -this.current_question.price);
 			}
 		})
 	}
@@ -245,14 +242,16 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
 		}
 	}
 
-	evaluationAnswerClient(ev_client, ball)
+	evaluationAnswerClient(ev_client, mark)
 	{
 		if (ev_client.key in this.check_process.evaluation_clients)
-			this.check_process.evaluation_clients[ev_client.key] = ball;
-		this.lobby.sendForClients('question_answer_evaluated', {
-			...ev_client.getDisplayParams(),
-			ball
-		})
+		{
+			this.check_process.evaluation_clients[ev_client.key] = mark;
+			this.lobby.sendForClients('question_answer_evaluated', {
+				...ev_client.getDisplayParams(),
+				mark
+			})
+		}
 	}
 
 	checkProcess()

@@ -113,17 +113,17 @@ class ViewModel {
 		let themes = input_.themes;
 		let prices = input_.prices;
 		let container = $(`.lobby-game-container`);
-		var result = '';
+		let result = '';
 
 		// fill array with empty items to achive same items count.
-		var maxQuestionsInTheme = Math.max( ...prices.map(item => item.length) );
+		let maxQuestionsInTheme = Math.max( ...prices.map(item => item.length) );
 		prices = prices.map(priceList => {
 			while (priceList.length < maxQuestionsInTheme)
 				priceList.push('');
 			return priceList;
 		})
 
-		for (var i = 0; i < themes.length; i++) {
+		for (let i = 0; i < themes.length; i++) {
 			result +=
 				`
 					<div class="theme-container">
@@ -134,7 +134,7 @@ class ViewModel {
 							return accamulator +
 							`
 							<div class="question-box round-question theme-question" data-theme-index="${i}" data-question-index="${index}">
-								${item}
+								${item ?? ''}
 							</div>
 							`
 						}, '')}

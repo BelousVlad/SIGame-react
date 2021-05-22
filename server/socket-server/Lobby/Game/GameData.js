@@ -1,6 +1,6 @@
 class GameData {
 	current_round = 0;
-	is_question_used = [ [ [] ] ] // Трёхмерный массисв
+	is_question_used = [];
 
 	constructor(packInfo)
 	{

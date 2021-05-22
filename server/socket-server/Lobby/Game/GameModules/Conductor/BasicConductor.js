@@ -12,25 +12,35 @@ class BasicConductor extends AbstractConductor {
 		this.timer = {};
 		this.status = 'first_turn';
 		this.last_choiced_player_key = undefined; /*Object.keys(this.lobby.clients)[0];*/
-		this.game.registerModuleMessage('test_module_msg', this, this.test_module_msg); //TODO delete
 		this.pregame_info_time = 5e3;
 		this.round_title_time = 5e3;
 		this.choose_question_time = 10e3;
 	}
 
-	test_module_msg(ws, msg)
-	{
-		console.log('test message: ', msg);
-	}
-
 	//overrided
 	turn()
 	{
-		if (this.status == 'choice_question') {
-			console.log('pre choice_question')
+		if (this.status === 'choice_question') {
+			this.sendRound();
 			this.chooseQuestion();
 		}
-		else if (this.status == 'first_turn')
+		else if (this.status === 'after_question')
+		{
+			let round = this.game.getRoundInfo();
+			let res = round.prices.find(i => i.length !== 0)
+			if (!res)
+				this.nextRound().then(() => {
+					this.status = 'choice_question';
+					this.turn();
+				});
+			else
+			{
+				this.status = 'choice_question';
+				this.turn();
+			}
+
+		}
+		else if (this.status === 'first_turn')
 		{
 			this.game.game_info.current_round = 0;
 			this.showPregameInfo()
@@ -39,7 +49,6 @@ class BasicConductor extends AbstractConductor {
 				return this.showRoundTitle(round)
 			})
 			.then((round) => {
-				this.lobby.sendForClients('show_round_info', round);
 				this.status = 'choice_question'
 				this.turn();
 			})
@@ -48,8 +57,10 @@ class BasicConductor extends AbstractConductor {
 
 	nextRound()
 	{
+
 		this.game.game_info.current_round++;
-		this.sendRound();
+		let round = this.game.getRoundInfo();
+		return this.showRoundTitle(round);
 	}
 
 	sendRound()
@@ -73,18 +84,20 @@ class BasicConductor extends AbstractConductor {
 	{
 		this.status = 'question-process'
 		this.QestionProcessController.startQuestionProcess(question)
-		.then(() => {
-			//this.status = 'question-process' //TODO check next round
-			// this.lobby._updatePlayers();
-			console.log('ended question process');
-			this.turn();
-		})
 		.catch((val) => {
 			console.log('question process catch:', val);
 			if (val === -1)
 				console.log('Sjip stage')
 			else if (val === -2)
 				console.log('No one reply')
+		})
+		.then(() => {
+			//this.status = 'question-process' //TODO check next round
+			// this.lobby._updatePlayers();
+			console.log('ended question process');
+			this.status = 'after_question'
+			this.game.setQuestionUsed(question)
+			this.turn();
 		});
 	}
 
@@ -199,9 +212,9 @@ class BasicConductor extends AbstractConductor {
 		this.QestionProcessController.clientReply(client, answer);
 	}
 
-	evaluationAnswerClient(client, ball)
+	evaluationAnswerClient(client, mark)
 	{
-		this.QestionProcessController.evaluationAnswerClient(client, ball);
+		this.QestionProcessController.evaluationAnswerClient(client, mark);
 	}
 }
 

@@ -26,7 +26,7 @@ class Game {
 	{
 		if (this.game_info.current_round !== undefined)
 		{
-			let prices = this.pack_controller.getPackageTemplateWithPrices();
+			let prices = this.pack_controller.getPackageTemplateWithPrices(this.game_info.is_question_used);
 
 			prices = prices[this.game_info.current_round];
 			let themes = this.pack_controller.getThemesTitles(this.game_info.current_round);
@@ -138,17 +138,32 @@ class Game {
 	{
 		this.conductor.clientReply(client, answer);
 	}
-	evaluation_answer_client(master_client, client, ball)
+	evaluation_answer_client(master_client, client, mark)
 	{
 		if (this.lobby.master.key === master_client.key) 
 		{
 			console.log('evaluationAnswerClient');
-			this.conductor.evaluationAnswerClient(client, ball);
+			this.conductor.evaluationAnswerClient(client, mark);
 		}
 	}
 	addScore(client, count)
 	{
 		this.game_info.scores[client.key] += count;
+	}
+	getQuestionLocation(question)
+	{
+		return this.pack_controller.getQuestionLocation(question);
+	}
+	setQuestionUsed(question)
+	{
+		let location = this.getQuestionLocation(question)
+		this.setQuestionUsedByCoords(location.roundIndex,
+							location.themeIndex,
+							location.questionIndex)
+	}
+	setQuestionUsedByCoords(round, theme, question)
+	{
+		this.game_info.is_question_used[round][theme][question] = true;
 	}
 }
 

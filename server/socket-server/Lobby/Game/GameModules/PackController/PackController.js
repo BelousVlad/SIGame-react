@@ -12,7 +12,7 @@ class PackController extends GameModule {
 		return this.package.info;
 	}
 
-	getPackageTemplate(func = (() => null)) {
+	getPackageTemplate(func = (() => null), questionCheckList) {
 		var template_ = new Array();
 
 		for (var i = 0; i < this.package.roundList.length; i++) {
@@ -24,9 +24,10 @@ class PackController extends GameModule {
 				template_[i][j] = new Array();
 
 				for (var k = 0; k < this.package.roundList[i].themeList[j].questionList.length; k++) {
-
-					template_[i][j][k] = func(this.package.roundList[i].themeList[j].questionList[k]);
-
+					if(questionCheckList && !questionCheckList[i][j][k])
+						template_[i][j][k] = func(this.package.roundList[i].themeList[j].questionList[k]);
+					else
+						template_[i][j][k] = null;
 				}
 			}
 		}
@@ -34,10 +35,10 @@ class PackController extends GameModule {
 		return template_;
 	}
 
-	getPackageTemplateWithPrices() {
+	getPackageTemplateWithPrices(questionCheckList) {
 		return this.getPackageTemplate(function(question_) {
 			return question_.price;
-		})
+		},questionCheckList)
 	}
 
 	getRandomQuestion(questionCheckList, roundIndex) {
