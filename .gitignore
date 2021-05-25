@@ -3,3 +3,5 @@ server/si-packs/*
 server/avatars/*
 !server/avatars/baseAvatar.jpg
 server/Q_igrovoy_1.siq
+
+.idea/
