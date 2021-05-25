@@ -43,20 +43,29 @@ class Game
 		{
 			promises.push(
 				new Promise((resolve, reject) => {
-					if (res.value.startsWith('@'))
+
+					if (res.value)
 					{
-						let loader = new GameResoucesLoader();
-						let uri_ = `/get_question_resource?name=${encodeURI(res.value.substring(1))}`;
-						this._question_resources.push(loader.loadRes(uri_, resolve));
-					}
-					else
-					{
-						let elem = document.createElement('div');
-						elem.innerText = res.value;
-						this._question_resources.push(elem);
-						resolve();
-					}
-				})
+						if (res.value.startsWith('@'))
+						{
+							let loader = new GameResoucesLoader();
+							let uri_ = `/get_question_resource?name=${encodeURI(res.value.substring(1))}`;
+                            this._question_resources.push(loader.loadRes(uri_, resolve));
+						}
+						else
+						{
+							let elem = document.createElement('div');
+							elem.innerText = res.value;
+							this._question_resources.push(elem);
+							resolve();
+						}
+                    }
+                    else
+                    {
+                        this._question_resources.push(null);
+                        resolve();
+                    }
+                })
 			)
 		}
 		return Promise.all(promises);
@@ -83,15 +92,16 @@ class Game
 	{
 		let number = stage_data.stage_number;
 		let time = stage_data.time;
+        console.log(this._question_resources[number]);
 		this._view.showQuestionStage(
 			this._question_resources[number],
 			time
-		)
+		);
 	}
 
 	questionProcess(data)
 	{
-		this._view.showQuestionProcessPlayers(data.reply_clients)
+		this._view.showQuestionProcessPlayers(data.reply_clients);
 		this._view.setTimer(data.time);
 	}
 
@@ -113,4 +123,6 @@ class Game
 			this._view.setTimer(dat.time);
 	}
 }
+//%D1%80%D0%B0%D1%88%D0%B5%D0%BD%20%D0%B4%D0%B8%D0%BA%D0%B0%D0%BF%D1%80%D0%B8%D0%BE%2001.jpg
+//%D1%80%D0%B0%D1%88%D0%B5%D0%BD%20%D0%B4%D0%B8%D0%BA%D0%B0%D0%BF%D1%80%D0%B8%D0%BE%2002.jpg
 

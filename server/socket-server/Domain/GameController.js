@@ -11,7 +11,8 @@ class GameController extends DomainController {
 			'ask_to_reply' : 'client_ask_to_reply',
 			'skip_stage' : 'skip_stage',
 			'question_answer' : 'question_answer',
-			'question_evaluation': 'question_evaluation'
+			'question_evaluation': 'question_evaluation',
+			'next_round': 'next_round'
 		})
 	}
 
@@ -104,6 +105,21 @@ class GameController extends DomainController {
 					lobby.game.evaluation_answer_client(client, ans_client, msg.data.mark);
 			}
 		}
+	}
+
+    next_round(ws, msg)
+	{
+        let key = msg.key;
+        let client = ClientManager.getClient(key);
+        if (client)
+        {
+            let lobby = LobbyManager.getLobbyByClientKey(key);
+            if (lobby && lobby.game)
+            {
+                if (client.key === lobby.host.key || client.key === lobby.master.key)
+                    lobby.game.nextRound();
+            }
+        }
 	}
 }
 

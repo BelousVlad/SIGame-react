@@ -89,7 +89,7 @@
 		{
 			app.speakerctrl.sendChatMessage(text);
 		}
-	})
+	});
 
 	$('#chat_send_text').on('keypress',function(e) {
 	    if(e.which == 13) {
@@ -106,7 +106,7 @@
 
 	$('.main-paragraph').click(function(e){
 
-	})
+	});
 
 	$(document).on('click','.become-master-btn',function(e){
 		app.ServerCommandManager.becameMaster();
@@ -136,27 +136,27 @@
 		// formData.append('CustomField', 'test');
 		request.open('POST', 'api/upload/pack');
 		request.send(formData);
-	}
+	};
 
 	document.querySelector('.game-start-btn').onclick = function ( ) {
 		app.ServerCommandManager.startLobbyGame();
-	}
+	};
 
 	document.querySelector('.game-answer-btn').onclick = function() {
 		app.ServerCommandManager.askToReply();
-	}
+	};
 
 	document.querySelector('.get-round').onclick = function ( ) {
 		app.speakerctrl.getRound();
-	}
+	};
 
 	document.querySelector('.next-round-btn').onclick = function ( ) {
-		app.speakerctrl.nextRound();
-	}
+		app.ServerCommandManager.nextRound();
+	};
 
 	document.querySelector('.previous-round-btn').onclick = function ( ) {
 		app.speakerctrl.previousRound();
-	}
+	};
 
 	$(document).on('click', '.round-question', function(e) {
 		let theme_id = $(this).data('theme-index');
@@ -170,7 +170,7 @@
 		let banner = $(this).parent().parent().parent();
 		let name = banner.data('name')
 		app.ServerCommandManager.playerEvaluationAnswer(name, true)
-	})
+	});
 
 	$(document).on('click', '.answer-box-btn-no', function(answer) {
 		let banner = $(this).parent().parent().parent();

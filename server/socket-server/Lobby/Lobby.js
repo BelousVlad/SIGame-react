@@ -21,7 +21,7 @@ class Lobby {
 		this.max_players = max_p ;
 		this.title = title ;
 		this.password = password ;
-		this.scores = {}
+		this.scores = {};
 		this.host = undefined;
 		this.master = undefined;
 		this.packFolder = undefined;

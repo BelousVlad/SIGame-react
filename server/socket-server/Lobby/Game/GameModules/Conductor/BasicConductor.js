@@ -29,10 +29,7 @@ class BasicConductor extends AbstractConductor {
 			let round = this.game.getRoundInfo();
 			let res = round.prices.find(theme => (theme.find(questionPrice => questionPrice !== null) !== undefined));
 			if (!res)
-				this.nextRound().then(() => {
-					this.status = 'choice_question';
-					this.turn();
-				});
+				this.nextRound();
 			else
 			{
 				this.status = 'choice_question';
@@ -60,7 +57,13 @@ class BasicConductor extends AbstractConductor {
 
 		this.game.game_info.current_round++;
 		let round = this.game.getRoundInfo();
-		return this.showRoundTitle(round);
+		if(this.timer)
+			this.timer.forceFail(false);
+		this.QestionProcessController.forceEndProcess();
+		return this.showRoundTitle(round).then(() => {
+            this.status = 'choice_question';
+            this.turn();
+        });
 	}
 
 	sendRound()
@@ -131,15 +134,18 @@ class BasicConductor extends AbstractConductor {
 		this.status = 'wait-choose-question';
 
 		this.timer = new Timer(time, {
-			fail: (e) => {
+			fail: (arg) => {
 
-				this.status = 'processing-question';
-				//let question = { text: 'fail - normal question' }; //TODO GET random question
-				let question = this.game.getRandomQuestion();
+                if(arg !== false)
+				{
+                    this.status = 'processing-question';
+                    //let question = { text: 'fail - normal question' }; //TODO GET random question
+                    let question = this.game.getRandomQuestion();
 
-				this.startQuestionProcess(question);
-
+                    this.startQuestionProcess(question);
+				}
 			}, success:  (client, question) => {
+				console.log('success');
 				this.status = 'processing-question';
 
 				let theme_index = question.theme_index;
@@ -164,7 +170,7 @@ class BasicConductor extends AbstractConductor {
 		if ( Object.keys(this.lobby.clients).indexOf(this.player_with_right_for_choose) !== -1 && this.lobby.master !== this.player_with_right_for_choose)
 			return this.player_with_right_for_choose;
 
-		var playersList = Object.values(this.lobby.clients).filter(player => player.key !== this.lobby.master.key);
+		let playersList = Object.values(this.lobby.clients).filter(player => player.key !== this.lobby.master.key);
 
 		this.player_with_right_for_choose = playersList[ /*get random index*/ parseInt( Math.random() * playersList.length ) ];
 
@@ -205,7 +211,6 @@ class BasicConductor extends AbstractConductor {
 
 	skip_stage()
 	{
-		console.log('skip stage')
 		this.QestionProcessController.skip();
 	}
 

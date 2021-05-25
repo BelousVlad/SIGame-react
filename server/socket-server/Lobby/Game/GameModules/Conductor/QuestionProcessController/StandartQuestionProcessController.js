@@ -16,8 +16,8 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
 
 	startQuestionProcess(question)
 	{
-		console.log('question right');
-		console.log(question.getRightResources());
+		// console.log('question right');
+		// console.log(question.getRightResources());
 		return new Promise((resolve,reject) => {
 			this.current_question = question;
 			this.service_data = {}
@@ -70,7 +70,7 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
 			this.wait_process.wait_timer = new Timer(timeout_, {
 				success: resolve,
 				fail: resolve
-			})
+			});
 
 			if (Object.keys(this.wait_process.clients).length === 0) {
 				this.wait_process.wait_timer.forceSuccess();
@@ -121,25 +121,27 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
 		for(let resource of resources)
 		{
 			// this.startForAllReady();
-			let time = 0;
-			if (resource.time)
-				time = resource.time * 1e3
-			else
+			console.log('stage', stage);
+			if (resource.value)
 			{
-				if (resource.type === 'text')
-					time = 1.375 + resource.content.length / 25; // 25 - скорость чтения символов в минуту
-				else
-					time = 5;
-				time *= 1e3;
-			}
-			time = 10e3;
-			this.clientsStage(stage, time, resource);
+                let time = 0;
+                if (resource.time)
+                    time = resource.time * 1e3
+                else
+                {
+                    if (resource.type === 'text')
+                        time = 1.375 + resource.content.length / 25; // 25 - скорость чтения символов в минуту
+                    else
+                        time = 5;
+                    time *= 1e3;
+                }
+                time = 10e3;
+                this.clientsStage(stage, time, resource);
 
-			await this.sleep(time);
-
+                await this.sleep(time);
+            }
 			stage++;
 		}
-
 		return null;
 	}
 
@@ -166,7 +168,7 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
 	questionReplyPreprocess()
 	{
 		return new Promise((resolve, reject) => {
-			this.startAskReplyProcess()
+			this.startAskReplyProcess();
 			this.lobby.sendForClients('client_question_reply_request', {
 				time: this.reply_request_time
 			});
@@ -214,7 +216,7 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
 			this.lobby.sendForClients('question_process', {
 				reply_clients: arr.map((i) => i.getDisplayParams()),
 				time: this.reply_question_time
-			})
+			});
 
 			for(let key in reply_clients)
 			{
@@ -237,7 +239,7 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
 
 		for (let key in this.reply_process.players)
 		{
-			console.log('key' , key)
+			// console.log('key' , key)
 			this.check_process.evaluation_clients[key] = false;
 		}
 	}
@@ -258,7 +260,7 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
 	{
 		return new Promise((resolve, reject) => {
 			this.start_check_process();
-			let arr = []
+			let arr = [];
 			for(let key in this.reply_process.players)
 			{
 				arr.push({
@@ -269,12 +271,12 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
 			this.lobby.sendForClients('question_answers', {
 				reply_clients: arr,
 				time: this.answers_check_question_time
-			})
+			});
 
 			this.lobby.master.send('check_answer', {
 				right: this.current_question.getRightResources(),
 				time: this.answers_check_question_time
-			})
+			});
 
 			this.timer = new Timer(this.reply_request_time, {
 				fail: reject,
@@ -291,6 +293,16 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
 				success: resolve
 			})
 		})
+	}
+
+	forceEndProcess()
+	{
+		if (this.timer)
+			this.timer.forceEnd();
+		if (this.wait_process && this.wait_process.wait_timer)
+		{
+            this.wait_process.wait_timer.forceEnd();
+		}
 	}
 }
 

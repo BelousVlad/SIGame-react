@@ -176,7 +176,7 @@ class Timer {
 				return item.filter();
 			else
 				return true;
-		})
+		});
 		this.timeEnd = Date.now();
 	}
 

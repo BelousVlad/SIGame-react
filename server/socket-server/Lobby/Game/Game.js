@@ -165,6 +165,10 @@ class Game {
 	{
 		this.game_info.is_question_used[round][theme][question] = true;
 	}
+    nextRound()
+	{
+		this.conductor.nextRound()
+	}
 }
 
 Object.assign( Game.prototype, event.prototype )

@@ -281,8 +281,6 @@ class MainController{
 		if( !client)
 			return;
 
-
-
 		const form = formidable({
 			uploadDir : config.avatarDirPath,
 			maxFileSize : 200e6, //  ~200mb

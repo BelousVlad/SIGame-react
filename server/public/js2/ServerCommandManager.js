@@ -74,6 +74,11 @@ class ServerCommandManager {
 		this.send('lobby.game.question_evaluation', { name, mark })
 	}
 
+    nextRound()
+	{
+        this.send('lobby.game.next_round')
+	}
+
 	//Дальше идут служебные методы (приватные)
 
 	send(action, data)

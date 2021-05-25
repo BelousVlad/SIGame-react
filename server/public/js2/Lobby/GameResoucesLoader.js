@@ -7,6 +7,7 @@ class GameResoucesLoader{
 	loadRes(path, callback)
 	{
 		let exp = path.substr(path.lastIndexOf('.'));
+		exp = exp.toLowerCase();
 		if (exp === '.jpg' || exp === '.png' || exp === '.gif')
 		{
 			return this._loadImg(path, callback);

@@ -219,7 +219,7 @@ class ViewModel {
 							resolve(...args);
 					}
 				});
-			}, 10)
+			}, 50)
 		})
 	}
 
