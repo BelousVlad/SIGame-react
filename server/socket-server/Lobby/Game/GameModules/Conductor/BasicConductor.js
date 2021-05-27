@@ -77,7 +77,6 @@ class BasicConductor extends AbstractConductor {
 		{
 			if (client.key === this.choose_player.key || client.key === lobby.master.key)
 			{
-				console.log('question choised')
 				this.timer.forceSuccess(client, question);
 			}
 		}

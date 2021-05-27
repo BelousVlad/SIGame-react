@@ -181,9 +181,8 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
 				success:  () => {
 					resolve(this.ask_reply_process.clients);
 					this.ask_reply_process = null;
-				},
-				filter: () => Object.keys(this.ask_reply_process.clients).length > 0 }
-			)
+				}
+			})
 		})
 	}
 
