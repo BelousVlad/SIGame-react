@@ -121,7 +121,6 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
 		for(let resource of resources)
 		{
 			// this.startForAllReady();
-			console.log('stage', stage);
 			if (resource.value)
 			{
                 let time = 0;
@@ -147,7 +146,9 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
 
 	skip()
 	{
+		console.log('skip')
 		this.timer.forceFail(-1);
+		// this.forceEndProcess()
 	}
 
 	startAskReplyProcess()
@@ -176,13 +177,12 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
 			this.timer = new Timer(this.reply_request_time, {
 				fail: () => {
 					reject(-2);
-					this.ask_reply_process = null;
 				},
 				success:  () => {
 					resolve(this.ask_reply_process.clients);
-					this.ask_reply_process = null;
-				}
-			})
+				},
+				filter: () => Object.keys(this.ask_reply_process.clients).length > 0 }
+			)
 		})
 	}
 
@@ -296,11 +296,11 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
 
 	forceEndProcess()
 	{
-		if (this.timer)
-			this.timer.forceEnd();
-		if (this.wait_process && this.wait_process.wait_timer)
+		if (this.timer && !this.timer.isTimerEnd)
+			this.timer.forceEnd(-1);
+		if (this.wait_process && this.wait_process.wait_timer && !this.wait_process.wait_timer)
 		{
-            this.wait_process.wait_timer.forceEnd();
+            this.wait_process.wait_timer.forceEnd(-1);
 		}
 	}
 }

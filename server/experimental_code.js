@@ -56,9 +56,9 @@ class Timer {
 		clearTimeout(this.timeoutCall);
 	}
 
-	forceEnd() {
+	forceEnd(...args) {
 		this.die();
-		return this.timerEnd();
+		return this.timerEnd(...args);
 	}
 
 	forceFail(...args) {
@@ -169,14 +169,14 @@ class Timer {
 		this.callbackList = this.callbackList.filter(item => item !== callbackObj);
 	}
 
-	timerEnd() {
+	timerEnd(...args) {
 		this.__isTimerEnd = true;
 		this.eachCallback(function(item) {
 			if (item && typeof item.filter === 'function') // async validation done in CallbackObject constructor
 				return item.filter();
 			else
 				return true;
-		});
+		},...args);
 		this.timeEnd = Date.now();
 	}
 

@@ -58,7 +58,7 @@ class BasicConductor extends AbstractConductor {
 		this.game.game_info.current_round++;
 		let round = this.game.getRoundInfo();
 		if(this.timer)
-			this.timer.forceFail(false);
+			this.timer.die();
 		this.QestionProcessController.forceEndProcess();
 		return this.showRoundTitle(round).then(() => {
             this.status = 'choice_question';
@@ -96,7 +96,6 @@ class BasicConductor extends AbstractConductor {
 		.then(() => {
 			//this.status = 'question-process' //TODO check next round
 			// this.lobby._updatePlayers();
-			console.log('ended question process');
 			this.status = 'after_question'
 			this.game.setQuestionUsed(question)
 			this.turn();
@@ -134,15 +133,12 @@ class BasicConductor extends AbstractConductor {
 
 		this.timer = new Timer(time, {
 			fail: (arg) => {
+				this.status = 'processing-question';
+				//let question = { text: 'fail - normal question' }; //TODO GET random question
+				let question = this.game.getRandomQuestion();
 
-                if(arg !== false)
-				{
-                    this.status = 'processing-question';
-                    //let question = { text: 'fail - normal question' }; //TODO GET random question
-                    let question = this.game.getRandomQuestion();
-
-                    this.startQuestionProcess(question);
-				}
+				this.startQuestionProcess(question);
+				
 			}, success:  (client, question) => {
 				console.log('success');
 				this.status = 'processing-question';
@@ -210,7 +206,11 @@ class BasicConductor extends AbstractConductor {
 
 	skip_stage()
 	{
-		this.QestionProcessController.skip();
+		console.log(this.status);
+		if(this.status === 'question-process')
+			this.QestionProcessController.skip();
+		else
+			this.timer.forceFail();
 	}
 
 	clientReply(client, answer)
