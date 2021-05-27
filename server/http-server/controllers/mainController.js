@@ -223,7 +223,7 @@ class MainController{
 			return;
 		}
 
-		const fileExtension = fileName.substring( fileName.indexOf('.') );
+		const fileExtension = fileName.substring( fileName.indexOf('.') ).toLowerCase();
 		let directoryName;
 
 		// directoryName = 'Images';
