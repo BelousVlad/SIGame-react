@@ -14,7 +14,8 @@ class BasicConductor extends AbstractConductor {
 		this.last_choiced_player_key = undefined; /*Object.keys(this.lobby.clients)[0];*/
 		this.pregame_info_time = 5e3;
 		this.round_title_time = 5e3;
-		this.choose_question_time = 10e3;
+        this.choose_question_time = 10e3;
+        this.end_game_title_time = 15e3;
 	}
 
 	//overrided
@@ -27,9 +28,21 @@ class BasicConductor extends AbstractConductor {
 		else if (this.status === 'after_question')
 		{
 			let round = this.game.getRoundInfo();
+
 			let res = round.prices.find(theme => (theme.find(questionPrice => questionPrice !== null) !== undefined));
 			if (!res)
-				this.nextRound();
+			{
+                if (round.round_number <= this.game.game_info.round_count - 1)
+                {
+                	console.log('END GAME');
+                    this.endGame();
+                }
+                else
+				{
+                    console.log('NEXT ROUND');
+                    this.nextRound();
+				}
+            }
 			else
 			{
 				this.status = 'choice_question';
@@ -46,7 +59,7 @@ class BasicConductor extends AbstractConductor {
 				return this.showRoundTitle(round)
 			})
 			.then((round) => {
-				this.status = 'choice_question'
+				this.status = 'choice_question';
 				this.turn();
 			})
 		}
@@ -84,20 +97,20 @@ class BasicConductor extends AbstractConductor {
 
 	startQuestionProcess(question)
 	{
-		this.status = 'question-process'
+		this.status = 'question-process';
 		this.QestionProcessController.startQuestionProcess(question)
 		.catch((val) => {
 			console.log('question process catch:', val);
 			if (val === -1)
-				console.log('Sjip stage')
+				console.log('Sjip stage');
 			else if (val === -2)
 				console.log('No one reply')
 		})
 		.then(() => {
 			//this.status = 'question-process' //TODO check next round
 			// this.lobby._updatePlayers();
-			this.status = 'after_question'
-			this.game.setQuestionUsed(question)
+			this.status = 'after_question';
+			this.game.setQuestionUsed(question);
 			this.turn();
 		});
 	}
@@ -206,7 +219,6 @@ class BasicConductor extends AbstractConductor {
 
 	skip_stage()
 	{
-		console.log(this.status);
 		if(this.status === 'question-process')
 			this.QestionProcessController.skip();
 		else
@@ -221,6 +233,46 @@ class BasicConductor extends AbstractConductor {
 	evaluationAnswerClient(client, mark)
 	{
 		this.QestionProcessController.evaluationAnswerClient(client, mark);
+	}
+	endGame()
+	{
+		let win_players = [];
+		const scores = this.game.game_info.scores;
+		let max = scores[Object.keys(this.lobby.clients)[0]];
+
+		for(let key in this.lobby.clients)
+		{
+			if (scores[key] > max)
+			{
+				win_players = [];
+				win_players.push(this.lobby.clients[key]);
+			}
+			else if (scores[key] === max)
+			{
+                win_players.push(this.lobby.clients[key]);
+            }
+		}
+
+		this._showEndGameTitle(win_players)
+			.then(() => {
+				this.lobby.endGame();
+			});
+	}
+	_showEndGameTitle(win_players)
+	{
+		const _win_players = win_players.map((player) => player.getDisplayParams());
+
+		this.lobby.sendForClients('show_end_game_title', {
+			players: _win_players,
+			time: this.end_game_title_time
+		});
+
+        return new Promise((resolve, reject) => {
+            this.timer = new Timer(this.end_game_title_time, {
+                fail: resolve,
+                success: resolve
+            })
+        })
 	}
 }
 

@@ -32,7 +32,7 @@ class Game {
 			let themes = this.pack_controller.getThemesTitles(this.game_info.current_round);
 			let round = this.pack_controller.getRound(this.game_info.current_round);
 
-			return { themes, prices, title: round.roundName };
+			return { themes, prices, title: round.roundName, round_number: this.game_info.current_round};
 		}
 		return undefined;
 	}
@@ -125,7 +125,7 @@ class Game {
 
 	getGameStatus()
 	{
-		let obj = {}
+		let obj = {};
 		obj.round_info = this.getRoundInfo();
 		//TODO
 		return obj;

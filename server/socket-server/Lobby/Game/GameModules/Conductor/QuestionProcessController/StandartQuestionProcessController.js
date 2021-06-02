@@ -233,7 +233,7 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
 
 	start_check_process()
 	{
-		this.check_process = {}
+		this.check_process = {};
 		this.check_process.evaluation_clients = {};
 
 		for (let key in this.reply_process.players)

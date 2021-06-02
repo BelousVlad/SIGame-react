@@ -26,7 +26,8 @@ module.exports = class SocketServerW{
 
 				this.speaker.answer(ws, msg);
 
-			})
+			});
+
 			ws.on('close', () => {
 				console.log(chalk.red('client disconnected.'))
 			})

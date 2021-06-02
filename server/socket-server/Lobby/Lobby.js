@@ -239,10 +239,10 @@ class Lobby {
 			players_count: Object.keys(this.clients).length,
 			is_password: !!this.password,
 			is_game: !!this.game
-		}
+		};
 
 		if (this.game)
-			lobby_.game = this.game.getGameStatus()
+			lobby_.game = this.game.getGameStatus();
 
 		return lobby_;
 	}
@@ -255,12 +255,27 @@ class Lobby {
 		let result = {
 			players,
 			info
-		}
+		};
 
 		if (client)
 			result.position = this.getClientPosition(client);
 
 		return result;
+	}
+
+	endGame()
+	{
+		//TODO
+		this.game = null;
+		this._updateLobby();
+	}
+
+	_updateLobby()
+	{
+        for(let item in this.clients)
+        {
+            this.clients[item].send('update_lobby', this.getFullInfo(this.clients[item]))
+        }
 	}
 
 	_updatePlayers()

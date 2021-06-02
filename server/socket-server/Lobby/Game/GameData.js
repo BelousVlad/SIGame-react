@@ -16,6 +16,7 @@ class GameData {
 	setQuestionUsedByTemplate(question_template_list)
 	{
 		this.is_question_used = question_template_list;
+		this.round_count = question_template_list.length;
 		for(let round of question_template_list)
 		{
 			for(let theme of round)
