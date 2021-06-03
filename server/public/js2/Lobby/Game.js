@@ -75,6 +75,7 @@ class Game
 	{
 		if (data)
 		{
+			console.log(data);
 			this.process_text = 'Кто желает отвечать?'
 			this._view.enableAnswerButton()
 			this._view.setTimer(data.time)
@@ -120,7 +121,7 @@ class Game
 			this._view.showPlayerAnswer(player, player.answer, app.lobby.position.is_master);
 		}
 		if (data.time)
-			this._view.setTimer(dat.time);
+			this._view.setTimer(data.time);
 	}
 }
 //%D1%80%D0%B0%D1%88%D0%B5%D0%BD%20%D0%B4%D0%B8%D0%BA%D0%B0%D0%BF%D1%80%D0%B8%D0%BE%2001.jpg

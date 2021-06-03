@@ -24,8 +24,6 @@ class ServerResponseManager {
 		console.log(msg)
 	}
 
-	//there are methods for lobby processes
-
 	update_players(msg)
 	{
 		if (msg.data)
@@ -36,7 +34,6 @@ class ServerResponseManager {
 
 	status(msg)
 	{
-
 		if (msg.data.lobby)
 		{
 			this.lobby_connected({ data: {

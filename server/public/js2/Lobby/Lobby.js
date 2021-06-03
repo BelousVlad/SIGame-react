@@ -1,7 +1,7 @@
 class Lobby {
 	constructor(info, players, position, view)
 	{
-		this._info = info;
+		this.info = info;
 		this._view = view;
 		this._position = position;
 		this.players = players;
@@ -25,7 +25,6 @@ class Lobby {
 
 	get info() { return this._info }
 	set info(data) {
-		// console.log(data);
 		this._info = data
 	} //mb TODO
 
@@ -40,5 +39,18 @@ class Lobby {
 	get game() { return this._game }
 	set game(data) {
 		this._game = new Game(data.round_info, this._view)
+		if (data.current_process)
+		{
+			if (data.current_process.process === 'ask_reply_process')
+			{
+				this._game.canReply(data.current_process)
+			}
+			else if (data.current_process.process === 'reply_process')
+			{
+				this._game.questionProcess(data.current_process)
+				if (data.current_process.is_reply)
+					this._game.replyQuestion(data.current_process)
+			}
+		}
 	}
 }

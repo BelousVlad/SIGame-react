@@ -326,10 +326,12 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
         if (this.check_process)
         {
             Object.assign(obj, this._getCheckProcessInfo(client));
+            obj.process = 'check_process';
         }
         else if (this.reply_process)
         {
             Object.assign(obj, this._getReplyProcessInfo(client));
+            obj.process = 'reply_process';
         }
         else if (this.ask_reply_process)
         {
@@ -338,6 +340,7 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
         else
         {
             obj.resouces = this.current_question.getQuestionResources();
+            obj.process = 'question_stage';
         }
 
         return obj;
