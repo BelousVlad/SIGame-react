@@ -258,6 +258,16 @@ class BasicConductor extends AbstractConductor {
 				this.lobby.endGame();
 			});
 	}
+
+    getProcessInfo(client)
+    {
+        //TODO no question-process
+        if (this.status === 'question-process')
+        {
+            return this.QestionProcessController.getProcessInfo(client);
+        }
+    }
+
 	_showEndGameTitle(win_players)
 	{
 		const _win_players = win_players.map((player) => player.getDisplayParams());

@@ -26,7 +26,8 @@ class Router{
 			'choosing_question' : 'choosing_question',
 			'question_process': 'question_process',
 			'reply_question' : 'reply_question',
-			'question_answers': 'question_answers'
+			'question_answers': 'question_answers',
+			'set_position' : 'set_position'
 		};
 	}
 

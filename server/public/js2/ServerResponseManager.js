@@ -45,7 +45,6 @@ class ServerResponseManager {
 				}
 			})
 		}
-		console.log(msg)
 	}
 
 	lobby_connected(msg)
@@ -122,5 +121,9 @@ class ServerResponseManager {
 	reply_question(msg)
 	{
 		this.app.lobby.game.replyQuestion(msg.data);
+	}
+    set_position(msg)
+	{
+		this.app.lobby.position = msg.data;
 	}
 }

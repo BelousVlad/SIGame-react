@@ -83,6 +83,7 @@ class Lobby {
 		if (!this.master && this.hasClient(client))
 		{
 			this.master = client;
+            this.sendClientPosition(this.master);
 			this._updatePlayers();
 			return true;
 		}
@@ -230,7 +231,7 @@ class Lobby {
 		return players;
 	}
 
-	getInfo()
+	getInfo(client)
 	{
 		let lobby_ = {
 			id : this.id,
@@ -242,7 +243,7 @@ class Lobby {
 		};
 
 		if (this.game)
-			lobby_.game = this.game.getGameStatus();
+			lobby_.game = this.game.getGameStatus(client);
 
 		return lobby_;
 	}
@@ -250,7 +251,7 @@ class Lobby {
 	getFullInfo(client)
 	{
 		let players = this.getPlayersInfo();
-		let info = this.getInfo();
+		let info = this.getInfo(client);
 
 		let result = {
 			players,
@@ -269,6 +270,11 @@ class Lobby {
 		this.game = null;
 		this._updateLobby();
 	}
+
+    sendClientPosition(client) {
+        const position = this.getClientPosition(client);
+        client.send('set_position', position);
+    }
 
 	_updateLobby()
 	{
@@ -311,7 +317,6 @@ class Lobby {
 			password : '',
 		}
 	}
-
 }
 
 Object.assign( Lobby.prototype, event.prototype ) // 2-nd step of mix-in of event

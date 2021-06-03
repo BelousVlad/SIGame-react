@@ -10,11 +10,14 @@ class App{
 
 		this.ServerSpeaker.onopen = () => {
 			this.ServerCommandManager.sendKey();
-		}
+		};
 
 		this.ServerSpeaker.openSocket();
 	}
 
 	get lobby() { return this._lobby }
-	set lobby(data) { this._lobby = new Lobby(data.info, data.players, data.position, this.view) }
+	set lobby(data) {
+		console.log(data);
+		this._lobby = new Lobby(data.info, data.players, data.position, this.view)
+	}
 }

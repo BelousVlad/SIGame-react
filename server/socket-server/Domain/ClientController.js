@@ -15,8 +15,6 @@ class ClientController extends DomainController{
 	{
 		let key = msg.data;
 
-		//console.log(msg);
-
 		if (key != "0") // Игрок имеет ключ
 		{
 			let client = ClientManager.getClient(key);
@@ -79,8 +77,6 @@ class ClientController extends DomainController{
 		}
 	}
 
-
-	//private
 	getClientStatus(client)
 	{
 		let lobby_ = LobbyManager.getLobbyByClient(client);

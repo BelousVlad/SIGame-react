@@ -123,10 +123,11 @@ class Game {
 		this.conductor.askToReply(client);
 	}
 
-	getGameStatus()
+	getGameStatus(client)
 	{
 		let obj = {};
 		obj.round_info = this.getRoundInfo();
+		obj.current_process = this.conductor.getProcessInfo(client);
 		//TODO
 		return obj;
 	}

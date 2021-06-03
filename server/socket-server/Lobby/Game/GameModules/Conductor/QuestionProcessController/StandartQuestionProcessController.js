@@ -16,11 +16,13 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
 
 	startQuestionProcess(question)
 	{
-		// console.log('question right');
-		// console.log(question.getRightResources());
+        this.check_process = null;
+        this.reply_process = null;
+        this.ask_reply_process = null;
+
 		return new Promise((resolve,reject) => {
 			this.current_question = question;
-			this.service_data = {}
+			this.service_data = {};
 			resolve();
 		})
 		.then(() => {
@@ -55,7 +57,7 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
 
 	startForAllReady()
 	{
-		this.wait_process = {}
+		this.wait_process = {};
 		this.wait_process.clients = {};
 		for(let key in this.lobby.clients)
 		{
@@ -112,9 +114,8 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
 		// send all resources.
 		this.startForAllReady();
 		let resources = question.getQuestionResources();
-		this.sendResources(resources)
-		await this.waitForAllReady(resources.length * 10e3) // 10 sec for each resource
-		// console.log('clients ready');
+		this.sendResources(resources);
+		await this.waitForAllReady(resources.length * 10e3); // 10 sec for each resource
 
 		// show resources one by one up to back of array.
 		let stage = 0;
@@ -125,7 +126,7 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
 			{
                 let time = 0;
                 if (resource.time)
-                    time = resource.time * 1e3
+                    time = resource.time * 1e3;
                 else
                 {
                     if (resource.type === 'text')
@@ -146,7 +147,6 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
 
 	skip()
 	{
-		console.log('skip')
 		this.timer.forceFail(-1);
 		// this.forceEndProcess()
 	}
@@ -169,20 +169,20 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
 	questionReplyPreprocess()
 	{
 		return new Promise((resolve, reject) => {
+            this.timer = new Timer(this.reply_request_time, {
+                fail: () => {
+                    reject(-2);
+                },
+                success:  () => {
+                    resolve(this.ask_reply_process.clients);
+                },
+                filter: () => Object.keys(this.ask_reply_process.clients).length > 0
+            });
+
 			this.startAskReplyProcess();
 			this.lobby.sendForClients('client_question_reply_request', {
 				time: this.reply_request_time
 			});
-
-			this.timer = new Timer(this.reply_request_time, {
-				fail: () => {
-					reject(-2);
-				},
-				success:  () => {
-					resolve(this.ask_reply_process.clients);
-				},
-				filter: () => Object.keys(this.ask_reply_process.clients).length > 0 }
-			)
 		})
 	}
 
@@ -202,18 +202,30 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
 		}
 	}
 
+	_getReplyClients()
+    {
+        let arr = [];
+        for(let key in this.reply_process.players)
+        {
+            arr.push(this.lobby.clients[key].getDisplayParams())
+        }
+        return arr;
+    }
+
 	questionProcess(reply_clients)
 	{
 		return new Promise((resolve, reject) => {
-			this.start_reply_wait(reply_clients)
+            this.timer = new Timer(this.reply_request_time, {
+                fail: reject,
+                success: resolve,
+                filter: () => true
+            });
 
-			let arr = []
-			for(let key in reply_clients)
-			{
-				arr.push(this.lobby.clients[key])
-			}
+			this.start_reply_wait(reply_clients);
+
+			const arr = this._getReplyClients();
 			this.lobby.sendForClients('question_process', {
-				reply_clients: arr.map((i) => i.getDisplayParams()),
+				reply_clients: arr,
 				time: this.reply_question_time
 			});
 
@@ -223,11 +235,6 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
 					time: this.reply_question_time
 				})
 			}
-			this.timer = new Timer(this.reply_request_time, {
-				fail: reject,
-				success: resolve,
-				filter: () => true
-			})
 		})
 	}
 
@@ -258,15 +265,14 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
 	checkProcess()
 	{
 		return new Promise((resolve, reject) => {
+            this.timer = new Timer(this.reply_request_time, {
+                fail: reject,
+                success: resolve
+            });
+
 			this.start_check_process();
-			let arr = [];
-			for(let key in this.reply_process.players)
-			{
-				arr.push({
-					...this.lobby.clients[key].getDisplayParams(),
-					answer: this.reply_process.answers[key]
-				})
-			}
+
+			const arr = this._getAnswersClients();
 			this.lobby.sendForClients('question_answers', {
 				reply_clients: arr,
 				time: this.answers_check_question_time
@@ -276,13 +282,21 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
 				right: this.current_question.getRightResources(),
 				time: this.answers_check_question_time
 			});
-
-			this.timer = new Timer(this.reply_request_time, {
-				fail: reject,
-				success: resolve
-			})
 		})
 	}
+
+	_getAnswersClients()
+    {
+        let arr = [];
+        for(let key in this.reply_process.players)
+        {
+            arr.push({
+                ...this.lobby.clients[key].getDisplayParams(),
+                answer: this.reply_process.answers[key]
+            })
+        }
+        return arr;
+    }
 
 	sleep(time)
 	{
@@ -303,6 +317,50 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
             this.wait_process.wait_timer.forceEnd(-1);
 		}
 	}
+
+    getProcessInfo(client)
+    {
+        const obj = {};
+        if (this.timer)
+            obj.time = this.timer.getLeftTime();
+        if (this.check_process)
+        {
+            Object.assign(obj, this._getCheckProcessInfo(client));
+        }
+        else if (this.reply_process)
+        {
+            Object.assign(obj, this._getReplyProcessInfo(client));
+        }
+        else if (this.ask_reply_process)
+        {
+            obj.process = 'ask_reply_process';
+        }
+        else
+        {
+            obj.resouces = this.current_question.getQuestionResources();
+        }
+
+        return obj;
+    }
+    _getCheckProcessInfo(client)
+    {
+        let obj = {};
+        obj.reply_clients = this._getAnswersClients();
+        if (client && client.key === this.lobby.master.key)
+            obj.right = this.current_question.getRightResources();
+        return obj;
+    }
+    _getReplyProcessInfo(client)
+    {
+        let obj = {};
+        obj.reply_clients = this._getReplyClients();
+        if (client)
+        {
+            const keys = Object.keys(this.reply_process.players);
+            obj.is_reply = keys.includes(client.key);
+        }
+        return obj;
+    }
 }
 
 module.exports = StandartQuestionProcessController;

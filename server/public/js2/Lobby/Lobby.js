@@ -24,7 +24,10 @@ class Lobby {
 	} //mb TODO
 
 	get info() { return this._info }
-	set info(data) { this._info = data } //mb TODO
+	set info(data) {
+		// console.log(data);
+		this._info = data
+	} //mb TODO
 
 	get position() { return this._position }
 	set position(data) { this._position = data } //mb TODO
