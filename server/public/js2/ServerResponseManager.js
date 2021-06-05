@@ -122,4 +122,8 @@ class ServerResponseManager {
 	{
 		this.app.lobby.position = msg.data;
 	}
+	lobby_chat_message(msg)
+	{
+		this.app.view.addChatMessage(msg.data.client, msg.data.text);
+	}
 }

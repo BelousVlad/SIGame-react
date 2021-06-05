@@ -17,7 +17,8 @@ class LobbyController extends DomainController {
 			'connect_lobby' : 'connect_lobby',
 			'became_master' : 'became_master',
 			'stop_master' : 'stop_master',
-			'start_game' : 'start_game'
+			'start_game' : 'start_game',
+			'send_chat_message': 'send_chat_message'
 		})
 		this.router = new DomainRouter();
 		this.GameController = new GameController();
@@ -174,6 +175,20 @@ class LobbyController extends DomainController {
 			return;
 
 		lobby.startGame();
+	}
+
+	send_chat_message(ws, msg)
+	{
+		let key = msg.key;
+		let client = ClientManager.getClient(key);
+		if (client)
+		{
+			let lobby = LobbyManager.getLobbyByClientKey(key);
+			if (lobby)
+			{
+				lobby.chatMessage(client, msg.data.text);
+			}
+		}
 	}
 
 	action(rout, ws, msg)

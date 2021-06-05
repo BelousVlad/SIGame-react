@@ -321,4 +321,15 @@ class ViewModel {
 			$(banner).append(answer_box.get(0));
 		})
 	}
+
+	addChatMessage(player, text)
+	{
+		$('.lobby-chat').append(`
+			<div class="chat-message">
+				<span class="chat-message-from">${player.name}</span>
+				<span>: </span>
+				<span class="chat-message-text">${text}</span>
+			</div>
+		`)
+	}
 }

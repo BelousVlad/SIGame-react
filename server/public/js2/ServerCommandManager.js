@@ -78,6 +78,10 @@ class ServerCommandManager {
 	{
         this.send('lobby.game.next_round')
 	}
+	sendChatMessage(text)
+	{
+		this.send('lobby.send_chat_message', { text });
+	}
 
 	//Дальше идут служебные методы (приватные)
 

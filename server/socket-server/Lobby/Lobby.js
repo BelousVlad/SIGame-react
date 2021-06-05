@@ -264,6 +264,11 @@ class Lobby {
 		return result;
 	}
 
+	chatMessage(client, text)
+	{
+		this.chat.addMessage(client, text);
+	}
+
 	endGame()
 	{
 		//TODO

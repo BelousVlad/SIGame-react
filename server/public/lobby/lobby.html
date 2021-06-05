@@ -87,7 +87,8 @@
 
 		if (text)
 		{
-			app.speakerctrl.sendChatMessage(text);
+			app.ServerCommandManager.sendChatMessage(text);
+			$('#chat_send_text').val('')
 		}
 	});
 
@@ -146,16 +147,8 @@
 		app.ServerCommandManager.askToReply();
 	};
 
-	document.querySelector('.get-round').onclick = function ( ) {
-		app.speakerctrl.getRound();
-	};
-
 	document.querySelector('.next-round-btn').onclick = function ( ) {
 		app.ServerCommandManager.nextRound();
-	};
-
-	document.querySelector('.previous-round-btn').onclick = function ( ) {
-		app.speakerctrl.previousRound();
 	};
 
 	$(document).on('click', '.round-question', function(e) {
