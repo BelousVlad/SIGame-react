@@ -339,7 +339,7 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
         }
         else
         {
-            obj.resouces = this.current_question.getQuestionResources();
+            obj.resources = this.current_question.getQuestionResources();
             obj.process = 'question_stage';
         }
 

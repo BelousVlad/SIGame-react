@@ -76,7 +76,6 @@ class ServerResponseManager {
 	{
 		let data = msg && msg.data;
 
-		console.log(msg.data);
 		this.app.lobby.game.loadResources(msg.data)
 			.then(() => {
 				console.log('loaded')

@@ -51,6 +51,18 @@ class Lobby {
 				if (data.current_process.is_reply)
 					this._game.replyQuestion(data.current_process)
 			}
+			else if (data.current_process.process === 'check_process')
+			{
+				this._game.setAnswers(data.current_process.reply_clients);
+				if (data.current_process.right)
+				{
+					//TODO
+				}
+			}
+			else if (data.current_process.process === 'question_stage')
+			{
+				this._game.loadResources(data.current_process.resources)
+			}
 		}
 	}
 }
