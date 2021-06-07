@@ -16,7 +16,7 @@ class ServerCommandManager {
 
 	getLobbies()
 	{
-		this.send('lobby.get_lobbies');
+        this.sendWithoutKey('lobby.get_lobbies');
 	}
 
 	connetLobby(id, password)
@@ -90,11 +90,11 @@ class ServerCommandManager {
 		let key = this.key;
 		if (key != undefined && key != "0")
 		{
-			this.sendWithKey(action, data);
+            this.sendWithKey(action, data);
 		}
 		else
 		{
-			this.sendWithoutKey(action, data);
+            this.sendWithoutKey(action, data);
 		}
 	}
 

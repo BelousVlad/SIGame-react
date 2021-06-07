@@ -32,7 +32,7 @@ class BasicConductor extends AbstractConductor {
 			let res = round.prices.find(theme => (theme.find(questionPrice => questionPrice !== null) !== undefined));
 			if (!res)
 			{
-                if (round.round_number <= this.game.game_info.round_count - 1)
+                if (this.game.isLastRound())
                 {
                 	console.log('END GAME');
                     this.endGame();

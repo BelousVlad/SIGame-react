@@ -168,10 +168,18 @@ class Game {
 	}
     nextRound()
 	{
-		this.conductor.nextRound()
+	    console.log(!this.isLastRound());
+	    if (!this.isLastRound())
+		    this.conductor.nextRound()
 	}
+	isLastRound()
+    {
+        let round = this.getRoundInfo();
+
+        return round.round_number >= this.game_info.round_count - 1;
+    }
 }
 
-Object.assign( Game.prototype, event.prototype )
+Object.assign( Game.prototype, event.prototype );
 
 module.exports = Game;

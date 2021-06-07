@@ -10,6 +10,7 @@ class App{
 
 		this.ServerSpeaker.onopen = () => {
 			this.ServerCommandManager.sendKey();
+			this.ServerCommandManager.getLobbies();
 		};
 
 		this.ServerSpeaker.openSocket();
@@ -20,4 +21,10 @@ class App{
 		console.log(data);
 		this._lobby = new Lobby(data.info, data.players, data.position, this.view)
 	}
+
+	set lobbies(val) {
+	    this._lobbies = val;
+        this.view.showLobbyList(val);
+    }
+    get lobbies() { return this._lobbies; }
 }

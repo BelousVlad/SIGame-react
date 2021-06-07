@@ -11,7 +11,7 @@ class ServerResponseManager {
 
 	lobby_list(msg)
 	{
-		this.app.view.showLobbyList(msg.data)
+	    this.app.lobbies = msg.data;
 	}
 
 	name_set_status(msg)

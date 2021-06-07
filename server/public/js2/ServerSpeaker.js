@@ -11,7 +11,7 @@ class ServerSpeaker {
 
 	openSocket()
 	{
-		this.socket = new WebSocket('ws://localhost:3001');
+		this.socket = new WebSocket('ws://10.11.0.235:3001');
 	    this.socket.binaryType = "arraybuffer";
 	    this.socket.onopen = this.onopen;
 	    this.socket.onmessage = this.onmessage.bind(this);
@@ -27,14 +27,14 @@ class ServerSpeaker {
 
 	isOpen()
 	{
-		return this.socket.readyState == WebSocket.OPEN;
+		return this.socket.readyState === WebSocket.OPEN;
 	}
 
 	send(action)
 	{
-		if (this.isOpen())
-		{
-			this.socket.send(JSON.stringify(action));
+        if (this.isOpen())
+        {
+            this.socket.send(JSON.stringify(action));
 			return true;
 		}
 		else

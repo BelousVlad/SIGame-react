@@ -14,12 +14,11 @@ class LobbyController extends DomainController {
 			'create_lobby' : 'create_lobby',
 			'connect_lobby' : 'connect_lobby',
 			'get_lobby_id' : 'get_lobby_id',
-			'connect_lobby' : 'connect_lobby',
 			'became_master' : 'became_master',
 			'stop_master' : 'stop_master',
 			'start_game' : 'start_game',
 			'send_chat_message': 'send_chat_message'
-		})
+		});
 		this.router = new DomainRouter();
 		this.GameController = new GameController();
 
@@ -35,7 +34,7 @@ class LobbyController extends DomainController {
 		for(let item in lobbies_)
 		{
 			let lobby = lobbies_[item];
-			lobbies.push(lobby.getInfo());
+			lobbies.push(lobby.getFullInfo());
 		}
 
 		this.send(ws,'lobby_list', lobbies);

@@ -4,21 +4,32 @@ class ViewModel {
 
 	}
 
-	showLobbyList(arr)
+	showLobbyList(lobby)
 	{
-		console.log(arr);
-		let html = arr.reduce((sum,item) =>
+		console.log(lobby);
+		let html = lobby.reduce((sum,item, index) =>
 			sum +
-			`<div class="lobby-list-item" id="${item.id}" title='${item.title}' is_password="${item.is_password}">
-				<div class="lobby-list-item-title">${item.title}</div>
+			`<div class="lobby-list-item" data-index="${index}" id="${item.info.id}" title='${item.info.title}' is_password="${item.info.is_password}">
+				<div class="lobby-list-item-title">${item.info.title}</div>
 				<div class="lobby-list-item-players-count">
-					${item.players_count}/${item.max_players}
+					${item.players.length}/${item.info.max_players}
 				</div>
 			</div>`
 		,"");
 
 		$(".lobby-list").html(html);
 	}
+
+    showMenuLobbyInfo(lobby)
+    {
+        $('.menu-info-host-value').text(lobby.info.title);
+        const master = this._getMaster(lobby.players)
+        $('.menu-info-master-value').text(master ? master.name : '');
+        const players = lobby.players.reduce((acc, item) => acc + `
+            ${ item.name }, 
+        `, '');
+        $('.menu-info-players-value').text(players);
+    }
 
 	renderPlayers(players, position)
 	{
@@ -332,4 +343,9 @@ class ViewModel {
 			</div>
 		`)
 	}
+
+	_getMaster(players)
+    {
+        return players.find((item) => item.is_master)
+    }
 }

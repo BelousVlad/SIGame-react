@@ -1,4 +1,5 @@
-<img alt="error" id="avatar" src="/api/get/avatar"></img>
+<!--<img alt="error" id="avatar" src="/api/get/avatar"></img>-->
+<!--
 <div class="container">
   <div class="main-menu-container">
     <button> click </button>
@@ -35,35 +36,81 @@
 </div>
 <div class="container">
     <div class="lobby-list">
-    <!--
-        <div class="lobby-list-item"></div>
-    -->
     </div>
 </div>
 
 <div class="lobby-password-popup">
     
 </div>
+-->
+
+<div class="main-menu-container">
+    <div class="main-menu-lobby-list-container">
+        <div class="lobby-list">
+
+        </div>
+    </div>
+    <div class="main-menu-info-container">
+        <div class="main-menu-info-box">
+            <h2 class="menu-info-title">
+                Test
+            </h2>
+            <div class="menu-info-field menu-info-host">
+                <span>Хост: </span>
+                <i class="menu-info-field-dots"></i>
+                <span class="menu-info-host-value"></span>
+            </div>
+            <div class="menu-info-field menu-info-master">
+                <span>Ведущий: </span>
+                <i class="menu-info-field-dots"></i>
+                <span class="menu-info-master-value"></span>
+            </div>
+            <div class="menu-info-field menu-info-players">
+                <span>Игроки: </span>
+                <i class="menu-info-field-dots"></i>
+                <span class="menu-info-players-value"></span>
+            </div>
+
+        </div>
+        <button class="app-button menu-info-btn" id="menu-info-connect">
+            Подключиться
+        </button>
+    </div>
+    <div class="main-menu-profile-container">
+
+    </div>
+</div>
 
 <script>
-    $('.lobbies-list-refresh-btn').click(function(e) {
+
+    setInterval(function(e) {
         app.ServerCommandManager.getLobbies();
-    })
+    },10000);
+
+    let lobby;
+
+    $('#menu-info-connect').click(function(e) {
+        if (lobby)
+        {
+            let id = lobby.info.id;
+
+            if (lobby.info.is_password)
+                app.view.viewPasswordPopup()
+                    .then((obj) => {
+                        let password = obj.password;
+                        app.ServerCommandManager.connetLobby(id, password);
+                    });
+            else
+            {
+                app.ServerCommandManager.connetLobby(id, '');
+            }
+        }
+    });
 
     $(document).on('click', '.lobby-list-item', function(e) {
-        let is_pass = $(this).attr('is_password');
-        let id = $(this).attr('id')
-        
-        if (is_pass === 'true')
-            app.view.viewPasswordPopup()
-            .then((obj) => {
-                let password = obj.password;
-                app.ServerCommandManager.connetLobby(id, password);
-            });
-        else
-        {
-            app.ServerCommandManager.connetLobby(id, '');
-        }
+        lobby = app.lobbies[$(this).data('index')];
+
+        app.view.showMenuLobbyInfo(lobby);
     })
 
 </script>
