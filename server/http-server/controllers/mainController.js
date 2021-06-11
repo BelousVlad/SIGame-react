@@ -121,7 +121,6 @@ class MainController{
 				mime_type = 'image/gif'
 			res.setHeader('Content-Type', mime_type)
 			path_ = path.join( config.rootPath, url)
-			console.log(path_);
 		}
 		else
 		{

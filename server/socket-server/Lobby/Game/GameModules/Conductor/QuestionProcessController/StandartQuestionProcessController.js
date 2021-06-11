@@ -148,7 +148,6 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
 	skip()
 	{
 		this.timer.forceFail(-1);
-		// this.forceEndProcess()
 	}
 
 	startAskReplyProcess()
