@@ -102,7 +102,7 @@ class BasicConductor extends AbstractConductor {
 		.catch((val) => {
 			console.log('question process catch:', val);
 			if (val === -1)
-				console.log('Sjip stage');
+				console.log('Skip stage');
 			else if (val === -2)
 				console.log('No one reply')
 		})
@@ -151,7 +151,7 @@ class BasicConductor extends AbstractConductor {
 				let question = this.game.getRandomQuestion();
 
 				this.startQuestionProcess(question);
-				
+
 			}, success:  (client, question) => {
 				console.log('success');
 				this.status = 'processing-question';
