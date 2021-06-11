@@ -26,6 +26,7 @@ module.exports =
 		switch ( extname ) {
 			case '.css' :
 			case '.js' :
+			case '.jpg' :
 			case '.ico' : { return true;}
 			default : { return false;}
 		}

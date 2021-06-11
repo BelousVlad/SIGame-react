@@ -622,11 +622,12 @@ input[name=chat_send_btn] {
   box-shadow: 
     0 0 30px -10px inset var(--border-color),
     0 0 20px -10px var(--border-color);
+    margin-right: 10px;
 }
 .become-master-btn{
   display: inline-block;
   margin: 20px auto;
-  padding: 15px 10px;
+  padding: 15px 20px;
 }
 .lobby-master-box{
   display: flex;

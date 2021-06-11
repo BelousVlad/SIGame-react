@@ -108,8 +108,28 @@ class MainController{
 			return;
 		}
 
-		let path_ = path.join( config.rootPath , 'public', url);
-		fs.readFile( path_, 'utf-8', ( err, data ) => {
+		let path_;
+		let encoding;
+		if (extname === '.jpg' || extname === '.png' || extname === '.gif') {
+			let mime_type;
+
+			if(extname === '.jpg')
+				mime_type = 'image/jpeg';
+			else if (extname === '.jpg')
+				mime_type = 'image/png'
+			else if (extname === '.gif')
+				mime_type = 'image/gif'
+			res.setHeader('Content-Type', mime_type)
+			path_ = path.join( config.rootPath, url)
+			console.log(path_);
+		}
+		else
+		{
+			path_ = path.join( config.rootPath , 'public', url)
+			encoding = 'utf-8'
+		}
+
+		fs.readFile( path_, encoding, ( err, data ) => {
 			if (err){
 				fs.readFile( config.errorPagePath, 'utf-8', (err, data) => {
 					if (err){
