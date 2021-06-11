@@ -31,8 +31,9 @@ class Game {
 			prices = prices[this.game_info.current_round];
 			let themes = this.pack_controller.getThemesTitles(this.game_info.current_round);
 			let round = this.pack_controller.getRound(this.game_info.current_round);
+			let current_round_type = this.pack_controller.getRoundType(this.game_info.current_round);
 
-			return { themes, prices, title: round.roundName, round_number: this.game_info.current_round};
+			return { current_round_type, themes, prices, title: round.roundName, round_number: this.game_info.current_round};
 		}
 		return undefined;
 	}

@@ -9,7 +9,7 @@ class BasicConductor extends AbstractConductor {
 		super(lobby, game);
 		this.QestionProcessController = new StandartQestionProcessController(lobby, game);
 		this.game.addListener('question-choosed',this.questionChoosed.bind(this))
-		this.timer = {};
+		this.timer = null;
 		this.status = 'first_turn';
 		this.last_choiced_player_key = undefined; /*Object.keys(this.lobby.clients)[0];*/
 		this.pregame_info_time = 5e3;
@@ -21,7 +21,8 @@ class BasicConductor extends AbstractConductor {
 	//overrided
 	turn()
 	{
-		if (this.status === 'choice_question') {
+		if (this.status === 'choice_question')
+		{
 			this.sendRound();
 			this.chooseQuestion();
 		}
@@ -70,8 +71,10 @@ class BasicConductor extends AbstractConductor {
 
 		this.game.game_info.current_round++;
 		let round = this.game.getRoundInfo();
+
 		if(this.timer)
 			this.timer.die();
+
 		this.QestionProcessController.forceEndProcess();
 		return this.showRoundTitle(round).then(() => {
             this.status = 'choice_question';

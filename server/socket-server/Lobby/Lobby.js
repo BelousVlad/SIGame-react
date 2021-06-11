@@ -217,11 +217,10 @@ class Lobby {
 
 	getPlayersInfo()
 	{
-		let players = [];
-		for (let p in this.clients)
+		const players = [];
+		for (const clientKey in this.clients)
 		{
-			let client = this.clients[p];
-
+			const client = this.clients[clientKey];
 			players.push({
 				score: this.game != undefined ? this.game.game_info.scores[client.key] : 0,
 				...client.getDisplayParams(),

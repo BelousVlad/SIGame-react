@@ -7,10 +7,11 @@ class Game
 		this._process_text = '';
 		this._current_choosing_player = current_choosing_player; /* possible values: null, {player_name: string, is_you: boolean} */
 	}
-	
+
 	get round() { return this._round }
 	set round(data) {
 		this._round = data;
+
 		if (data)
 			this._view.viewRoundInfo(data);
 	}

@@ -154,6 +154,11 @@ class PackController extends GameModule {
 
 		return null;
 	}
+
+	getRoundType(roundIndex)
+	{
+		return this.package.roundList[roundIndex].type;
+	}
 }
 
 module.exports = PackController;
