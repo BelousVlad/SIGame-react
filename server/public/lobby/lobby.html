@@ -6,44 +6,37 @@
 </head>
 <body>
 
-<h1>Lobby</h1>
+<!-- <h1>Lobby</h1> -->
 <div class="container">
-	<div class="master-container"></div>
-	<div class="game-info-container"></div>
-	<div class="chat-container"></div>
-	<input type="file" class="select-pack">select pack</input>
-	<button class="game-start-btn">start</button>
 	<button class="game-answer-btn" disabled>answer</button>
-	<button class="get-round">get round</button>
-	<button class="next-round-btn">next round</button>
-	<button class="previous-round-btn">previous round</button>
 </div>
-<div class="main-canvas">question table</div>
-<div class="container">player-container</div>
 
+<section class="master-control-section">
+	<div class="container">
+		<div class="master-controll-container">
+			<input type="file" class="select-pack" hidden>
+			<button class="controll-btn set-pack-btn">
+				Обрати пак
+			</button>
+			<button class="controll-btn game-start-btn">Почати</button>
+			<button class="controll-btn next-round-btn">Наступний раунд</button>
+			<button class="controll-btn skip-round-btn">Пропустити</button>
+		</div>
+
+	</div>
+</section>
 
 <section class="lobby-section">
-
 	<div class="game-container">
-		<div class="lobby-master-box">
+		<div class="lobby-game-section lobby-master-box">
 
 		</div>
-		<div class="lobby-main-canvas-box">
-
-			<div class="main-canvas-paragraph-container">
-				<div class="main-paragraph paragraph">
-					Стол
-				</div>
-				<div class="settings-paragraph paragraph">
-					Настройки
-				</div>
-			</div>
+		<div class="lobby-game-section lobby-main-canvas-box">
 
 			<div class="main-canvas">
 				<div class="lobby-game-container">
 
 				</div>
-				<div class="lobby-info-container"></div>
 			</div>
 
 			<div class="process-loader">
@@ -51,7 +44,7 @@
 			</div>
 		</div>
 
-		<div class="lobby-chat-box">
+		<div class="lobby-game-section lobby-chat-box">
 			<div class="lobby-chat"></div>
 			<div class="lobby-chat-input-container">
 				<input type="text" id="chat_send_text"></input>
@@ -60,11 +53,13 @@
 		</div>
 	</div>
 
-	<div class="process-text">
+	<div class="lobby-game-section process-text-container">
+		<div class="process-text">
 
+		</div>
 	</div>
 
-	<div class="players-container">
+	<div class="lobby-game-section players-container">
 
 	<!--
 		<div class="player-box">
@@ -130,6 +125,11 @@
 
 	});
 
+	$('.set-pack-btn').click(function(e) {
+		$('.select-pack').click();
+		return false;
+	})
+
 	document.querySelector('.select-pack').onchange = function( file ) {
 		var formData = new FormData(),
 			request = new XMLHttpRequest();
@@ -151,6 +151,10 @@
 		app.ServerCommandManager.nextRound();
 	};
 
+	document.querySelector('.skip-round-btn').onclick = function ( ) {
+		app.ServerCommandManager.skipStage();
+	};
+
 	$(document).on('click', '.round-question', function(e) {
 		let theme_id = $(this).data('theme-index');
 		let question_id = $(this).data('question-index');
@@ -170,7 +174,6 @@
 		let name = banner.data('name')
 		app.ServerCommandManager.playerEvaluationAnswer(name, false)
 	})
-
 </script>
 
 </body>

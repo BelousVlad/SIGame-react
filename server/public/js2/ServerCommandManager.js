@@ -83,6 +83,11 @@ class ServerCommandManager {
 		this.send('lobby.send_chat_message', { text });
 	}
 
+	skipStage()
+	{
+		this.sendWithKey('lobby.game.skip_stage');
+	}
+
 	//Дальше идут служебные методы (приватные)
 
 	send(action, data)

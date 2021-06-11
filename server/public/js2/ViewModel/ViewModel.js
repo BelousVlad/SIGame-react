@@ -47,7 +47,7 @@ class ViewModel {
 
 	renderBecameMasterBtn()
 	{
-		let html = `<div class="become-master-btn">Стать ведущим</div>`;
+		let html = `<div class="controll-btn become-master-btn">Стать ведущим</div>`;
 		$(".lobby-master-box").html(html);
 	}
 
@@ -87,7 +87,7 @@ class ViewModel {
 
 	getStopMasterButton()
 	{
-		return `<div class="stop-master-btn">Перестать быть ведущим</div>`;
+		return `<div class="controll-btn stop-master-btn">Перестать быть ведущим</div>`;
 	}
 
 	viewPasswordPopup()
@@ -342,6 +342,14 @@ class ViewModel {
 				<span class="chat-message-text">${text}</span>
 			</div>
 		`)
+	}
+
+	renderLobbyInfo(info)
+	{
+		$('.lobby-game-container').html(`
+			<h3 class="lobby-info-title">${info.title}</h3>
+			<p class="lobby-info-field lobby-info-max-players">Максимум игроков: ${info.max_players}</p>
+		`);
 	}
 
 	_getMaster(players)

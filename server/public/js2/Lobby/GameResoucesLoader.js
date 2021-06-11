@@ -32,6 +32,7 @@ class GameResoucesLoader{
 	_loadVideo(path, callback)
 	{
 		let element = document.createElement('video');
+		element.autoplay = 'autoplay';
 		element.src = path;
 		element.onloadeddata = callback;
 		return element;
@@ -40,6 +41,7 @@ class GameResoucesLoader{
 	{
 		let element = document.createElement('audio'); 
 		element.src = path;
+		element.autoplay = 'autoplay';
 		element.onloadeddata = callback;
 		return element;
 	}

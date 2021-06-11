@@ -11,6 +11,10 @@ class Lobby {
 		{
 			this.game = info.game;
 		}
+		else
+		{
+			this._view.renderLobbyInfo(this._info);
+		}
 	}
 
 	get players() { return this._players }

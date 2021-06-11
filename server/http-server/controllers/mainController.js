@@ -223,24 +223,37 @@ class MainController{
 			return;
 		}
 
-		const fileExtension = fileName.substring( fileName.indexOf('.') ).toLowerCase();
+		const fileExtension = fileName.substring( fileName.lastIndexOf('.') ).toLowerCase();
 		let directoryName;
 
 		// directoryName = 'Images';
+		let mime_type;
+		
 		switch(fileExtension) {
 			case '.jpg':
 			case '.png':
 			case '.gif':
 				directoryName = 'Images';
+				if(fileExtension === '.jpg')
+					mime_type = 'image/jpeg';
+				else if (fileExtension === '.jpg')
+					mime_type = 'image/png'
+				else if (fileExtension === '.gif')
+					mime_type = 'image/gif'
 				break;
 
 			case '.mp4':
 			case '.ogg':
 				directoryName = 'Video';
+				if (fileExtension === '.mp4')
+					mime_type = 'video/mp4'
+				else if (fileExtension === '.ogg')
+					mime_type = 'video/ogg'
 				break;
 
 			case '.mp3':
 				directoryName = 'Audio';
+				mime_type = 'video/mpeg'
 				break;
 
 			default:
@@ -250,7 +263,7 @@ class MainController{
 
 		const fullPath = lobby.packFolder + '/' + directoryName + '/' + fileName;
 
-		res.setHeader('Content-Type', 'image/jpeg');
+		res.setHeader('Content-Type', mime_type);
 		fs.readFile(fullPath, undefined, (err, data) => {
 			if (err) {
 				console.error(err);

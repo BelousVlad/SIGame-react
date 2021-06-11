@@ -1,4 +1,5 @@
 const path = require('path')
+const url = require('url')
 const config = require('../config');
 const helper = require( config.helperClassPath );
 const ClientManager = require('../socket-server/ClientManager');
@@ -50,12 +51,13 @@ module.exports =
     },
 
    	'mainController/get_question_resource' : ( req ) => {
+
     	var flag = Boolean(
     		req.url.split('?')[0] === '/get_question_resource' &&
     		req.method.toLowerCase() === 'get' &&
     		/^name=.+$/.test( req.url.substring( decodeURI(req.url.indexOf('?') + 1 ) ))
     	)
-
+		
     	return flag;
     },
 

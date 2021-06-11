@@ -167,7 +167,6 @@
 
 .player-box{
   position: relative;
-  border: 1px solid #000;
 }
 .player-box:hover .service-player-menu{
   opacity: 1;
@@ -194,11 +193,9 @@
 .lobby-master-box{
   width: 240px;
   height: 100%;
-  border: 1px solid blue;
 }
 .lobby-chat-box{
   width: 240px;
-  border: 1px solid blue;
 }
 .lobby-main-canvas{
   flex-grow: 1;
@@ -213,7 +210,6 @@
 .lobby-chat-input-container{
   display: flex;
   justify-content: space-between;
-  border-top: 1px solid blue;
   height: 50px;
   align-self: flex-end;
   width: 100%;
@@ -233,42 +229,29 @@ input[name=chat_send_btn] {
   word-wrap: break-word;
 }
 .players-container{
-  width: 100%;
+  width: 90%;
   height: 200px;
-  border: 1px solid #000;
+  margin: 45px auto 15px;
 }
 .player-box{
   width: 150px;
 }
 .players-box-img-box{
   width: 100%;
-  height: 140px;
+  height: 130px;
 }
 .player-box-name{
   text-align: center;
   font-size: 20px;
-  margin-bottom: 5px;
+  margin-bottom: 2px;
 }
 .player-box-score{
   text-align: center;
   font-size: 15px;
   width: 100%;
 }
-.become-master-btn{
-  border: 1px solid #000;
-  padding: 5px 10px;
-}
-.become-master-btn:hover{
-  background: #000;
-}
-.stop-master-btn{
-  border: 1px solid #000;
-  padding: 5px 10px;
-  cursor: pointer;
-}
-.stop-master-btn:hover{
-  background: #000;
-}
+
+
 .paragraph{
   height: 100%;
   border: 1px solid green;
@@ -287,9 +270,8 @@ input[name=chat_send_btn] {
   position: relative;
 }
 .main-canvas{
-  height: calc(100% - 30px);
+  height: 100%;
   width: 100%;
-  border: 1px solid red;
 }
 .game-container{
   display: flex;
@@ -302,6 +284,8 @@ input[name=chat_send_btn] {
   flex-direction: column;
   width: 100%;
   height: 100%;
+  padding: 5px;
+  color: #fff;
 }
 .theme-container{
   display:flex;
@@ -594,7 +578,79 @@ input[name=chat_send_btn] {
         width: 80%;
     }
 }
-
-
-
-
+.master-controll-container{
+  background: var(--bg-color);
+  box-shadow: 0 0 5px 0px var(--border-color);
+  padding: 20px;
+  border-radius: 10px;
+  justify-content: space-around;
+  display: inline-flex;
+  margin: 0 auto;
+}
+.controll-btn{
+  background: var(--border-color);
+  box-shadow: 0 0 10px 2px var(--border-color);
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 10px;
+  margin-right: 25px;
+  cursor: pointer;
+}
+.game-container{
+  width: 90%;
+  margin: 0 auto;
+}
+.lobby-game-section{
+  margin: 15px;
+  background: var(--bg-color);
+  box-shadow: 0 0 30px -10px var(--border-color);
+  border-radius: 6px;
+}
+.lobby-chat-box{
+  margin-right: 0;
+}
+.players-container{
+  width: 90%;
+  margin: 15px auto 15px;
+  display: flex;
+  padding: 10px;
+  flex-wrap: wrap;
+}
+.player-box{
+  color: #fff;
+  box-shadow: 
+    0 0 30px -10px inset var(--border-color),
+    0 0 20px -10px var(--border-color);
+}
+.become-master-btn{
+  display: inline-block;
+  margin: 20px auto;
+  padding: 15px 10px;
+}
+.lobby-master-box{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px;
+  margin-left: 0;
+}
+.stop-master-btn{
+  display: inline-block;
+  margin: 20px auto;
+  padding: 15px 10px;
+}
+.lobby-info-title{
+  font-weight: 600;
+  font-size: 42px;
+  text-align: center;
+  margin-bottom: 30px;
+}
+.lobby-info-field{
+  font-size: 22px;
+}
+.process-text-container{
+  width: 90%;
+  min-height: 100px;
+  margin: 30px auto 15px;
+}

@@ -31,7 +31,7 @@ class PlayerBannerBuilder {
 	{
 		this.avatar_html = 
 				`<div class="players-box-img-box">
-					<img class="player-box-img" src="${ src }">
+					<img class="player-box-img" src="/avatars/${ src }">
 				</div>`
 	}
 
