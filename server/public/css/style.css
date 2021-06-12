@@ -421,7 +421,7 @@ input[name=chat_send_btn] {
   width: 400px;
   height: 300px;
   background: #fff;
-  z-index: 10;
+  z-index: 25;
 }
 .lobby-game-container img {
   max-width: 100%;
@@ -478,14 +478,7 @@ input[name=chat_send_btn] {
 .button:active{
   transform: scale(1.1);
 }
-.app-input {
-  height: 40px;
-  padding: 10px 15px;
-  border: none;
-  background: #6495ED;
-  border-radius: 10px;
-  color: #ffffff;
-}
+
 .app-input::placeholder{
   color: #fff8;
 }
@@ -665,4 +658,57 @@ input[name=chat_send_btn] {
   text-decoration: none;
   box-shadow: 0 0 10px 2px var(--border-color);
   margin: 40px 15px;
+}
+.game-answer-btn{
+  width: 100px;
+  height: 100px;
+  line-height: 100px;
+  padding: 0;
+  text-align: center;
+}
+.game-answer-btn.controll-btn-disabled{
+  cursor: not-allowed;
+  background: var(--bg-grey-color);
+  box-shadow: 0 0 10px 2px var(--bg-grey-color);
+}
+.process-text-container{
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+  align-items: stretch;
+}
+.process-text{
+  flex-grow: 1;
+  margin-right: 20px;
+  color: #fff;
+}
+.black-popup-screen{
+  background: #0008;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 20;
+}
+.input-text-popup {
+  padding: 30px 20px;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-color);
+  box-shadow: 0 0 30px -10px var(--border-color);
+}
+.input-text-popup>*{
+  margin-bottom: 20px;
+  margin-right: 0;
+}
+.app-input {
+  height: 35px;
+  padding: 0 10px;
+  box-shadow: 0 0 10px 2px var(--border-color);
+  background: var(--bg-color);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  
 }

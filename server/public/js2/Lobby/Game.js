@@ -81,6 +81,7 @@ class Game
 			this._view.enableAnswerButton()
 			this._view.setTimer(data.time)
 				.then(() => {
+					this._view.disableAnswerButton()
 					this.can_reply = false;
 				})
 		}
@@ -125,6 +126,4 @@ class Game
 			this._view.setTimer(data.time);
 	}
 }
-//%D1%80%D0%B0%D1%88%D0%B5%D0%BD%20%D0%B4%D0%B8%D0%BA%D0%B0%D0%BF%D1%80%D0%B8%D0%BE%2001.jpg
-//%D1%80%D0%B0%D1%88%D0%B5%D0%BD%20%D0%B4%D0%B8%D0%BA%D0%B0%D0%BF%D1%80%D0%B8%D0%BE%2002.jpg
 

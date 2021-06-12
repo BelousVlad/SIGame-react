@@ -79,7 +79,7 @@ class ViewModel {
 			builder.BuildHostMenu();
 
 		let html = builder.getResult();
-		if (position.is_host)
+		if (position.is_master)
 			html += this.getStopMasterButton();
 
 		$(".lobby-master-box").html(html);
@@ -160,11 +160,13 @@ class ViewModel {
 	enableAnswerButton()
 	{
 		$('.game-answer-btn').removeAttr('disabled');
+		$('.game-answer-btn').removeClass('controll-btn-disabled');
 	}
 
 	disableAnswerButton()
 	{
 		$('.game-answer-btn').prop('disabled', true);
+		$('.game-answer-btn').addClass('controll-btn-disabled');
 	}
 
 	showProcessText(text)
@@ -277,11 +279,13 @@ class ViewModel {
 	inputTextPopup(time)
 	{
 		let el = document.createElement('div');
+		let bg = document.createElement('div');
+		$(bg).addClass('black-popup-screen');
 		return new Promise((resolve, reject) => {
 			$(el).addClass('input-text-popup');
 			$(el).html(`
-				<input type="text" name="text"/>
-				<button class="input-text-popup-btn">Ok</button>
+				<input class="app-input" type="text" name="text"/>
+				<button class="controll-btn input-text-popup-btn">Ok</button>
 			`)
 
 			$(el).find('.input-text-popup-btn').click(function(e) {
@@ -303,10 +307,12 @@ class ViewModel {
 				})
 			}
 
+			$('.wrapper').append(bg);
 			$('.wrapper').append(el);
 		})
 		.then((text) => {
 			$(el).remove()
+			$(bg).remove()
 			return text;
 		})
 	}
