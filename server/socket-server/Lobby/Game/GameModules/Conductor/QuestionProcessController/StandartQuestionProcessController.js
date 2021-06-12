@@ -72,7 +72,9 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
 			return this.questionPreprocess(question)
 		})
 		.then(() => {
-			// return this.questionReplyPreprocess(question)
+			// TODO REWORK
+			this.reply_process = new Object;
+			this.reply_process.players = players;
 		})
 		.then(() => {
 			return this.questionProcess(players)
@@ -84,7 +86,9 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
 			for(let key in this.check_process.evaluation_clients)
 			{
 				const mark = this.check_process.evaluation_clients[key];
-				const award = this.bet_wait_process.bets_of_clients.find(bet_of_client => bet_of_client.client_key === key);
+				const award = this.bet_wait_process.bets_of_clients.find(bet_of_client => bet_of_client.client_key === key).bet;
+
+				console.log(award);
 
 				if (mark)
 					this.game.addScore(this.reply_process.players[key], award);
@@ -266,10 +270,11 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
 
 	_getReplyClients()
     {
+    	console.log('replproc: ', this.reply_process);
         let arr = [];
         for(let key in this.reply_process.players)
         {
-            arr.push(this.lobby.clients[key].getDisplayParams())
+            arr.push(this.reply_process.players[key].getDisplayParams())
         }
         return arr;
     }
@@ -293,7 +298,7 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
 
 			for(let key in reply_clients)
 			{
-				this.lobby.clients[key].send('reply_question', {
+				reply_clients[key].send('reply_question', {
 					time: this.reply_question_time
 				})
 			}
@@ -388,7 +393,7 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
         for(let key in this.reply_process.players)
         {
             arr.push({
-                ...this.lobby.clients[key].getDisplayParams(),
+                ...this.reply_process.players[key].getDisplayParams(),
                 answer: this.reply_process.answers[key]
             })
         }
