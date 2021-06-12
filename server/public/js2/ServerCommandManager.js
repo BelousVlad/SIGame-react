@@ -59,6 +59,11 @@ class ServerCommandManager {
 		this.send('lobby.game.ask_to_reply');
 	}
 
+	makeBet(value)
+	{
+		this.send('lobby.game.make_bet', {bet: value});
+	}
+
 	sendReady()
 	{
 		this.send('lobby.game.client_ready');

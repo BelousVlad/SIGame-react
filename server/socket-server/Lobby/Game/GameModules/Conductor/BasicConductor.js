@@ -23,8 +23,16 @@ class BasicConductor extends AbstractConductor {
 	{
 		if (this.status === 'choice_question')
 		{
-			this.sendRound();
-			this.chooseQuestion();
+			if (this.game.getRoundType() === 'final')
+			{
+				this.sendRound();
+				this.chooseQuestionForFinal();
+			}
+			else
+			{
+				this.sendRound();
+				this.chooseQuestion();
+			}
 		}
 		else if (this.status === 'after_question')
 		{
@@ -76,10 +84,26 @@ class BasicConductor extends AbstractConductor {
 			this.timer.die();
 
 		this.QestionProcessController.forceEndProcess();
-		return this.showRoundTitle(round).then(() => {
-            this.status = 'choice_question';
-            this.turn();
-        });
+
+		return Promise.resolve()
+			.then(() => {
+				if (this.game.isLastRound())
+					this.removeAllPlayersWithNotPositiveScore();
+			})
+			.then(() => this.showRoundTitle(round))
+			.then(() => {
+				this.sendRound();
+			})
+			.then(() => {
+	            this.status = 'choice_question';
+	            this.turn();
+	        });
+	}
+
+	removeAllPlayersWithNotPositiveScore()
+	{
+		console.log(`REMOVE ALL PLAYERS WITH NOT POSITIVE SCORE !!`);
+		// TODO
 	}
 
 	sendRound()
@@ -118,11 +142,36 @@ class BasicConductor extends AbstractConductor {
 		});
 	}
 
+	startFinalRoundQuestionProcess(question)
+	{
+		this.status = 'question-process';
+		this.QestionProcessController.startFinalRoundQuestionProcess(question)
+			.catch((val) => {
+				console.log('question process catch:', val);
+				if (val === -1)
+					console.log('Skip stage');
+				else if (val === -2)
+					console.log('No one reply')
+			})
+			.then(() => {
+				this.status = 'after_question';
+				this.game.setQuestionUsed(question);
+				this.turn();
+			})
+	}
+
 	chooseQuestion()
 	{
 		let player = this.getQueueQuestionPlayer();
 		this.choose_player = player;
 		this.requireChooceQuestion(player);
+	}
+
+	chooseQuestionForFinal() // TODO
+	{
+		const player = this.getQueueQuestionPlayer();
+		this.choose_player = player;
+		this.requireChooceQuestionForFinalRound(player);
 	}
 
 	clientReady(client)
@@ -149,7 +198,6 @@ class BasicConductor extends AbstractConductor {
 
 		this.timer = new Timer(time, {
 			fail: (arg) => {
-				this.status = 'processing-question';
 				//let question = { text: 'fail - normal question' }; //TODO GET random question
 				let question = this.game.getRandomQuestion();
 
@@ -157,7 +205,6 @@ class BasicConductor extends AbstractConductor {
 
 			}, success:  (client, question) => {
 				console.log('success');
-				this.status = 'processing-question';
 
 				let theme_index = question.theme_index;
 				let question_index = question.question_index;
@@ -167,7 +214,55 @@ class BasicConductor extends AbstractConductor {
 				console.log(question1, theme_index, question_index);
 				this.startQuestionProcess(question1);
 
-			}, filter: (e) => this.status !== 'wait-choose-question'}
+			}, filter: (e) => false /* calls fail by default */}
+		)
+	}
+
+	requireChooceQuestionForFinalRound(player)
+	{
+		const question_time = this.choose_question_time;
+
+		for (const p in this.lobby.clients)
+		{
+			this.lobby.clients[p].send('choosing_question', {player_name: player.name, time: question_time, is_you: player.key === p });
+		}
+
+		this.status = 'wait-choose-question';
+
+		this.timer = new Timer(question_time, {
+			fail: (arg) => {
+
+				const question_ = this.game.getRandomQuestion();
+
+				this.game.setQuestionUsed(question_);
+
+			}, success:  (client, question) => {
+
+				const themeIndex = question.theme_index;
+				const questionIndex = question.question_index;
+				const question_ = this.game.getQuestion(themeIndex, questionIndex);
+
+				this.game.setQuestionUsed(question_);
+
+				// console.log('bb ', this.game.getLeftQuestions().length);
+
+				if (this.game.getLeftQuestions().length > 1)
+				{
+					this.status = 'choice_question';
+					this.turn();
+				}
+				else
+				{
+					const questionTemplate = this.game.getLeftQuestions()[0];
+					// console.log('fq1', questionTemplate);
+					const finalQuestion = this.game.getQuestion(questionTemplate.themeIndex, questionTemplate.questionIndex);
+
+					// console.log('fq2', finalQuestion);
+
+					this.startFinalRoundQuestionProcess(finalQuestion);
+				}
+
+			}, filter: (e) => false /* calls fail by default */}
 		)
 	}
 
@@ -231,6 +326,11 @@ class BasicConductor extends AbstractConductor {
 	clientReply(client, answer)
 	{
 		this.QestionProcessController.clientReply(client, answer);
+	}
+
+	clientMakeBet(client, bet)
+	{
+		this.QuestionProcessController.clientMakeBet(client, bet);
 	}
 
 	evaluationAnswerClient(client, mark)

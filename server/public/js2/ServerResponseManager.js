@@ -126,4 +126,13 @@ class ServerResponseManager {
 	{
 		this.app.view.addChatMessage(msg.data.client, msg.data.text);
 	}
+
+	make_bet(msg)
+	{
+		const time = msg.data.time;
+
+		const hide_timeout = setTimeout(this.app.view.hide_bet_popup.bind(this.app.view), time);
+
+		this.app.view.view_bet_popup(hide_timeout);
+	}
 }

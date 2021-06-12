@@ -64,6 +64,13 @@
 		</div>
 	</div>
 
+	<div id="bet-popup-container" style="display: none;">
+		<input type="text" id="bet-popup-input">
+		<button id="bet-popup-btn">
+			зробити ставку
+		</button>
+	</div>
+
 	<div class="lobby-game-section players-container">
 
 	<!--
@@ -180,7 +187,14 @@
 		console.log('name', name)
 		app.ServerCommandManager.playerEvaluationAnswer(name, false)
 	})
-	
+
+	document.getElementById('bet-popup-btn').onclick = function() {
+		const input_field = document.getElementById('bet-popup-input');
+		const value = parseInt(input_field.value);
+
+		app.ServerCommandManager.makeBet(value);
+	}
+
 </script>
 
 </body>
