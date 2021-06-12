@@ -26,7 +26,7 @@ class ViewModel {
         const master = this._getMaster(lobby.players)
         $('.menu-info-master-value').text(master ? master.name : '');
         const players = lobby.players.reduce((acc, item) => acc + `
-            ${ item.name }, 
+            ${ item.name },
         `, '');
         $('.menu-info-players-value').text(players);
     }
@@ -356,6 +356,28 @@ class ViewModel {
 			<h3 class="lobby-info-title">${info.title}</h3>
 			<p class="lobby-info-field lobby-info-max-players">Максимум игроков: ${info.max_players}</p>
 		`);
+	}
+
+	view_bet_popup(hide_timeout)
+	{
+		const popup_container = document.getElementById('bet-popup-container');
+		popup_container.style.display = 'block';
+
+		const btn = document.getElementById('bet-popup-btn');
+
+		const onClick = () => {
+			btn.removeEventListener('click', onClick);
+			clearTimeout(hide_timeout);
+			this.hide_bet_popup();
+		}
+
+		btn.addEventListener('click', onClick);
+	}
+
+	hide_bet_popup()
+	{
+		const popup_container = document.getElementById('bet-popup-container');
+		popup_container.style.display = 'none';
 	}
 
 	_getMaster(players)

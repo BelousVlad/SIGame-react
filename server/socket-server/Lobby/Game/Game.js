@@ -132,14 +132,22 @@ class Game {
 		//TODO
 		return obj;
 	}
+
 	skip_stage()
 	{
 		this.conductor.skip_stage();
 	}
+
+	client_make_bet(client, bet_value)
+	{
+		this.conductor.clientMakeBet(client, bet);
+	}
+
 	client_reply(client, answer)
 	{
 		this.conductor.clientReply(client, answer);
 	}
+
 	evaluation_answer_client(master_client, client, mark)
 	{
 		if (this.lobby.master.key === master_client.key)
@@ -148,6 +156,7 @@ class Game {
 			this.conductor.evaluationAnswerClient(client, mark);
 		}
 	}
+
 	addScore(client, count)
 	{
 		this.game_info.scores[client.key] += count;
@@ -167,6 +176,35 @@ class Game {
 	{
 		this.game_info.is_question_used[round][theme][question] = true;
 	}
+
+	// this method returns not a SIQuestion instances. it returns objects with properties themeIndex, questionIndex
+	getLeftQuestions()
+	{
+		const result = new Array;
+
+		this.game_info.is_question_used[this.game_info.current_round].forEach(
+			(theme, themeIndex) => theme.forEach(
+				(is_question_used, questionIndex) =>
+					is_question_used ? undefined : result.push({themeIndex, questionIndex})
+				)
+		);
+
+		return result;
+	}
+
+	getLeftQuestionsCount()
+	{
+		let counter = 0;
+		this.game_info.is_question_used[this.game_info.current_round].forEach(theme => theme.forEach(is_question_used => counter += is_question_used ? 0 : 1));
+
+		return counter;
+	}
+
+	getRoundType()
+	{
+		return this.pack_controller.getRoundType(this.game_info.current_round);
+	}
+
     nextRound()
 	{
 	    console.log(!this.isLastRound());

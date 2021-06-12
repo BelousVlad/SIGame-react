@@ -12,6 +12,7 @@ class GameController extends DomainController {
 			'skip_stage' : 'skip_stage',
 			'question_answer' : 'question_answer',
 			'question_evaluation': 'question_evaluation',
+			'make_bet' : 'make_bet',
 			'next_round': 'next_round'
 		})
 	}
@@ -91,7 +92,7 @@ class GameController extends DomainController {
 			}
 		}
 	}
-	question_evaluation(ws, msg) 
+	question_evaluation(ws, msg)
 	{
 		let key = msg.key;
 		let client = ClientManager.getClient(key);
@@ -103,6 +104,25 @@ class GameController extends DomainController {
 				let ans_client = ClientManager.getClientByName(msg.data.name);
 				if (ans_client)
 					lobby.game.evaluation_answer_client(client, ans_client, msg.data.mark);
+			}
+		}
+	}
+
+	make_bet(ws, msg)
+	{
+		const key = msg.key;
+		const client = ClientManager.getClient(key);
+		if (client)
+		{
+			const lobby = LobbyManager.getLobbyByClientKey(key);
+			if (lobby && lobby.game)
+			{
+				const bet_value = msg.data.bet_value;
+				if (bet_value >= 0 && (parseInt(bet_value) === bet_value/*check if numbet is intager*/))
+				{
+					lobby.game.client_make_bet(client, bet_value);
+				}
+
 			}
 		}
 	}

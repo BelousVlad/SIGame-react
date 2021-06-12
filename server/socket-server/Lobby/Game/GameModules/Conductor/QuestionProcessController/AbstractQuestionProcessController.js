@@ -8,7 +8,7 @@ class AbstractQuestionProcessController extends GameModule {
 
 	startQuestion(question)
 	{
-		
+
 	}
 
 }

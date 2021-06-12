@@ -28,7 +28,8 @@ class Router{
 			'reply_question' : 'reply_question',
 			'question_answers': 'question_answers',
 			'set_position' : 'set_position',
-			'lobby_chat_message': 'lobby_chat_message'
+			'lobby_chat_message': 'lobby_chat_message',
+			'make_bet' : 'make_bet'
 		};
 	}
 
