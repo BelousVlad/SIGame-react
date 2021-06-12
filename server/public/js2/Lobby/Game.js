@@ -118,12 +118,14 @@ class Game
 
 	setAnswers(data)
 	{
-		for(let player of data.reply_clients)
-		{
-			this._view.showPlayerAnswer(player, player.answer, app.lobby.position.is_master);
-		}
+		console.log(data);
+
+		this._view.showPlayersAnswers(data.reply_clients, data.right, data.is_you_check);
+
 		if (data.time)
-			this._view.setTimer(data.time);
+			this._view.setTimer(data.time).then(() => {
+				this._view.hidePlayersAnswers();
+			});
 	}
 }
 

@@ -48,7 +48,9 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
 					this.game.addScore(this.reply_process.players[key], this.current_question.price);
 				else
 					this.game.addScore(this.reply_process.players[key], -this.current_question.price);
-			}
+
+				}
+			this.lobby._updatePlayers();
 		})
 	}
 
@@ -359,7 +361,7 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
 			this.check_process.evaluation_clients[ev_client.key] = mark;
 			this.lobby.sendForClients('question_answer_evaluated', {
 				...ev_client.getDisplayParams(),
-				mark
+				mark: mark ?? false
 			})
 		}
 	}
@@ -375,15 +377,22 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
 			this.start_check_process();
 
 			const arr = this._getAnswersClients();
-			this.lobby.sendForClients('question_answers', {
-				reply_clients: arr,
-				time: this.answers_check_question_time
-			});
+			// this.lobby.sendForClients('question_answers', {
+			// 	reply_clients: arr,
+			// 	time: this.answers_check_question_time
+			// });
 
-			this.lobby.master.send('check_answer', {
-				right: this.current_question.getRightResources(),
-				time: this.answers_check_question_time
-			});
+			for(let key in this.lobby.clients)
+			{
+				const player = this.lobby.clients[key];
+
+				player.send('question_answers', {
+					reply_clients: arr,
+					time: this.answers_check_question_time,
+					right: this.current_question.getRightResources(),
+					is_you_check: key === this.lobby.master.key
+				});
+			}
 		})
 	}
 

@@ -710,5 +710,71 @@ input[name=chat_send_btn] {
   color: #fff;
   border: none;
   border-radius: 10px;
-  
 }
+
+.answers-picker-container{
+  position: fixed;
+  background: var(--bg-color);
+  box-shadow: 0 0 30px -10px var(--border-color);
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 50%;
+  height: 90vh;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  max-width: 500px;
+  min-width: 300px;
+  z-index: 25;
+  padding: 15px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+}
+.answer-box{
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  grid-template-columns: auto 1fr;
+  margin-bottom: 50px;
+  width: 100%;
+}
+.answer-player-box{
+  grid-row: 1/-1;
+  grid-column: 1;
+}
+.answer-box-player-answer{
+  grid-row: 1;
+  grid-column: 2;
+  color: #fff;
+}
+.answer-box-player-btns{
+  grid-row: 2;
+  grid-column: 2;
+}
+
+.answers-picker-container::-webkit-scrollbar {
+  width: 1em;
+}
+.answers-picker-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.answers-picker-container::-webkit-scrollbar-thumb {
+  background-color: var(--bg-grey-color);
+}
+.answer-right-box{
+  width: 100%;
+  color: #fff;
+  font-size: 22px;
+}
+.answer-right-item{
+  margin-bottom: 10px;
+}
+
+
+
+
+
+
+
+

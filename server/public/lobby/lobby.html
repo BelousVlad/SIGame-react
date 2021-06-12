@@ -175,15 +175,16 @@
 			app.ServerCommandManager.choiceQuestion(theme_id, question_id);
 	});
 
-	$(document).on('click', '.answer-box-btn-yes', function(answer) {
-		let banner = $(this).parent().parent().parent();
-		let name = banner.data('name')
+	$(document).on('click', '.answer-box-player-yes', function(answer) {
+		let banner = $(this).parent().parent();
+		let name = banner.data('player')
 		app.ServerCommandManager.playerEvaluationAnswer(name, true)
 	});
 
-	$(document).on('click', '.answer-box-btn-no', function(answer) {
-		let banner = $(this).parent().parent().parent();
-		let name = banner.data('name')
+	$(document).on('click', '.answer-box-player-no', function(answer) {
+		let banner = $(this).parent().parent();
+		let name = banner.data('player')
+		console.log('name', name)
 		app.ServerCommandManager.playerEvaluationAnswer(name, false)
 	})
 
@@ -193,6 +194,7 @@
 
 		app.ServerCommandManager.makeBet(value);
 	}
+
 </script>
 
 </body>
