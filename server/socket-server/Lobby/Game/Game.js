@@ -144,7 +144,6 @@ class Game {
 	{
 		if (this.lobby.master.key === master_client.key)
 		{
-			console.log('evaluationAnswerClient');
 			this.conductor.evaluationAnswerClient(client, mark);
 		}
 	}

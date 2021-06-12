@@ -279,8 +279,7 @@ class ViewModel {
 	inputTextPopup(time)
 	{
 		let el = document.createElement('div');
-		let bg = document.createElement('div');
-		$(bg).addClass('black-popup-screen');
+		let bg = this._createPopupBackground();
 		return new Promise((resolve, reject) => {
 			$(el).addClass('input-text-popup');
 			$(el).html(`
@@ -317,26 +316,79 @@ class ViewModel {
 		})
 	}
 
-	showPlayerAnswer(player, answer, is_show_btns)
+	showPlayersAnswers(players, answer, is_show_btns)
 	{
-		$(`.players-container .player-box[data-name=${player.name}]`).each((i, banner) => {
-			let answer_box = document.createElement('div');
-			answer_box = $(answer_box);
-			answer_box.addClass('player-answer-box');
-			answer_box.html(`
-				<div class="answer-box-btns">
-				${
-					is_show_btns ?
-					`<button class="answer-box-btn-yes">Верно</button>
-					<button class="answer-box-btn-no">Не верно</button>` : ''
-				}
+		// $(`.players-container .player-box[data-name=${player.name}]`).each((i, banner) => {
+		// 	let answer_box = document.createElement('div');
+		// 	answer_box = $(answer_box);
+		// 	answer_box.addClass('player-answer-box');
+		// 	answer_box.html(`
+		// 		<div class="answer-box-btns">
+		// 		${
+		// 			is_show_btns ?
+		// 			`<button class="answer-box-btn-yes">Верно</button>
+		// 			<button class="answer-box-btn-no">Не верно</button>` : ''
+		// 		}
+		// 		</div>
+		// 		<div>
+		// 			${answer}
+		// 		</div>
+		// 	`)
+		// 	$(banner).append(answer_box.get(0));
+		// })
+
+		const container = $(`<div class="answers-picker-container"></div>`)
+		let players_elements = '';
+
+		const btns = `
+			<div class="answer-box-player-btns">
+				<button class="controll-btn answer-box-player-yes">
+					Вiрно
+				</button>
+				<button class="controll-btn answer-box-player-no">
+					Не вiрно
+				</button>
+			</div>
+		`;
+
+		players.forEach(player => {
+			let builder = new PlayerBannerBuilder();
+			builder.BuildAvatar(player.avatar);
+			builder.BuildName(player.name);
+			let element = `
+			<div class="answer-box" data-player="${player.name}">
+				<div class="answer-player-box">
+					${builder.getResult()}
 				</div>
-				<div>
-					${answer}
+				<div class="answer-box-player-answer">
+					${player.answer}
 				</div>
-			`)
-			$(banner).append(answer_box.get(0));
-		})
+				${ is_show_btns ? btns : '' }
+			</div>`
+
+			players_elements += element;
+		});
+
+		let right_elem = `<div class="answer-right-box"></div>`;
+		console.log(answer)
+		let right_elems = answer.reduce((acc, item, i) => acc + `
+			<div class="answer-right-item">
+				<span>№${i+1}</span> <span>${item.value}</span>
+			</div>
+		`, '')
+		right_elem = $(right_elem);
+		right_elem.append(right_elems);
+
+		$(container).append(right_elem);
+		$(container).append(players_elements);
+
+		$('.wrapper').append(this._createPopupBackground());
+		$('.wrapper').append(container);
+	}
+
+	hidePlayersAnswers() 
+	{
+		$('.answers-picker-container, .black-popup-screen').remove()
 	}
 
 	addChatMessage(player, text)
@@ -362,4 +414,10 @@ class ViewModel {
     {
         return players.find((item) => item.is_master)
     }
+	_createPopupBackground()
+	{
+		const bg = document.createElement('div')
+		$(bg).addClass('black-popup-screen');
+		return bg;
+	}
 }
