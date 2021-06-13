@@ -30,7 +30,8 @@ class Router{
 			'set_position' : 'set_position',
 			'lobby_chat_message': 'lobby_chat_message',
 			'make_bet' : 'make_bet',
-			'lobby_leave' : 'lobby_leave'
+			'lobby_leave' : 'lobby_leave',
+			'show_end_game_title' : 'show_end_game_title'
 		};
 	}
 

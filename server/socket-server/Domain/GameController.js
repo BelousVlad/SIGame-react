@@ -111,6 +111,7 @@ class GameController extends DomainController {
 
 	make_bet(ws, msg)
 	{
+		console.log('make bet ', msg);
 		const key = msg.key;
 		const client = ClientManager.getClient(key);
 		if (client)
@@ -118,8 +119,8 @@ class GameController extends DomainController {
 			const lobby = LobbyManager.getLobbyByClientKey(key);
 			if (lobby && lobby.game)
 			{
-				const bet_value = msg.data.bet_value;
-				if (bet_value >= 0 && (parseInt(bet_value) === bet_value/*check if numbet is intager*/))
+				const bet_value = msg.data.bet;
+				if (bet_value > 0 && (parseInt(bet_value) === bet_value/*check if numbet is intager*/))
 				{
 					lobby.game.client_make_bet(client, bet_value);
 				}

@@ -138,7 +138,7 @@ class Game {
 		this.conductor.skip_stage();
 	}
 
-	client_make_bet(client, bet_value)
+	client_make_bet(client, bet)
 	{
 		this.conductor.clientMakeBet(client, bet);
 	}

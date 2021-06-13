@@ -87,8 +87,8 @@ class BasicConductor extends AbstractConductor {
 
 		return Promise.resolve()
 			.then(() => {
-				if (this.game.isLastRound())
-					this.removeAllPlayersWithNotPositiveScore();
+				if (this.game.getRoundType() === 'final')
+					this.positivatePlayersScoreBeforeFinalRound();
 			})
 			.then(() => this.showRoundTitle(round))
 			.then(() => {
@@ -100,10 +100,14 @@ class BasicConductor extends AbstractConductor {
 	        });
 	}
 
-	removeAllPlayersWithNotPositiveScore()
+	positivatePlayersScoreBeforeFinalRound()
 	{
-		console.log(`REMOVE ALL PLAYERS WITH NOT POSITIVE SCORE !!`);
-		// TODO
+		for (const key in this.game.game_info.scores) {
+			if (this.game.game_info.scores[key] < 1)
+				this.game.game_info.scores[key] = 1;
+		}
+
+		this.lobby._updatePlayers();
 	}
 
 	sendRound()
@@ -330,7 +334,7 @@ class BasicConductor extends AbstractConductor {
 
 	clientMakeBet(client, bet)
 	{
-		this.QuestionProcessController.clientMakeBet(client, bet);
+		this.QestionProcessController.clientMakeBet(client, bet);
 	}
 
 	evaluationAnswerClient(client, mark)
@@ -374,9 +378,22 @@ class BasicConductor extends AbstractConductor {
 	_showEndGameTitle(win_players)
 	{
 		const _win_players = win_players.map((player) => player.getDisplayParams());
+		const allPlayers = Object.entries(this.game.game_info.scores)
+			.map(pair_key_score => {
+				const key = pair_key_score[0];
+				const player = this.lobby.clients[key];
+
+				return {
+					score: pair_key_score[1],
+					...player.getDisplayParams(),
+					...this.lobby.getClientPosition(player)
+				};
+			})
+
 
 		this.lobby.sendForClients('show_end_game_title', {
-			players: _win_players,
+			players: allPlayers,
+			winners: _win_players,
 			time: this.end_game_title_time
 		});
 
