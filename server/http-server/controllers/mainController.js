@@ -145,10 +145,23 @@ class MainController{
 
 	upload_pack ( req, res ) {
 		const cookies = helper.parseCookies(req);
+
+		const client = ClientManager.getClient( cookies.key );
+
+		if (!client) {
+			res.end('client not found');
+			return;
+		}
+
 		const lobby = LobbyManager.getLobbyByClientKey( cookies.key );
 
 		if ( !lobby ) {
 			res.end('lobby not found');
+			return;
+		}
+
+		if (lobby.master.key !== client.key || lobby.host.key !== client.key) {
+			res.end('you havent permission to upload lobby package');
 			return;
 		}
 
@@ -247,7 +260,7 @@ class MainController{
 
 		// directoryName = 'Images';
 		let mime_type;
-		
+
 		switch(fileExtension) {
 			case '.jpg':
 			case '.png':

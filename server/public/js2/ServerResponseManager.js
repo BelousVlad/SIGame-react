@@ -139,4 +139,19 @@ class ServerResponseManager {
 
 		this.app.view.view_bet_popup(hide_timeout);
 	}
+
+	show_end_game_title(msg)
+	{
+		const data = msg.data
+			 ,players = data.players
+			 ,winners = data.winners
+			 ,time = data.time;
+
+		this.app.lobby.players = players;
+		console.log(`WINNERS: `, winners);
+	}
+
+	// 			players: allPlayers,
+			// winners: _win_players,
+			// time: this.end_game_title_time
 }
