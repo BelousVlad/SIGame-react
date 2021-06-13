@@ -25,7 +25,7 @@ class Game
 	get current_choosing_player() { return this._current_choosing_player; }
 	set current_choosing_player(data)
 	{
-		let text = `Cейчас выбирает игрок ${data.player_name}`;
+		let text = `Зараз обирає гравець ${data.player_name}`;
 		this._view.showProcessText(text);
 		this._view.setTimer(data.time);
 
@@ -76,8 +76,8 @@ class Game
 	{
 		if (data)
 		{
-			console.log(data);
-			this.process_text = 'Кто желает отвечать?'
+			this.process_text = 'Усі відгукнулися гравці відповідатимуть'
+			this._view.showMainText('Хто бажає відповідати?')
 			this._view.enableAnswerButton()
 			this._view.setTimer(data.time)
 				.then(() => {

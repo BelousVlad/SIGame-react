@@ -18,6 +18,7 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
 
 	startQuestionProcess(question)
 	{
+		console.log('QUESTION', question.getQuestionResources());
         this.check_process = null;
         this.reply_process = null;
         this.ask_reply_process = null;

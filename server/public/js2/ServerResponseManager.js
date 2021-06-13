@@ -61,6 +61,7 @@ class ServerResponseManager {
 	start_game(msg)
 	{
 		app.lobby.game = msg.data;
+		this.app.lobby._info.is_game = true;
 	}
 
 	lobby_id_collected(msg) {
@@ -102,6 +103,7 @@ class ServerResponseManager {
 	}
 
 	show_round_title(msg) {
+		console.log(msg)
 		this.app.view.showRoundTitle(msg.data.title, msg.data.time);
 	}
 
@@ -135,19 +137,25 @@ class ServerResponseManager {
 	{
 		const time = msg.data.time;
 
-		const hide_timeout = setTimeout(this.app.view.hide_bet_popup.bind(this.app.view), time);
-
-		this.app.view.view_bet_popup(hide_timeout);
+		this.app.view.view_bet_popup(time).then((bet) => {
+			bet = parseInt(bet)
+			app.ServerCommandManager.makeBet(bet);
+		})	
 	}
 
 	show_end_game_title(msg)
 	{
+		this.app.lobby._info.is_game = false;
+
 		const data = msg.data
 			 ,players = data.players
 			 ,winners = data.winners
 			 ,time = data.time;
 
-		this.app.lobby.players = players;
+			 
+		this.app.view.showEndGame(players, winners)
+		// this.app.lobby.players = players;
+		
 		console.log(`WINNERS: `, winners);
 	}
 

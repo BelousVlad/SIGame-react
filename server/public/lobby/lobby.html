@@ -184,14 +184,6 @@
 		console.log('name', name)
 		app.ServerCommandManager.playerEvaluationAnswer(name, false)
 	})
-
-	document.getElementById('bet-popup-btn').onclick = function() {
-		const input_field = document.getElementById('bet-popup-input');
-		const value = parseInt(input_field.value);
-
-		app.ServerCommandManager.makeBet(value);
-	}
-
 </script>
 
 </body>

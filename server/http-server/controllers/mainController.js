@@ -160,7 +160,7 @@ class MainController{
 			return;
 		}
 
-		if (lobby.master.key !== client.key || lobby.host.key !== client.key) {
+		if ((lobby.master && lobby.master.key !== client.key) || (lobby.host && lobby.host.key !== client.key)) {
 			res.end('you havent permission to upload lobby package');
 			return;
 		}
@@ -268,7 +268,7 @@ class MainController{
 				directoryName = 'Images';
 				if(fileExtension === '.jpg')
 					mime_type = 'image/jpeg';
-				else if (fileExtension === '.jpg')
+				else if (fileExtension === '.png')
 					mime_type = 'image/png'
 				else if (fileExtension === '.gif')
 					mime_type = 'image/gif'

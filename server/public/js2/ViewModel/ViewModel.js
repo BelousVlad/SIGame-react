@@ -90,7 +90,7 @@ class ViewModel {
 
 	getStopMasterButton()
 	{
-		return `<div class="controll-btn stop-master-btn">Перестать быть ведущим</div>`;
+		return `<div class="controll-btn stop-master-btn">Перестати бути провідним</div>`;
 	}
 
 	viewPasswordPopup()
@@ -177,6 +177,11 @@ class ViewModel {
 		$('.process-text').text(text);
 	}
 
+	showMainText(text)
+	{
+		$('.lobby-game-container').html(`<span class="game-main-text">${text}</span>`);
+	}
+
 	getProcessText()
 	{
 		return $('.process-text').text();
@@ -184,8 +189,8 @@ class ViewModel {
 
 	showPregameInfo(authorList, time)
 	{
-		$('.lobby-info-container').text('Aвторы: ' + authorList.join(', '));
-		$('.lobby-info-container').show();
+		console.log(authorList);
+		$('.lobby-game-container').html(`<span class="author-list">Aвтори: ${authorList.join(', ')}</span>`);
 		this.setTimer(time);
 		// setTimeout(() =>
 		// 	{
@@ -198,8 +203,7 @@ class ViewModel {
 
 	showRoundTitle(title, time)
 	{
-		$('.lobby-info-container').text('Hазвание: ' + title);
-		$('.lobby-info-container').show();
+		$('.lobby-game-container').html(`<span class="game-round-title">Назва раунда: ${title}</span>`);
 
 		this.setTimer(time);
 	}
@@ -272,7 +276,7 @@ class ViewModel {
 			`, '');
 
 		let html = `<div class="question-process-player-container">
-			<div class="question-process-text">Отвечающте игроки: </div>
+			<div class="question-process-text">Відповідаючі гравці: </div>
 			${clients_html}
 		</div>`
 
@@ -287,7 +291,7 @@ class ViewModel {
 			$(el).addClass('input-text-popup');
 			$(el).html(`
 				<input class="app-input" type="text" name="text"/>
-				<button class="controll-btn input-text-popup-btn">Ok</button>
+				<button class="controll-btn input-text-popup-btn">Ок</button>
 			`)
 
 			$(el).find('.input-text-popup-btn').click(function(e) {
@@ -415,26 +419,30 @@ class ViewModel {
 		`);
 	}
 
-	view_bet_popup(hide_timeout)
+	showEndGame(players, winners)
 	{
-		const popup_container = document.getElementById('bet-popup-container');
-		popup_container.style.display = 'block';
+		let html = '<h2>Переможець</h2>';
+		
+		let winner = players[0]
+		players.forEach(item => {
+			if(item.score > winner.score)
+				winner = item;
+		})
 
-		const btn = document.getElementById('bet-popup-btn');
+		html += `<div class="win-player">${winner.name} </div>`
+		html += '<div> Також приймали участь: </div>'
+		
+		html += players.reduce((acc, player) => acc + `
+			<span>${player.name}, </span>
+		`, '');
+		$('.lobby-game-container').html(`<div class="end-game-title">${html}</div>`);
 
-		const onClick = () => {
-			btn.removeEventListener('click', onClick);
-			clearTimeout(hide_timeout);
-			this.hide_bet_popup();
-		}
-
-		btn.addEventListener('click', onClick);
+		this.showProcessText('Вітаємо переможців!');
 	}
 
-	hide_bet_popup()
+	view_bet_popup(timeout)
 	{
-		const popup_container = document.getElementById('bet-popup-container');
-		popup_container.style.display = 'none';
+		return this.inputTextPopup(timeout)
 	}
 
 	_getMaster(players)

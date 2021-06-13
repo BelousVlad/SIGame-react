@@ -23,16 +23,16 @@ class BasicConductor extends AbstractConductor {
 	{
 		if (this.status === 'choice_question')
 		{
-			if (this.game.getRoundType() === 'final')
-			{
-				this.sendRound();
-				this.chooseQuestionForFinal();
-			}
-			else
-			{
+			// if (this.game.getRoundType() === 'final')
+			// {
+			// 	this.sendRound();
+			// 	this.chooseQuestionForFinal();
+			// }
+			// else
+			// {
 				this.sendRound();
 				this.chooseQuestion();
-			}
+			// }
 		}
 		else if (this.status === 'after_question')
 		{
@@ -65,6 +65,7 @@ class BasicConductor extends AbstractConductor {
 			this.showPregameInfo()
 			.then(() => {
 				let round = this.game.getRoundInfo();
+				console
 				return this.showRoundTitle(round)
 			})
 			.then((round) => {
@@ -87,8 +88,8 @@ class BasicConductor extends AbstractConductor {
 
 		return Promise.resolve()
 			.then(() => {
-				if (this.game.getRoundType() === 'final')
-					this.positivatePlayersScoreBeforeFinalRound();
+				// if (this.game.getRoundType() === 'final')
+				// 	this.positivatePlayersScoreBeforeFinalRound();
 			})
 			.then(() => this.showRoundTitle(round))
 			.then(() => {
@@ -270,17 +271,33 @@ class BasicConductor extends AbstractConductor {
 		)
 	}
 
+	qeue_index = 0;
+
 	getQueueQuestionPlayer() // метод для получения игрока которого очередь отвечать
 	{
 
-		let keys = Object.keys(this.lobby.clients); //TODO DELETE
-		return this.lobby.clients[keys[0]];
+		// let keys = Object.keys(this.lobby.clients); //TODO DELETE
+		// return this.lobby.clients[keys[0]];
+
+		let playersList = Object.values(this.lobby.clients).filter(player => player.key !== this.lobby.master.key);
+
+		if(this.qeue_index >= playersList.length)
+			this.qeue_index = 0;
+		
+		const player = playersList[this.qeue_index++];
+		if(player.key === this.lobby.master.key)
+			{
+				qeue_index++;
+				const player = playersList[this.qeue_index];
+			}
+		return player;
+
 
 		// if specific player with right for choose is avaiable then return it.
 		if ( Object.keys(this.lobby.clients).indexOf(this.player_with_right_for_choose) !== -1 && this.lobby.master !== this.player_with_right_for_choose)
 			return this.player_with_right_for_choose;
 
-		let playersList = Object.values(this.lobby.clients).filter(player => player.key !== this.lobby.master.key);
+		playersList = Object.values(this.lobby.clients).filter(player => player.key !== this.lobby.master.key);
 
 		this.player_with_right_for_choose = playersList[ /*get random index*/ parseInt( Math.random() * playersList.length ) ];
 
@@ -306,7 +323,7 @@ class BasicConductor extends AbstractConductor {
 	showRoundTitle(round)
 	{
 		this.lobby.sendForClients('show_round_title', {
-			title: round.roundName,
+			title: round.title,
 			time: this.pregame_info_time
 		});
 

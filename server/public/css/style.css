@@ -699,6 +699,7 @@ input[name=chat_send_btn] {
   flex-direction: column;
   background: var(--bg-color);
   box-shadow: 0 0 30px -10px var(--border-color);
+  justify-content: space-between;
 }
 .input-text-popup>*{
   margin-bottom: 20px;
@@ -830,4 +831,28 @@ input[name=chat_send_btn] {
   color: #fff;
   padding: 0 10px;
 }
-
+.author-list{
+  font-size: 32px;
+  padding: 20px;
+}
+.lobby-game-container video,
+.lobby-game-container img{
+  width: 100%;
+}
+.lobby-game-container{
+  overflow: hidden;
+}
+.game-main-text{
+  font-size: 32px;
+}
+.game-round-title{
+  font-size: 26px;
+}
+.win-player{
+  font-size: 32px;
+  font-weight: bold;
+}
+.end-game-title{
+  padding: 20px;
+  font-size: 16px;
+}
