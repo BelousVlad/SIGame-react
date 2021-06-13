@@ -1,9 +1,27 @@
 <div class="login-box">
-    <input class="app-input" type="text" id="clientNameField" placeholder="Укажите имя"/>
-    <input class="app-button login-box-btn" type="button" value="Войти" id="clientNameFieldBtn" />
+    <input class="app-input" type="text" id="clientNameField" placeholder="Логiн"/>
+	<input type="file" class="select-avatar" value="select avatar" hidden/>
+	<button class="controll-btn avatar-btn">
+		Встановити аватар
+	</button>
+	<input class="app-button login-box-btn" type="button" value="Войти" id="clientNameFieldBtn" />
 </div>
 
 <script type="text/javascript">
+
+	$('.avatar-btn').click(function(e) {
+		$('.select-avatar').click();
+	})
+
+	document.querySelector('.select-avatar').onchange = function( file ) {
+		var formData = new FormData(),
+			request = new XMLHttpRequest();
+		formData.append('userfile', document.querySelector('.select-avatar').files[0] );
+		formData.append('meta-data', 'client-avatar-upload');
+		request.open('POST', 'api/upload/avatar');
+		request.send(formData);
+	}
+
 	$("#clientNameFieldBtn").click(function(e) {
 		let name = $("#clientNameField").val().trim();
 

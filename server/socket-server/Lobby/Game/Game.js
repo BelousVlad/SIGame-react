@@ -160,6 +160,11 @@ class Game {
 	{
 		this.game_info.scores[client.key] += count;
 	}
+
+	setScore(client, score)
+	{
+		this.game_info.scores[client.key] = score;
+	}
 	getQuestionLocation(question)
 	{
 		return this.pack_controller.getQuestionLocation(question);

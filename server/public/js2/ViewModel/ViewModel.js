@@ -22,7 +22,10 @@ class ViewModel {
 
     showMenuLobbyInfo(lobby)
     {
-        $('.menu-info-host-value').text(lobby.info.title);
+		// console.log(lobby)
+		$('.menu-info-title').text(lobby.info.title);
+		const host = this._getHost(lobby.players);
+        $('.menu-info-host-value').text(host.name ? host.name : '');
         const master = this._getMaster(lobby.players)
         $('.menu-info-master-value').text(master ? master.name : '');
         const players = lobby.players.reduce((acc, item) => acc + `
@@ -96,8 +99,8 @@ class ViewModel {
 			let element = $(`
 				<div class="popup-bg">
 				    <div class="container popup-container">
-				        <input type="password" name="password">
-				        <input type="button" name="password-btn" value="Відправити">
+				        <input placeholder="Ведiть пароль" class="app-input" type="password" name="password">
+				        <input class="controll-btn send-password-btn" type="button" name="password-btn" value="Відправити">
 				    </div>
 				</div>
 			`)
@@ -435,6 +438,10 @@ class ViewModel {
 	_getMaster(players)
     {
         return players.find((item) => item.is_master)
+    }
+	_getHost(players)
+    {
+        return players.find((item) => item.is_host)
     }
 	_createPopupBackground()
 	{

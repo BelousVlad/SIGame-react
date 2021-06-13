@@ -140,7 +140,7 @@ class Lobby {
 				this.deleteClient(item);
 
 				let client = ClientManager.getClient(item);
-
+				this._updatePlayers();
 				return true;
 			}
 		}
@@ -228,6 +228,13 @@ class Lobby {
 			})
 		}
 		return players;
+	}
+
+	setScore(client, score)
+	{
+		if (this.game)
+			this.game.setScore(client,score);
+		this._updatePlayers();
 	}
 
 	getInfo(client)

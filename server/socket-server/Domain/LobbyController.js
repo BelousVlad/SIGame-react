@@ -17,7 +17,9 @@ class LobbyController extends DomainController {
 			'became_master' : 'became_master',
 			'stop_master' : 'stop_master',
 			'start_game' : 'start_game',
-			'send_chat_message': 'send_chat_message'
+			'send_chat_message': 'send_chat_message',
+			'leave_from_lobby': 'leave_from_lobby',
+			'kick_player' : 'kick_player'
 		});
 		this.router = new DomainRouter();
 		this.GameController = new GameController();
@@ -186,6 +188,46 @@ class LobbyController extends DomainController {
 			if (lobby)
 			{
 				lobby.chatMessage(client, msg.data.text);
+			}
+		}
+	}
+
+	leave_from_lobby(ws, msg)
+	{
+		let key = msg.key;
+		let client = ClientManager.getClient(key);
+
+		if (client)
+		{
+			let lobby = LobbyManager.getLobbyByClient(client);
+			if (lobby)
+			{
+				lobby.removeClient(client)
+				client.send('lobby_leave')
+			}
+		}
+	}
+
+	kick_player(ws, msg)
+	{
+		let key = msg.key;
+		let client = ClientManager.getClient(key);
+
+		if (client)
+		{
+			let lobby = LobbyManager.getLobbyByClient(client);
+			if (lobby)
+			{
+				if (client.key == lobby.host.key)
+				{
+					let kick_name = msg.data.name;
+
+					let res = lobby.kickClientByName(kick_name)
+					if(res)
+					{
+						ClientManager.getClientByName(kick_name).send('lobby_leave');
+					}
+				}
 			}
 		}
 	}

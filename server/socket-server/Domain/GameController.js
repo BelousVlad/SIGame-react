@@ -13,7 +13,8 @@ class GameController extends DomainController {
 			'question_answer' : 'question_answer',
 			'question_evaluation': 'question_evaluation',
 			'make_bet' : 'make_bet',
-			'next_round': 'next_round'
+			'next_round': 'next_round',
+			'change_score' : 'change_score'
 		})
 	}
 
@@ -140,6 +141,34 @@ class GameController extends DomainController {
                     lobby.game.nextRound();
             }
         }
+	}
+
+	change_score(ws, msg)
+	{
+		let key = msg.key;
+		let client = ClientManager.getClient(key);
+
+		if (client)
+		{
+			let lobby = LobbyManager.getLobbyByClient(client);
+			if (lobby)
+			{
+				if ((lobby.master && client.key == lobby.master.key) || lobby.host && client.key == lobby.host.key)
+				{
+					let change_client_name = msg.data.player_name;
+
+					let change_client = lobby.getClientByName(change_client_name);
+
+					if (change_client)
+					{
+						let score = Number(msg.data.score);
+
+						if (!Number.isNaN(score))
+							lobby.setScore(change_client, score);
+					}
+				}
+			}
+		}
 	}
 }
 

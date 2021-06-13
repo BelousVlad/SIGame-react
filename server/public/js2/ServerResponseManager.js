@@ -126,6 +126,10 @@ class ServerResponseManager {
 	{
 		this.app.view.addChatMessage(msg.data.client, msg.data.text);
 	}
+	lobby_leave(msg)
+	{
+		document.location.reload();
+	}
 
 	make_bet(msg)
 	{

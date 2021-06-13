@@ -1,11 +1,11 @@
-
-
-<h1> LOBBY PAGE</h1>
-
-<input type="text" name="lobby_title">
-<input type="text" name="lobby_password">
-<input type="number" name="lobby_max" min="3" max="8">
-<input type="button" id="lobby_send" value="create">
+<section class="section-lobby-create">
+	<div class="container-lobby-create">
+		<input placeholder="Назва" class="app-input" type="text" name="lobby_title">
+		<input placeholder="Пароль" class="app-input" type="text" name="lobby_password">
+		<input placeholder="Кiлькiсть гравцiв" class="app-input" type="number" name="lobby_max" min="3" max="8">
+		<input class="app-button" type="button" id="lobby_send" value="create">
+	</div>
+</section>
 
 <script type="text/javascript">
 	$('#lobby_send').click(function(e){

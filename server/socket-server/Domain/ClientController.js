@@ -7,7 +7,8 @@ class ClientController extends DomainController{
 	{
 		super({
 			'key' : 'send_key',
-			'name' : 'set_name'
+			'name' : 'set_name',
+			'leave_from_lobby' : 'leave_from_lobby'
 		})
 	}
 
@@ -92,7 +93,7 @@ class ClientController extends DomainController{
 			client: client.getDisplayParams()
 		}
 	}
-
+	
 }
 
 module.exports = ClientController;

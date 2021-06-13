@@ -93,6 +93,11 @@ class ServerCommandManager {
 		this.sendWithKey('lobby.game.skip_stage');
 	}
 
+	lobbyLeave()
+	{
+		this.send('lobby.leave_from_lobby');
+	}
+
 	//Дальше идут служебные методы (приватные)
 
 	send(action, data)
@@ -106,6 +111,16 @@ class ServerCommandManager {
 		{
             this.sendWithoutKey(action, data);
 		}
+	}
+
+	kick_player(name)
+	{
+		this.send('lobby.kick_player', { name: name });
+	}
+
+	lobbyChangePlayerScore(name, score)
+	{
+		this.send('lobby.game.change_score', { player_name: name, score })
 	}
 
 	sendWithKey(action ,msg)
