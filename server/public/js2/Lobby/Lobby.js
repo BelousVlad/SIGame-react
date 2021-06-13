@@ -13,7 +13,10 @@ class Lobby {
 		}
 		else
 		{
-			this._view.renderLobbyInfo(this._info);
+			const master = this._view._getMaster(players)
+			const host = this._view._getHost(players)
+
+			this._view.renderLobbyInfo(this._info, host, master);
 		}
 	}
 
@@ -24,6 +27,12 @@ class Lobby {
 		if (!this.hasMaster)
 		{
 			this._view.renderBecameMasterBtn();
+		}
+		if(!this._info.is_game)
+		{
+			const master = this._view._getMaster(data)
+			const host = this._view._getHost(data)
+			this._view.renderLobbyInfo(this._info, host, master);
 		}
 	} //mb TODO
 

@@ -50,7 +50,7 @@ class ViewModel {
 
 	renderBecameMasterBtn()
 	{
-		let html = `<div class="controll-btn become-master-btn">Стать ведущим</div>`;
+		let html = `<div class="controll-btn become-master-btn">Стати провідним</div>`;
 		$(".lobby-master-box").html(html);
 	}
 
@@ -405,11 +405,13 @@ class ViewModel {
 		`)
 	}
 
-	renderLobbyInfo(info)
+	renderLobbyInfo(info, host, master)
 	{
 		$('.lobby-game-container').html(`
 			<h3 class="lobby-info-title">${info.title}</h3>
-			<p class="lobby-info-field lobby-info-max-players">Максимум игроков: ${info.max_players}</p>
+			<p class="lobby-info-field lobby-info-max-players">Максимум гравців: ${info.max_players}</p>
+			<p class="lobby-info-field lobby-info-master">Провідний: ${master ? master.name : " - "}</p>
+			<p class="lobby-info-field lobby-info-host">Власник: ${host ? host.name : ' - '}</p>
 		`);
 	}
 
