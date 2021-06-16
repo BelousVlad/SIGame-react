@@ -211,7 +211,6 @@ class Game {
 
     nextRound()
 	{
-	    console.log(!this.isLastRound());
 	    if (!this.isLastRound())
 		    this.conductor.nextRound()
 	}

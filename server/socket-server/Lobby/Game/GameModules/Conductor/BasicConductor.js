@@ -77,28 +77,31 @@ class BasicConductor extends AbstractConductor {
 
 	nextRound()
 	{
+		if(this.status !== 'question-process')
+		{
+			this.game.game_info.current_round++;
+			let round = this.game.getRoundInfo();
 
-		this.game.game_info.current_round++;
-		let round = this.game.getRoundInfo();
+			if(this.timer)
+				this.timer.die();
 
-		if(this.timer)
-			this.timer.die();
+			this.QestionProcessController.forceEndProcess();
 
-		this.QestionProcessController.forceEndProcess();
+			return Promise.resolve()
+				.then(() => {
+					// if (this.game.getRoundType() === 'final')
+					// 	this.positivatePlayersScoreBeforeFinalRound();
+				})
+				.then(() => this.showRoundTitle(round))
+				.then(() => {
+					this.sendRound();
+				})
+				.then(() => {
+					this.status = 'choice_question';
+					this.turn();
+				});
+		}
 
-		return Promise.resolve()
-			.then(() => {
-				// if (this.game.getRoundType() === 'final')
-				// 	this.positivatePlayersScoreBeforeFinalRound();
-			})
-			.then(() => this.showRoundTitle(round))
-			.then(() => {
-				this.sendRound();
-			})
-			.then(() => {
-	            this.status = 'choice_question';
-	            this.turn();
-	        });
 	}
 
 	positivatePlayersScoreBeforeFinalRound()
@@ -209,14 +212,12 @@ class BasicConductor extends AbstractConductor {
 				this.startQuestionProcess(question);
 
 			}, success:  (client, question) => {
-				console.log('success');
 
 				let theme_index = question.theme_index;
 				let question_index = question.question_index;
 				let question1 = this.game.getQuestion(theme_index, question_index);
 				// if (!question1)
 					// return;
-				console.log(question1, theme_index, question_index);
 				this.startQuestionProcess(question1);
 
 			}, filter: (e) => false /* calls fail by default */}

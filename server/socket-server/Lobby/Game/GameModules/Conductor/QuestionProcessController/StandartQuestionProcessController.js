@@ -18,7 +18,6 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
 
 	startQuestionProcess(question)
 	{
-		console.log('QUESTION', question.getQuestionResources());
         this.check_process = null;
         this.reply_process = null;
         this.ask_reply_process = null;
@@ -88,8 +87,6 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
 			return this.checkProcess();
 		})
 		.then(() => {
-			console.log('this.check_process.evaluation_clients ', this.check_process.evaluation_clients);
-			console.log('this.bet_wait_process.bets_of_clients ', this.bet_wait_process.bets_of_clients);
 			for(let key in this.check_process.evaluation_clients)
 			{
 
@@ -214,7 +211,7 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
 
 	askToReply(client)
 	{
-		if (this.ask_reply_process)
+		if (this.ask_reply_process && this.lobby.master && this.lobby.master.key !== client.key)
 		{
 			this.ask_reply_process.clients[client.key] = client;
 			this.lobby.sendForClients('client_ask_reply', client.getDisplayParams())
@@ -223,6 +220,7 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
 	questionReplyPreprocess()
 	{
 		return new Promise((resolve, reject) => {
+			this.startAskReplyProcess();
             this.timer = new Timer(this.reply_request_time, {
                 fail: () => {
                     reject(-2);
@@ -233,7 +231,6 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
                 filter: () => Object.keys(this.ask_reply_process.clients).length > 0
             });
 
-			this.startAskReplyProcess();
 			this.lobby.sendForClients('client_question_reply_request', {
 				time: this.reply_request_time
 			});
@@ -259,13 +256,11 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
 
 	clientMakeBet(client, bet)
 	{
-		console.log(10);
 		if (this.bet_wait_process) {
 			const keys_of_players_without_bet = this.bet_wait_process.bets_of_clients
 				.filter(player => player.bet === undefined)
 				.map(player => player.client_key);
 
-			console.log(11);
 			if (keys_of_players_without_bet.indexOf(client.key) !== -1) {
 				const player = this.bet_wait_process.bets_of_clients.find(player => player.client_key === client.key);
 
@@ -281,7 +276,6 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
 
 	_getReplyClients()
     {
-    	console.log('replproc: ', this.reply_process);
         let arr = [];
         for(let key in this.reply_process.players)
         {
@@ -356,7 +350,6 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
 		this.check_process = {};
 		this.check_process.evaluation_clients = {};
 
-		console.log('PLAYERS: ', this.reply_process.players);
 		for (const key in this.reply_process.players)
 		{
 			// console.log('key' , key)
@@ -431,12 +424,14 @@ class StandartQuestionProcessController extends AbstractQuestionProcessControlle
 
 	forceEndProcess()
 	{
+		console.log(this.timer);
 		if (this.timer && !this.timer.isTimerEnd)
 			this.timer.forceEnd(-1);
 		if (this.wait_process && this.wait_process.wait_timer && !this.wait_process.wait_timer)
 		{
             this.wait_process.wait_timer.forceEnd(-1);
 		}
+		console.log(this.timer);
 	}
 
     getProcessInfo(client)
