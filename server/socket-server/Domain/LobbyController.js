@@ -171,8 +171,7 @@ class LobbyController extends DomainController {
 		if (!lobby)
 			return;
 
-		let master = lobby.master || new Object;
-		if (master.key !== key)
+		if (!lobby.master || lobby.master.key !== client.key)
 			return;
 
 		lobby.startGame();

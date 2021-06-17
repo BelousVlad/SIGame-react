@@ -94,7 +94,9 @@ class Lobby {
 	{
 		if (this.master)
 		{
+			const client = this.master;
 			this.master = null;
+            this.sendClientPosition(client);
 			this._updatePlayers();
 			return true;
 		}
@@ -173,8 +175,10 @@ class Lobby {
 	// return true if game have successful created, else return false
 	startGame()
 	{
-		if (this.packState !== 'ready') // check for pack ready state
+		if (this.packState !== 'ready')
+		{
 			return false;
+		} // check for pack ready state
 
 		if (this.game) // check if game already exist
 			return false;

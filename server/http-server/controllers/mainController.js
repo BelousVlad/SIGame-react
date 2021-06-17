@@ -148,6 +148,7 @@ class MainController{
 
 		const client = ClientManager.getClient( cookies.key );
 
+
 		if (!client) {
 			res.end('client not found');
 			return;
@@ -160,10 +161,21 @@ class MainController{
 			return;
 		}
 
-		if ((lobby.master && lobby.master.key !== client.key) || (lobby.host && lobby.host.key !== client.key)) {
-			res.end('you havent permission to upload lobby package');
-			return;
+		console.log(client.key)
+
+		console.log(lobby.master && lobby.master.key !== client.key)
+		console.log(lobby.host && lobby.host.key !== client.key)
+
+		if (!lobby.master || lobby.master.key !== client.key) {
+			if(!lobby.host || lobby.host.key !== client.key)
+			{
+				res.end('you havent permission to upload lobby package');
+			
+				return;
+			}
 		}
+
+		console.log('pack upload');
 
 		lobby.uploadPackStart();
 		// lobby.emit('lobby_pack_state_change');
