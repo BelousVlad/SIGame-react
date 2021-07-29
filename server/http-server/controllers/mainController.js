@@ -24,6 +24,15 @@ class MainController{
 		})
 	}
 
+	index(request, response) {
+		let path_ = 'public/index.html';
+
+		helper.getContent(path_, false)
+		.then((data) => {
+			response.end(data)
+		})
+	}
+
 	main(request, response)
 	{
 		let path_ = config.mainPagePath;

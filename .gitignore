@@ -4,4 +4,5 @@ server/avatars/*
 !server/avatars/baseAvatar.jpg
 server/Q_igrovoy_1.siq
 
+server/public/dist/*
 .idea/

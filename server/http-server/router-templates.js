@@ -32,6 +32,8 @@ module.exports =
 		}
 	},
 
+	'mainController/index' : '.*',
+
 	'mainController/name' : ( req ) => {
 
         let cookies = helper.parseCookies(req);
