@@ -32,7 +32,7 @@ module.exports =
 		}
 	},
 
-	'mainController/index' : '.*',
+	'mainController/index' : '*',
 
 	'mainController/name' : ( req ) => {
 
