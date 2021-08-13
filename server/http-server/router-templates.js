@@ -31,8 +31,7 @@ module.exports =
 			default : { return false;}
 		}
 	},
-
-	'mainController/index' : '*',
+	'mainController/index' : '.*',
 
 	'mainController/name' : ( req ) => {
 
@@ -64,8 +63,8 @@ module.exports =
     	return flag;
     },
 
+	'mainController/main' : '.*',
 	'mainController/create_lobby' : '^/create-lobby$',
 	'mainController/lobby' : '^/lobby$',
 	'mainController/avatar_set_page' : '^/avatar_set$',
-	'mainController/main' : '.*',
 };

@@ -24,6 +24,7 @@ module.exports = class httpRouter{
 				}
 			}
 			else if ( typeof this.templates[i] === 'string' ) {
+				console.log(this.templates[i])
 				if ( new RegExp( this.templates[i] ).test( req.url ) ) {
 					require(path.join(  config.controllersPath, i.split('/')[0].concat('.js') ) ) /* import object */ [i.split('/')[1]]( req, res ); // use object method
 					return;
